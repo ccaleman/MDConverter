@@ -1,0 +1,149 @@
+package org.mdconverter.argumentparser;
+
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.internal.Lists;
+import org.mdconverter.argumentparser.argumentdefinition.MainArguments;
+import org.mdconverter.classloader.LoaderInput;
+import org.mdconverter.classloader.PluginLoader;
+import org.mdconverter.classloader.PluginMisconfigurationException;
+import org.mdconverter.consolewriter.ConsoleWriter;
+import org.mdconverter.plugin.type.FileType;
+import org.mdconverter.plugin.type.PluginType;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import javax.inject.Singleton;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.util.List;
+
+/**
+ * Created by miso on 23.10.2015.
+ */
+@Singleton
+public class ArgumentParser {
+
+    private JCommander jc;
+    private MainArguments mainArguments;
+    private final ConsoleWriter consoleWriter;
+    private final InputErrorHandler errorHandler;
+    private final PluginLoader pluginLoader;
+
+    private List<InputError> argumentsErrors = Lists.newArrayList();
+
+    @Inject
+    public ArgumentParser(@Named("project.version") String version, ConsoleWriter consoleWriter,
+                              InputErrorHandler errorHandler, PluginLoader pluginLoader) {
+        mainArguments = new MainArguments();
+        this.consoleWriter = consoleWriter;
+        this.errorHandler = errorHandler;
+        this.pluginLoader = pluginLoader;
+        jc = new JCommander(mainArguments);
+        jc.setProgramName("MDConverter-" + version + ".jar");
+    }
+
+    public void parseArguments(String[] args) {
+        // parse the arguments.
+        try {
+            jc.parse(args);
+            if (mainArguments.isHelp()) {
+                printUsage();
+            } else {
+                if (mainArguments.getOutputFile() != null) {
+                    //TODO: create Outputfile or redirect to console
+                }
+                LoaderInput reader = isReaderDefined();
+                LoaderInput writer = isWriterDefined();
+                if (!argumentsErrors.isEmpty()) {
+                    List<LoaderInput> loaderInputs = errorHandler.handleErrors(argumentsErrors, reader, writer);
+                    reader = loaderInputs.get(0);
+                    writer = loaderInputs.get(1);
+                }
+                do {
+                    pluginLoader.loadPlugin(reader);
+                    pluginLoader.loadPlugin(writer);
+                    if (!pluginLoader.getInputErrors().isEmpty()) {
+                        errorHandler.handleErrors(pluginLoader.getInputErrors(), reader, writer);
+                    }
+                    pluginLoader.getInputErrors().clear();
+                    //TODO: what to do if script? --> check in pluginLoader
+                } while ((pluginLoader.getReader() == null && pluginLoader.getWriter() == null) || false);
+
+                consoleWriter.println(ConsoleWriter.LinePrefix.INFO,
+                        String.format("Defined reader: %s", reader.getPluginName()),
+                        pluginLoader.getReader().getDescription(),
+                        String.format("Defined writer: %s", writer.getPluginName()),
+                        pluginLoader.getWriter().getDescription());
+            }
+        } catch (ParameterException e) {
+            printUsage();
+            consoleWriter.printErrorln(e.getMessage() + "\n");
+            throw new IllegalArgumentException("Given arguments are wrong!");
+        } catch (IOException | RuntimeException e) {
+            consoleWriter.printErrorln(e.getMessage() != null ? e.getMessage() : "Error not defined.");
+        } catch (PluginMisconfigurationException e) {
+            consoleWriter.printErrorln(e.getMessage() + "\n");
+        }
+    }
+
+    public JCommander getJc() {
+        return jc;
+    }
+
+    public MainArguments getMainArguments() {
+        return mainArguments;
+    }
+
+    private LoaderInput isWriterDefined() {
+        String fileWriter = getMainArguments().getFileWriter();
+        LoaderInput loaderInput = new LoaderInput();
+        if (fileWriter != null) {
+            loaderInput.setPluginName(fileWriter);
+            loaderInput.setPluginType(PluginType.WRITER);
+        } else {
+            consoleWriter.printErrorln("No Writer defined!");
+            argumentsErrors.add(InputError.NO_WRITER);
+        }
+        loaderInput = checkForFileType(loaderInput);
+        return loaderInput;
+    }
+
+    private LoaderInput checkForFileType(LoaderInput loaderInput) {
+        if (getMainArguments().isStructure()) {
+            loaderInput.setFileType(FileType.STRUCTURE);
+        } else if (getMainArguments().isTopology()) {
+            loaderInput.setFileType(FileType.TOPOLOGY);
+        } else {
+            if (!argumentsErrors.contains(InputError.NO_FILETYPE)) {
+                argumentsErrors.add(0, InputError.NO_FILETYPE);
+                consoleWriter.printErrorln("No file type defined!");
+            } else if (!argumentsErrors.get(0).equals(InputError.NO_FILETYPE)) {
+                argumentsErrors.remove(InputError.NO_FILETYPE);
+                argumentsErrors.add(0, InputError.NO_FILETYPE);
+                consoleWriter.printErrorln("No file type defined!");
+            }
+        }
+        return loaderInput;
+    }
+
+    private LoaderInput isReaderDefined() {
+        String fileReader = getMainArguments().getFileReader();
+        LoaderInput loaderInput = new LoaderInput();
+        if (fileReader != null) {
+            loaderInput.setPluginName(fileReader);
+            loaderInput.setPluginType(PluginType.READER);
+        } else {
+            consoleWriter.printErrorln("No Reader defined!");
+            argumentsErrors.add(InputError.NO_READER);
+        }
+        loaderInput = checkForFileType(loaderInput);
+        return loaderInput;
+    }
+
+    private void printUsage() {
+        StringBuilder stringBuilder = new StringBuilder();
+        getJc().usage(stringBuilder);
+        consoleWriter.println(stringBuilder.toString());
+    }
+}

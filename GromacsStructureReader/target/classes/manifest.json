@@ -1,0 +1,19 @@
+{
+    "pluginName": "gromacs",
+    "className": "org.mdconverter.main.GromacsReader",
+    "version": "1.0",
+    "fileExtension": "gro",
+    "fileType": "structure",
+    "pluginType": "reader",
+    "script": false,
+    "scriptType": "none",
+    "measurementUnits": {
+        "length": "nm",
+        "mass": "kg",
+        "time": "ps",
+        "charge": "e",
+        "temperature": "K",
+        "energy": "kJ/mol",
+        "force": "kJ/mol/nm"
+    }
+}

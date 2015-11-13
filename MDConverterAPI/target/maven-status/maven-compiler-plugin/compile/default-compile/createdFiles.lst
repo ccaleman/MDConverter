@@ -1,0 +1,12 @@
+org\mdconverter\plugin\type\PluginType.class
+org\mdconverter\plugin\type\FileType.class
+org\mdconverter\plugin\writer\AbstractWriter.class
+org\mdconverter\plugin\reader\AbstractReader.class
+org\mdconverter\unitconverter\UnitConverter.class
+org\mdconverter\consolewriter\ConsoleWriter.class
+org\mdconverter\plugin\type\ScriptType.class
+org\mdconverter\plugin\context\Context.class
+org\mdconverter\consolewriter\ConsoleWriter$LinePrefix.class
+org\mdconverter\plugin\reader\Reader.class
+org\mdconverter\plugin\PluginManifest.class
+org\mdconverter\plugin\writer\Writer.class
