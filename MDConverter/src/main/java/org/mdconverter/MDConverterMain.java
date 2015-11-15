@@ -7,16 +7,13 @@ import org.mdconverter.argumentparser.argumentdefinition.MainArguments;
 import org.mdconverter.classloader.PluginLoader;
 import org.mdconverter.consolewriter.ConsoleWriterImpl;
 import org.mdconverter.plugin.reader.AbstractReader;
+import org.mdconverter.plugin.type.FileType;
+import org.mdconverter.plugin.type.PluginType;
 import org.mdconverter.plugin.writer.AbstractWriter;
+import org.mdconverter.unitconverter.UnitConverterImpl;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.measure.converter.UnitConverter;
-import javax.measure.quantity.Quantity;
-import javax.measure.unit.NonSI;
-import javax.measure.unit.Unit;
-import javax.measure.unit.UnitFormat;
-import java.time.temporal.IsoFields;
 
 /**
  * Created by miso on 28.10.2015.
@@ -27,44 +24,42 @@ public class MDConverterMain {
     private final ConsoleWriterImpl consoleWriter;
     private final ArgumentParser argumentParser;
     private final PluginLoader pluginLoader;
-    private Structure structure = new StructureImpl();
-
+    private final UnitConverterImpl unitConverter;
 
     @Inject
     public MDConverterMain(ArgumentParser argumentParser, ConsoleWriterImpl consoleWriter,
-                           PluginLoader pluginLoader) {
+                           PluginLoader pluginLoader, UnitConverterImpl unitConverter) {
         this.consoleWriter = consoleWriter;
         this.argumentParser = argumentParser;
         this.pluginLoader = pluginLoader;
+        this.unitConverter = unitConverter;
     }
 
     public void init(String[] args) {
         try {
             argumentParser.parseArguments(args);
 
+
+
+
             AbstractReader reader = setupReader();
+            Structure structure = reader.getMetaModel();
             AbstractWriter writer = setupWriter();
 
-            Unit<? extends Quantity> length = Unit.valueOf(reader.getPluginManifest().getMeasurementUnits().get("length"));
-            UnitConverter length1 = length.getConverterTo(Unit.valueOf(writer.getPluginManifest().getMeasurementUnits().get("length")));
-            reader.getMetaModel();
 
+            unitConverter.convertStructure(structure, FileType.STRUCTURE);
+            writer.setStructure(structure);
             String output = writer.getOutput();
             consoleWriter.printErrorln("\n" + output);
+
+
+
+
+
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
-    }
-
-
-
-    private AbstractWriter setupWriter() {
-        AbstractWriter writer = pluginLoader.getWriter();
-        MainArguments mainArguments = argumentParser.getMainArguments();
-        writer.setArguments(mainArguments.getReaderParams());
-        writer.setStructure(this.structure);
-        writer.setUnspecifiedArguments(mainArguments.getUnknown());
-        return writer;
     }
 
     private AbstractReader setupReader() {
@@ -72,8 +67,18 @@ public class MDConverterMain {
         MainArguments mainArguments = argumentParser.getMainArguments();
         reader.setArguments(mainArguments.getReaderParams());
         reader.setInputFile(mainArguments.getInputFile());
-        reader.setStructure(this.structure);
+        reader.setStructure(new StructureImpl());
         reader.setUnspecifiedArguments(mainArguments.getUnknown());
+        unitConverter.setReaderUnits(reader.getPluginManifest().getMeasurementUnits());
         return reader;
+    }
+
+    private AbstractWriter setupWriter() {
+        AbstractWriter writer = pluginLoader.getWriter();
+        MainArguments mainArguments = argumentParser.getMainArguments();
+        writer.setArguments(mainArguments.getReaderParams());
+        writer.setUnspecifiedArguments(mainArguments.getUnknown());
+        unitConverter.setWriterUnits(writer.getPluginManifest().getMeasurementUnits());
+        return writer;
     }
 }

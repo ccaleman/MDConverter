@@ -17,8 +17,6 @@ import java.util.Map;
 @Parameters(commandDescription = "Application arguments")
 public class MainArguments {
 
-    //TODO: show plugin versions
-
     @Parameter(names = {"--help", "-h", "-?"}, description = "Show usage", help = true)
     private boolean help = false;
 

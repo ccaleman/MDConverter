@@ -8,6 +8,8 @@ import org.mdconverter.argumentparser.InputErrorHandler;
 import org.mdconverter.classloader.PluginLoader;
 import org.mdconverter.consolewriter.ConsoleWriter;
 import org.mdconverter.consolewriter.ConsoleWriterImpl;
+import org.mdconverter.unitconverter.UnitConverter;
+import org.mdconverter.unitconverter.UnitConverterImpl;
 
 import java.io.OutputStream;
 import java.util.Properties;
@@ -29,7 +31,7 @@ public class MDConverter extends AbstractModule{
         bind(OutputStream.class).annotatedWith(Names.named("INFO")).toInstance(System.out);
         bind(OutputStream.class).annotatedWith(Names.named("ERROR")).toInstance(System.err);
         bind(ConsoleWriter.class).to(ConsoleWriterImpl.class);
-        //bind(UnitConverter.class).to(UnitConverterImpl.class);
+        bind(UnitConverter.class).to(UnitConverterImpl.class);
         bind(ArgumentParser.class);
         bind(PluginLoader.class);
         bind(InputErrorHandler.class);

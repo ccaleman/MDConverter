@@ -1,12 +1,15 @@
 package org.mdconverter.fileparser;
 
+import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
 import org.biojava.nbio.structure.*;
 
 import javax.measure.converter.UnitConverter;
 import javax.measure.unit.NonSI;
 import javax.measure.unit.SI;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.LineNumberReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -20,6 +23,17 @@ public class ParseInputFile {
 
     private static Pattern ATOM_PATTERN = Pattern.compile("^[ \\t]*[0-9]+[A-Z]{3}.*");
     private static Pattern NUM_PATTERN = Pattern.compile("^[1-9][0-9]*");
+    private static Pattern TITLE_PATTERN = Pattern.compile("^[a-zA-z0-9`\\-=\\[\\];',./~!@#$%^&*()_+{}|:\"<>? ]*");
+
+    public static String getTitleFromFile(Path inputFile) throws IOException {
+        BufferedReader reader = Files.newBufferedReader(inputFile, Charsets.UTF_8);
+        LineNumberReader lineReader = new LineNumberReader(reader);
+        String line = lineReader.readLine();
+        if (TITLE_PATTERN.matcher(line).matches()) {
+            return line;
+        }
+        return "NO TITLE FOUND!";
+    }
 
     public static List<Chain> getModelFromFile (Path input) throws IOException {
         List<String> strings = Files.readAllLines(input);
@@ -59,17 +73,15 @@ public class ParseInputFile {
             if (chainId == null) {
                 chainId = split.get(0);
                 group.setPDBName(chainId);
-                //group.setPDBFlag(true);
                 ResidueNumber residueNumber = ResidueNumber.fromString(chainId);
                 residueNumber.setSeqNum(Integer.parseInt(id));
                 group.setResidueNumber(residueNumber);
             }
             atom.setName(split.get(1));
             atom.setPDBserial(Integer.parseInt(split.get(2)));
-            UnitConverter converter = SI.NANO(SI.METER).getConverterTo(NonSI.ANGSTROM);
-            atom.setX(converter.convert(Double.parseDouble(split.get(3))));
-            atom.setY(converter.convert(Double.parseDouble(split.get(4))));
-            atom.setZ(converter.convert(Double.parseDouble(split.get(5))));
+            atom.setX(Double.parseDouble(split.get(3)));
+            atom.setY(Double.parseDouble(split.get(4)));
+            atom.setZ(Double.parseDouble(split.get(5)));
             atom.setAltLoc(' ');
             List<String> elements = Lists.newArrayList();
             Lists.newArrayList(Element.values()).stream().forEach(elem -> elements.add(elem.toString()));
@@ -78,7 +90,6 @@ public class ParseInputFile {
             }
             group.addAtom(atom);
         }
-        //group.setResidueNumber(chainId, Integer.parseInt(id), ' ');
         return group;
     }
 }

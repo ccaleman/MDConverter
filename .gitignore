@@ -4,3 +4,8 @@ build/
 *.jar
 *.iml
 1AKI.gro
+MDConverterAPI/target/
+GromacsStructureReader/target/
+MDConverter/target/
+*.gro
+PDBStructureWriter/target/

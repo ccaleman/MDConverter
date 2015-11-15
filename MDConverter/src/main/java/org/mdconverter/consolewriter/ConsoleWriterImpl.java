@@ -15,7 +15,6 @@ import java.util.Scanner;
 @Singleton
 public class ConsoleWriterImpl extends PrintStream implements ConsoleWriter {
 
-
     private final OutputStream errorStream;
     private OutputStream infoStram;
     private Scanner sc = new Scanner(System.in);
@@ -48,7 +47,7 @@ public class ConsoleWriterImpl extends PrintStream implements ConsoleWriter {
         try {
             stream.write(bytes);
             stream.write('\n');
-            this.getInfoStram().flush();
+            stream.flush();
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage());
         }
