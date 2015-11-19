@@ -1,6 +1,8 @@
 package org.mdconverter.main;
 
 
+import org.biojava.nbio.structure.Structure;
+import org.mdconverter.plugin.InvalidParameterException;
 import org.mdconverter.plugin.writer.AbstractWriter;
 
 import javax.inject.Singleton;
@@ -12,8 +14,14 @@ import javax.inject.Singleton;
 public class PDBWriter extends AbstractWriter {
 
     @Override
-    public String getOutput() {
-        return getStructure().toPDB();
+    public String getUsage() {
+        return super.getUsage();
+    }
+
+    @Override
+    public String getOutput() throws InvalidParameterException {
+        Structure structure = (Structure) getStructure();
+        return structure.toPDB();
     }
 
     @Override

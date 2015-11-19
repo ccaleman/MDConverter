@@ -15,7 +15,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.List;
 
 /**
@@ -50,9 +49,6 @@ public class ArgumentParser {
             if (mainArguments.isHelp()) {
                 printUsage();
             } else {
-                if (mainArguments.getOutputFile() != null) {
-                    //TODO: create Outputfile or redirect to console
-                }
                 LoaderInput reader = isReaderDefined();
                 LoaderInput writer = isWriterDefined();
                 if (!argumentsErrors.isEmpty()) {

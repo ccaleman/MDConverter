@@ -1,12 +1,11 @@
 package org.mdconverter.plugin.reader;
 
-import org.biojava.nbio.structure.Structure;
 import org.mdconverter.consolewriter.ConsoleWriter;
+import org.mdconverter.plugin.InvalidParameterException;
 import org.mdconverter.plugin.PluginManifest;
 import org.mdconverter.unitconverter.UnitConverter;
 
 import javax.inject.Inject;
-import java.io.File;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
@@ -14,7 +13,7 @@ import java.util.Map;
 /**
  * Created by miso on 28.10.2015.
  */
-public abstract class AbstractReader implements Reader {
+public abstract class AbstractReader<T> implements Reader<T> {
 
     @Inject
     private ConsoleWriter consoleWriter;
@@ -25,25 +24,30 @@ public abstract class AbstractReader implements Reader {
     private Map<String, String> arguments;
     private Path inputFile;
     private List<String> unspecifiedArgs;
-    private Structure structure;
+    private T structure;
 
     public String getDescription() {
         return "Description not defined";
     }
 
     @Override
-    public Structure getMetaModel() {
+    public T getMetaModel() throws InvalidParameterException{
         return this.structure;
     }
 
     @Override
-    public final void setStructure(Structure structure) {
+    public final void setStructure(T structure) {
         this.structure = structure;
     }
 
     @Override
     public final void setUnspecifiedArguments(List<String> args) {
         this.unspecifiedArgs=args;
+    }
+
+    @Override
+    public String getUsage() {
+        return "No Usage defined!";
     }
 
     public final PluginManifest getPluginManifest() {
@@ -78,7 +82,7 @@ public abstract class AbstractReader implements Reader {
         return inputFile;
     }
 
-    protected final Structure getStructure() {
+    protected final T getStructure() {
         return structure;
     }
 

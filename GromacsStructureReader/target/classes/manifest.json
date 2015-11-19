@@ -8,7 +8,7 @@
     "script": false,
     "scriptType": "none",
     "measurementUnits": {
-        "length": "nm",
+        "length": "ns",
         "mass": "kg",
         "time": "ps",
         "charge": "e",

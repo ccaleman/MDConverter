@@ -1,7 +1,7 @@
 package org.mdconverter.plugin.writer;
 
-import org.biojava.nbio.structure.Structure;
 import org.mdconverter.consolewriter.ConsoleWriter;
+import org.mdconverter.plugin.InvalidParameterException;
 import org.mdconverter.plugin.PluginManifest;
 import org.mdconverter.unitconverter.UnitConverter;
 
@@ -12,7 +12,7 @@ import java.util.Map;
 /**
  * Created by miso on 28.10.2015.
  */
-public abstract class AbstractWriter implements Writer {
+public abstract class AbstractWriter<T> implements Writer<T> {
 
     @Inject
     private ConsoleWriter consoleWriter;
@@ -22,10 +22,10 @@ public abstract class AbstractWriter implements Writer {
     private PluginManifest pluginManifest;
     private Map<String, String> arguments;
     private List<String> unspecifiedArgs;
-    private Structure structure;
+    private T structure;
 
     @Override
-    public String getOutput() {
+    public String getOutput() throws InvalidParameterException {
         return null;
     }
 
@@ -45,8 +45,13 @@ public abstract class AbstractWriter implements Writer {
     }
 
     @Override
-    public final void setStructure(Structure structure) {
+    public final void setStructure(T structure) {
         this.structure = structure;
+    }
+
+    @Override
+    public String getUsage() {
+        return "No usage defined!";
     }
 
     public final String getName() {
@@ -77,7 +82,7 @@ public abstract class AbstractWriter implements Writer {
         return unspecifiedArgs;
     }
 
-    protected final Structure getStructure() {
+    protected final T getStructure() {
         return structure;
     }
 }

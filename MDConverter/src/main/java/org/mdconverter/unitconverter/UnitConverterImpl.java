@@ -3,13 +3,10 @@ package org.mdconverter.unitconverter;
 import org.biojava.nbio.structure.Structure;
 import org.jscience.mathematics.number.Real;
 import org.mdconverter.plugin.type.FileType;
-import org.mdconverter.plugin.type.PluginType;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import javax.measure.quantity.Length;
 import javax.measure.quantity.Quantity;
-import javax.measure.unit.NonSI;
 import javax.measure.unit.Unit;
 import java.util.Map;
 
@@ -27,11 +24,12 @@ public class UnitConverterImpl implements UnitConverter {
     public UnitConverterImpl() {
     }
 
-    public Structure convertStructure(Structure structure, FileType fileType) {
+    public Object convertStructure(Object structure, FileType fileType) {
         if (fileType.equals(FileType.STRUCTURE)) {
-            Unit<?> lengthX = Unit.valueOf(readerUnits.get("length"));
-            Unit<?> lengthY = Unit.valueOf(writerUnits.get("length"));
-            structure.getChains().stream()
+            Structure struct = (Structure) structure;
+            Unit<? extends Quantity> lengthX = Unit.valueOf(readerUnits.get("length"));
+            Unit<? extends Quantity> lengthY = Unit.valueOf(writerUnits.get("length"));
+            struct.getChains().stream()
                     .forEach(chain -> chain.getAtomGroups()
                     .forEach(group -> group.getAtoms().stream()
                     .forEach(atom -> {
@@ -39,10 +37,11 @@ public class UnitConverterImpl implements UnitConverter {
                         atom.setY(getLengthFromXInY(Real.valueOf(atom.getY()), lengthX, lengthY).doubleValue());
                         atom.setZ(getLengthFromXInY(Real.valueOf(atom.getZ()), lengthX, lengthY).doubleValue());
                     })));
+            return struct;
         } else {
 
         }
-        return structure;
+        return null;
     }
 
     public void setReaderUnits(Map<String, String> readerUnits) {
@@ -53,7 +52,7 @@ public class UnitConverterImpl implements UnitConverter {
         this.writerUnits = writerUnits;
     }
 
-    private Real getLengthFromXInY(Real length, Unit<?> X, Unit<?> Y) {
+    private Real getLengthFromXInY(Real length, Unit<? extends Quantity> X, Unit<? extends Quantity> Y) {
         javax.measure.converter.UnitConverter converter = X.getConverterTo(Y);
         double convert = converter.convert(length.doubleValue());
         return Real.valueOf(convert);
