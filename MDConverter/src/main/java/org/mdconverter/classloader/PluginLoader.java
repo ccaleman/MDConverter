@@ -13,6 +13,7 @@ import org.mdconverter.plugin.PluginManifest;
 import org.mdconverter.plugin.reader.AbstractReader;
 import org.mdconverter.plugin.type.FileType;
 import org.mdconverter.plugin.type.PluginType;
+import org.mdconverter.plugin.type.ScriptType;
 import org.mdconverter.plugin.writer.AbstractWriter;
 
 import javax.inject.Inject;
@@ -58,6 +59,8 @@ public class PluginLoader {
     @Inject
     private Injector parentInjector;
     private PluginManifest pluginManifest;
+    private PluginManifest readerPluginManifest;
+    private PluginManifest writerPluginManifest;
 
     @Inject
     public PluginLoader(ConsoleWriterImpl consoleWriter,
@@ -78,7 +81,7 @@ public class PluginLoader {
         this.structureWriterPath = Paths.get(s + structureWriterPath);
         this.topReaderPath = Paths.get(s + topReaderPath);
         this.topWriterPath = Paths.get(s + topWriterPath);
-        if(ensureDirectories()) {
+        if (ensureDirectories()) {
             throw new RuntimeException("Could not create plugin folders.");
         }
         consoleWriter.printInfoln(this.structureReaderPath.toAbsolutePath().toString());
@@ -101,7 +104,7 @@ public class PluginLoader {
         if (actual.equals(PluginType.READER)) {
             AbstractReader abstractReader = searchForPlugin(loaderInput, jarFiles, AbstractReader.class);
             if (abstractReader != null) {
-                abstractReader.setPluginManifest(pluginManifest);
+                abstractReader.setPluginManifest(readerPluginManifest);
                 reader = abstractReader;
                 consoleWriter.printInfoln("Found reader plugin");
             } else {
@@ -111,7 +114,7 @@ public class PluginLoader {
         } else if (actual.equals(PluginType.WRITER)) {
             AbstractWriter abstractWriter = searchForPlugin(loaderInput, jarFiles, AbstractWriter.class);
             if (abstractWriter != null) {
-                abstractWriter.setPluginManifest(pluginManifest);
+                abstractWriter.setPluginManifest(writerPluginManifest);
                 writer = abstractWriter;
                 consoleWriter.printInfoln("Found writer plugin");
             } else {
@@ -171,12 +174,17 @@ public class PluginLoader {
         Class<T> abstractPlugin = null;
         Injector injector = parentInjector.createChildInjector(new PluginModule());
         for (URI jarFile : jarFiles) {
-            pluginManifest = scanJarFile(jarFile);
+            pluginManifest =  scanJarFile(jarFile);
             if (pluginManifest != null) {
                 pluginManifests.add(pluginManifest);
-                if (pluginManifest.getPluginName().equalsIgnoreCase(loaderInput.getPluginName()) && !pluginManifest.isScript()) {
+                if (pluginManifest.getPluginName().equalsIgnoreCase(loaderInput.getPluginName())) {
+                    if (pluginManifest.getPluginType().equals(PluginType.READER)) {
+                        this.readerPluginManifest = pluginManifest;
+                    } else {
+                        this.writerPluginManifest = pluginManifest;
+                    }
                     abstractPlugin = extractPluginClass(pluginManifest);
-                } else if (pluginManifest.isScript()) {
+                } else if (pluginManifest.isScript() && !pluginManifest.getScriptType().equals(ScriptType.JYTHON)) {
                     throw new RuntimeException("Script support isn't implemented yet!!!!");
                 }
             }

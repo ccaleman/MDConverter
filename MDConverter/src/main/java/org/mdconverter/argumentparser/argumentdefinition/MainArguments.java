@@ -23,20 +23,18 @@ public class MainArguments {
     @Parameter(description = "unspecified arguments (will be forwarded unhandled to reader and writer)")
     private List<String> unknown = Lists.newArrayList();
 
-    @Parameter(names = "-R", arity = 1, description = "FileReader you want to use\n" +
-            "\t\tonly required if no FileReaderScript is defined")
+    @Parameter(names = "-R", arity = 1, description = "FileReader you want to use")
     private String fileReader = null;
 
     @Parameter(names = "-S", arity = 0, description = "Define for structure type conversion\n" +
-            "\t\tonly required if no topology type is defined")
+            "\t\tonly required if topology type is not defined")
     private boolean structure = false;
 
     @Parameter(names = "-T", arity = 0, description = "Define for topology type conversion\n" +
-            "\t\tonly required if no structure type is defined")
+            "\t\tonly required if structure type is not defined")
     private boolean topology = false;
 
-    @Parameter(names = "-W", arity = 1, description = "FileWriter you want to use\n" +
-            "\t\tonly required if no FileWriterScript is defined")
+    @Parameter(names = "-W", arity = 1, description = "FileWriter you want to use")
     private String fileWriter = null;
 
     @Parameter(names = {"-i", "-in"}, arity = 1, required = true, description = "Input file",

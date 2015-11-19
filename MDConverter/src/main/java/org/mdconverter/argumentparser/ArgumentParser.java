@@ -63,8 +63,7 @@ public class ArgumentParser {
                         errorHandler.handleErrors(pluginLoader.getInputErrors(), reader, writer);
                     }
                     pluginLoader.getInputErrors().clear();
-                    //TODO: what to do if script? --> check in pluginLoader
-                } while ((pluginLoader.getReader() == null && pluginLoader.getWriter() == null) || false);
+                } while ((pluginLoader.getReader() == null && pluginLoader.getWriter() == null));
 
                 consoleWriter.println(ConsoleWriter.LinePrefix.INFO,
                         String.format("Defined reader: %s", reader.getPluginName()),

@@ -13,6 +13,7 @@
         <module>MDConverter</module>
         <module>GromacsStructureReader</module>
         <module>PDBStructureWriter</module>
+        <module>AmberStructureReader</module>
     </modules>
 
     <properties>
@@ -26,6 +27,8 @@
         <junit.version>4.12</junit.version>
         <biojava-structure.version>4.1.0</biojava-structure.version>
         <jython-standalone.version>2.7.0</jython-standalone.version>
+        <jansi.version>1.11</jansi.version>
+        <mockito-all.version>1.10.19</mockito-all.version>
         <!-- DIRECTORY DEFINITIONS-->
         <build.dir>${project.basedir}/../build</build.dir>
         <plugin.output.reader.structure>${build.dir}/StructureReader</plugin.output.reader.structure>
@@ -87,6 +90,17 @@
                 <groupId>org.python</groupId>
                 <artifactId>jython-standalone</artifactId>
                 <version>${jython-standalone.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.fusesource.jansi</groupId>
+                <artifactId>jansi</artifactId>
+                <version>${jansi.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-all</artifactId>
+                <version>${mockito-all.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

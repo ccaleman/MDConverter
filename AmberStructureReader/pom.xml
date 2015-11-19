@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>GromacsStructureReader</artifactId>
+    <artifactId>AmberStructureReader</artifactId>
 
     <dependencies>
         <dependency>
@@ -23,6 +23,17 @@
             <artifactId>biojava-structure</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.python</groupId>
+            <artifactId>jython-standalone</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.fusesource.jansi</groupId>
+            <artifactId>jansi</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -49,11 +60,12 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <finalName>GromacsSR</finalName>
+                    <finalName>AmberSR</finalName>
                     <outputDirectory>${plugin.output.reader.structure}</outputDirectory>
                 </configuration>
             </plugin>
         </plugins>
     </build>
+
 
 </project>

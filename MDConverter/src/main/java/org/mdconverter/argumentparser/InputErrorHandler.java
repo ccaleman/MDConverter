@@ -54,7 +54,7 @@ public class InputErrorHandler {
                     }
                     break;
                 default:
-                    cw.printErrorln("Such an error is not defined in InputError enum!");
+                    cw.printErrorln("Such an error is not defined in InputErrorHandler!");
             }
         }
         if (checkLoderInput(reader) && checkLoderInput(writer)) {

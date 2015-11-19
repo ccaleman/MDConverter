@@ -29,14 +29,16 @@ public class UnitConverterImpl implements UnitConverter {
             Structure struct = (Structure) structure;
             Unit<? extends Quantity> lengthX = Unit.valueOf(readerUnits.get("length"));
             Unit<? extends Quantity> lengthY = Unit.valueOf(writerUnits.get("length"));
-            struct.getChains().stream()
+            if (struct.nrModels() >=1) {
+                struct.getChains().stream()
                     .forEach(chain -> chain.getAtomGroups()
-                    .forEach(group -> group.getAtoms().stream()
-                    .forEach(atom -> {
-                        atom.setX(getLengthFromXInY(Real.valueOf(atom.getX()), lengthX, lengthY).doubleValue());
-                        atom.setY(getLengthFromXInY(Real.valueOf(atom.getY()), lengthX, lengthY).doubleValue());
-                        atom.setZ(getLengthFromXInY(Real.valueOf(atom.getZ()), lengthX, lengthY).doubleValue());
-                    })));
+                        .forEach(group -> group.getAtoms().stream()
+                            .forEach(atom -> {
+                                atom.setX(getLengthFromXInY(Real.valueOf(atom.getX()), lengthX, lengthY).doubleValue());
+                                atom.setY(getLengthFromXInY(Real.valueOf(atom.getY()), lengthX, lengthY).doubleValue());
+                                atom.setZ(getLengthFromXInY(Real.valueOf(atom.getZ()), lengthX, lengthY).doubleValue());
+                            })));
+            }
             return struct;
         } else {
 
