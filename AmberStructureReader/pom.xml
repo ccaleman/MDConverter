@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>MDConverterCollection</artifactId>
-        <groupId>org.mdconvert</groupId>
-        <version>${project.version}</version>
+        <groupId>org.mdconverter</groupId>
+        <version>0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -13,9 +13,8 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.mdconvert</groupId>
+            <groupId>org.mdconverter</groupId>
             <artifactId>MDConverterAPI</artifactId>
-            <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -28,12 +27,6 @@
             <artifactId>jython-standalone</artifactId>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.fusesource.jansi</groupId>
-            <artifactId>jansi</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
     </dependencies>
 
     <build>
@@ -46,6 +39,24 @@
                     <source>1.8</source>
                     <target>1.8</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>2.1.2</version>
+            </plugin>
+            <plugin>
+                <groupId>net.sf.mavenjython</groupId>
+                <artifactId>jython-compile-maven-plugin</artifactId>
+                <version>1.2</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jython</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -66,6 +77,4 @@
             </plugin>
         </plugins>
     </build>
-
-
 </project>
