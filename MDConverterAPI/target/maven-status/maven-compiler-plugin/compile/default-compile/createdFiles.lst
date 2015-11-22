@@ -4,6 +4,7 @@ org\mdconverter\plugin\InvalidParameterException.class
 org\mdconverter\plugin\reader\Reader.class
 org\mdconverter\plugin\PluginManifest.class
 org\mdconverter\plugin\type\PluginType.class
+org\mdconverter\jythonsupport\JythonObjectFactory.class
 org\mdconverter\plugin\writer\AbstractWriter.class
 org\mdconverter\plugin\reader\AbstractReader.class
 org\mdconverter\unitconverter\UnitConverter.class

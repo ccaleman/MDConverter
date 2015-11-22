@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>MDConverterCollection</artifactId>
-        <groupId>org.mdconvert</groupId>
-        <version>${project.version}</version>
+        <groupId>org.mdconverter</groupId>
+        <version>0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -31,6 +31,10 @@
             <groupId>org.biojava</groupId>
             <artifactId>biojava-structure</artifactId>
         </dependency>
+        <dependency>
+            <groupId>org.python</groupId>
+            <artifactId>jython-standalone</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
@@ -45,5 +49,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

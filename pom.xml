@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.mdconvert</groupId>
+    <groupId>org.mdconverter</groupId>
     <artifactId>MDConverterCollection</artifactId>
     <version>${project.version}</version>
     <packaging>pom</packaging>
@@ -26,9 +26,9 @@
         <gson.version>2.4</gson.version>
         <junit.version>4.12</junit.version>
         <biojava-structure.version>4.1.0</biojava-structure.version>
-        <jython-standalone.version>2.7.0</jython-standalone.version>
-        <jansi.version>1.11</jansi.version>
+        <jython-standalone.version>2.5.2</jython-standalone.version>
         <mockito-all.version>1.10.19</mockito-all.version>
+        <jansi.version>1.11</jansi.version>
         <!-- DIRECTORY DEFINITIONS-->
         <build.dir>${project.basedir}/../build</build.dir>
         <plugin.output.reader.structure>${build.dir}/StructureReader</plugin.output.reader.structure>
@@ -42,8 +42,8 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>MDConverter</groupId>
-                <artifactId>MainApplicationAPI</artifactId>
+                <groupId>org.mdconverter</groupId>
+                <artifactId>MDConverterAPI</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
@@ -77,11 +77,6 @@
                 <version>${gson.version}</version>
             </dependency>
             <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>${junit.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.biojava</groupId>
                 <artifactId>biojava-structure</artifactId>
                 <version>${biojava-structure.version}</version>
@@ -92,9 +87,10 @@
                 <version>${jython-standalone.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.fusesource.jansi</groupId>
-                <artifactId>jansi</artifactId>
-                <version>${jansi.version}</version>
+                <groupId>junit</groupId>
+                <artifactId>junit</artifactId>
+                <version>${junit.version}</version>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>org.mockito</groupId>
@@ -149,5 +145,4 @@
             </resource>
         </resources>
     </build>
-
 </project>

@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>MDConverterCollection</artifactId>
-        <groupId>org.mdconvert</groupId>
-        <version>${project.version}</version>
+        <groupId>org.mdconverter</groupId>
+        <version>0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -41,62 +41,24 @@
             <artifactId>biojava-structure</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.mdconverter</groupId>
+            <artifactId>MDConverterAPI</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
+            <scope>test</scope>
         </dependency>
-
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mdconvert</groupId>
-            <artifactId>MDConverterAPI</artifactId>
-            <version>${project.version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
-            <!--<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-dependency-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>copy-dependencies</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/classes/lib</outputDirectory>
-                            <excludeScope>provided</excludeScope>
-                            <excludeTransitive>true</excludeTransitive>
-                            <overWriteReleases>false</overWriteReleases>
-                            <overWriteSnapshots>false</overWriteSnapshots>
-                            <overWriteIfNewer>true</overWriteIfNewer>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <configuration>
-                    <finalName>MDConverter</finalName>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>org.mdconverter.Application</mainClass>
-                        </manifest>
-                        <manifestEntries>
-                            <Class-Path>lib/</Class-Path>
-                        </manifestEntries>
-                    </archive>
-                    <outputDirectory>${build.dir}</outputDirectory>
-                </configuration>
-            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -120,5 +82,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

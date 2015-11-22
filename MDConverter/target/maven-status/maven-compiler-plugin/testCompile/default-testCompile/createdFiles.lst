@@ -1,1 +1,3 @@
 org\mdconverter\argumentparser\argumentdefinition\MainArgumentsTest.class
+org\mdconverter\unitconverter\UnitConverterImplTest.class
+org\mdconverter\argumentparser\InputErrorHandlerTest.class

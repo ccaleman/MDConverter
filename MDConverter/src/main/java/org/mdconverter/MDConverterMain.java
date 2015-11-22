@@ -45,7 +45,8 @@ public class MDConverterMain {
         argumentParser.parseArguments(args);
         AbstractReader reader = setupReader();
         if (reader.getPluginManifest().getFileType().equals(FileType.STRUCTURE)) {
-            reader.setStructure(new StructureImpl());
+            Structure structure = new StructureImpl();
+            reader.setStructure(structure);
         } else {
             //TODO: set topology structure
             reader.setStructure(null);

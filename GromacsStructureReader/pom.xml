@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>MDConverterCollection</artifactId>
-        <groupId>org.mdconvert</groupId>
-        <version>${project.version}</version>
+        <groupId>org.mdconverter</groupId>
+        <version>0.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -13,7 +13,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.mdconvert</groupId>
+            <groupId>org.mdconverter</groupId>
             <artifactId>MDConverterAPI</artifactId>
             <version>${project.version}</version>
             <scope>provided</scope>
@@ -55,5 +55,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>

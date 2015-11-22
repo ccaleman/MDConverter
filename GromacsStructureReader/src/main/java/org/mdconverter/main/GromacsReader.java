@@ -20,7 +20,7 @@ public class GromacsReader extends AbstractReader {
 
     @Override
     public String getDescription() {
-        return super.getDescription();
+        return "GromacsSR is able to read *.gro files.";
     }
 
     @Override
@@ -41,7 +41,7 @@ public class GromacsReader extends AbstractReader {
 
     @Override
     public String getUsage() {
-        return super.getUsage();
+        return "GromacsSR do not need any special arguments aberrant from normal usage.";
     }
 }
 

@@ -3,6 +3,7 @@ package org.mdconverter.argumentparser;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.internal.Lists;
+import com.google.common.io.Files;
 import org.mdconverter.argumentparser.argumentdefinition.MainArguments;
 import org.mdconverter.classloader.LoaderInput;
 import org.mdconverter.classloader.PluginLoader;
@@ -65,6 +66,8 @@ public class ArgumentParser {
                     pluginLoader.getInputErrors().clear();
                 } while ((pluginLoader.getReader() == null && pluginLoader.getWriter() == null));
 
+                checkFileExtensions();
+
                 consoleWriter.println(ConsoleWriter.LinePrefix.INFO,
                         String.format("Defined reader: %s", reader.getPluginName()),
                         pluginLoader.getReader().getDescription(),
@@ -79,6 +82,21 @@ public class ArgumentParser {
             consoleWriter.printErrorln(e.getMessage() != null ? e.getMessage() : "Error not defined.");
         } catch (PluginMisconfigurationException e) {
             consoleWriter.printErrorln(e.getMessage() + "\n");
+        }
+    }
+
+    private void checkFileExtensions() throws ParameterException {
+        String fileExtension = Files.getFileExtension(mainArguments.getInputFile().toString());
+        String extension = pluginLoader.getReader().getPluginManifest().getFileExtension();
+        if (!extension.equalsIgnoreCase(fileExtension)) {
+            throw new ParameterException(String.format("Given input file can not be processed by chosen reader. (Found: %s / Expected: %s)", fileExtension, extension));
+        }
+        if (mainArguments.getOutputFile() != null) {
+            fileExtension = Files.getFileExtension(mainArguments.getOutputFile().toString());
+            extension = pluginLoader.getWriter().getPluginManifest().getFileExtension();
+            if (!extension.equalsIgnoreCase(fileExtension)) {
+                throw new ParameterException(String.format("Given output file can not be created by chosen writer. (Found: %s / Expected: %s)", fileExtension, extension));
+            }
         }
     }
 

@@ -2,10 +2,9 @@ package org.mdconverter;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import org.mdconverter.classloader.PluginMisconfigurationException;
 import org.mdconverter.inject.MDConverter;
 
-import java.io.*;
+import java.io.InputStream;
 import java.util.Properties;
 
 /**
@@ -25,7 +24,7 @@ public class Application {
             instance.init(args);
         } catch (Exception e) {
             //TODO: remove from release
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 }
