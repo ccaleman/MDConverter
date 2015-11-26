@@ -1,3 +1,3 @@
-from readstructureimpl import *
+from test import *
 
 __all__ = ["readstructureimpl"]
