@@ -1,0 +1,7 @@
+org.mdconverter.consolewriter
+org.mdconverter.jython
+org.mdconverter.plugin
+org.mdconverter.plugin.context
+org.mdconverter.plugin.reader
+org.mdconverter.plugin.type
+org.mdconverter.plugin.writer
