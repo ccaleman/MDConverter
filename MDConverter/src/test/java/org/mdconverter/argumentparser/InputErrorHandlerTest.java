@@ -13,6 +13,7 @@ import org.mdconverter.plugin.type.FileType;
 import org.mdconverter.plugin.type.PluginType;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -79,7 +80,7 @@ public class InputErrorHandlerTest {
         when(mockedCW.getIntInput()).thenReturn(1);
     }
 
-    private void mockPL() throws IOException, PluginMisconfigurationException {
+    private void mockPL() throws IOException, PluginMisconfigurationException, URISyntaxException {
         PluginManifest mockPM = mock(PluginManifest.class);
         when(mockPM.getPluginName()).thenReturn("InputErrorReturned");
         when(mockPL.getPluginManifestsByLoaderInput(reader)).thenReturn(Lists.newArrayList(mockPM));

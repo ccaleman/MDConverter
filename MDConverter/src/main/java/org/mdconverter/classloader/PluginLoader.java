@@ -7,8 +7,9 @@ import com.google.gson.Gson;
 import com.google.inject.Injector;
 import org.mdconverter.Application;
 import org.mdconverter.argumentparser.InputError;
-import org.mdconverter.consolewriter.ConsoleWriterImpl;
+import org.mdconverter.consolewriter.ConsoleWriter;
 import org.mdconverter.inject.PluginModule;
+import org.mdconverter.jythonsupport.JythonObjectFactoryImpl;
 import org.mdconverter.plugin.PluginManifest;
 import org.mdconverter.plugin.reader.AbstractReader;
 import org.mdconverter.plugin.type.FileType;
@@ -44,7 +45,12 @@ import java.util.jar.JarFile;
 @Singleton
 public class PluginLoader {
 
-    private final ConsoleWriterImpl consoleWriter;
+    private final ConsoleWriter consoleWriter;
+
+    /**
+     * Impl because of method {@link JythonObjectFactoryImpl#addPluginToInterpreter(String)} which only should be accessed internal and not by plugins
+     */
+    private final JythonObjectFactoryImpl jof;
     private final Path structureReaderPath;
     private final Path structureWriterPath;
     private final Path topReaderPath;
@@ -63,12 +69,13 @@ public class PluginLoader {
     private PluginManifest writerPluginManifest;
 
     @Inject
-    public PluginLoader(ConsoleWriterImpl consoleWriter,
+    public PluginLoader(ConsoleWriter consoleWriter, JythonObjectFactoryImpl jof,
                         @Named("location.reader.structure") String structureReaderPath,
                         @Named("location.writer.structure") String structureWriterPath,
                         @Named("location.reader.topology") String topReaderPath,
                         @Named("location.writer.topology") String topWriterPath) {
         this.consoleWriter = consoleWriter;
+        this.jof = jof;
         URL url = Application.class.getProtectionDomain().getCodeSource().getLocation();
         String s = "";
         try {
@@ -90,7 +97,7 @@ public class PluginLoader {
         consoleWriter.printInfoln(this.topWriterPath.toAbsolutePath().toString());
     }
 
-    public List<PluginManifest> getPluginManifestsByLoaderInput(LoaderInput input) throws IOException, PluginMisconfigurationException {
+    public List<PluginManifest> getPluginManifestsByLoaderInput(LoaderInput input) throws IOException, PluginMisconfigurationException, URISyntaxException {
         pluginManifests.clear();
         if (input.getPluginType().equals(PluginType.READER))
             searchForPlugin(input, getJarFilePaths(input), AbstractReader.class);
@@ -99,7 +106,7 @@ public class PluginLoader {
         return pluginManifests;
     }
 
-    public void loadPlugin(LoaderInput loaderInput) throws IOException, PluginMisconfigurationException {
+    public void loadPlugin(LoaderInput loaderInput) throws IOException, PluginMisconfigurationException, URISyntaxException {
         List<URI> jarFiles = getJarFilePaths(loaderInput);
         if (actual.equals(PluginType.READER)) {
             AbstractReader abstractReader = searchForPlugin(loaderInput, jarFiles, AbstractReader.class);
@@ -170,7 +177,7 @@ public class PluginLoader {
         return jarFiles;
     }
 
-    private <T> T searchForPlugin(LoaderInput loaderInput, List<URI> jarFiles, Class<T> clazz) throws IOException, PluginMisconfigurationException {
+    private <T> T searchForPlugin(LoaderInput loaderInput, List<URI> jarFiles, Class<T> clazz) throws IOException, PluginMisconfigurationException, URISyntaxException {
         Class<T> abstractPlugin = null;
         Injector injector = parentInjector.createChildInjector(new PluginModule());
         for (URI jarFile : jarFiles) {
@@ -184,6 +191,9 @@ public class PluginLoader {
                         this.writerPluginManifest = pluginManifest;
                     }
                     abstractPlugin = extractPluginClass(pluginManifest);
+                    if (pluginManifest.getScriptType().equals(ScriptType.JYTHON)) {
+                        jof.addPluginToInterpreter(jarFile.getPath());
+                    }
                 } else if (pluginManifest.isScript() && !pluginManifest.getScriptType().equals(ScriptType.JYTHON)) {
                     throw new RuntimeException("Script support isn't implemented yet!!!!");
                 }

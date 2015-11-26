@@ -11,7 +11,7 @@ import org.mdconverter.plugin.type.PluginType;
 
 import javax.inject.Inject;
 import java.io.IOException;
-import java.util.InputMismatchException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 /**
@@ -28,7 +28,7 @@ public class InputErrorHandler {
         this.pl = pl;
     }
 
-    public List<LoaderInput> handleErrors(List<InputError> errors, LoaderInput reader, LoaderInput writer) throws PluginMisconfigurationException, IOException {
+    public List<LoaderInput> handleErrors(List<InputError> errors, LoaderInput reader, LoaderInput writer) throws PluginMisconfigurationException, IOException, URISyntaxException {
         for (InputError error : errors) {
             switch (error) {
                 case NO_READER:
@@ -42,7 +42,7 @@ public class InputErrorHandler {
                     cw.println("(0) exit");
                     cw.println("(1) structure");
                     cw.println("(2) topology");
-                    Integer intInput = getIntInput();
+                    Integer intInput = cw.getIntInput();
                     if (intInput.equals(1)) {
                         reader.setFileType(FileType.STRUCTURE);
                         writer.setFileType(FileType.STRUCTURE);
@@ -63,7 +63,7 @@ public class InputErrorHandler {
         throw new RuntimeException("System was not able to complete user inputs!");
     }
 
-    private void setPluginForLoaderInput(LoaderInput input, PluginType pluginType) throws IOException, PluginMisconfigurationException {
+    private void setPluginForLoaderInput(LoaderInput input, PluginType pluginType) throws IOException, PluginMisconfigurationException, URISyntaxException {
         input.setPluginType(pluginType);
         cw.println(String.format("Following %s can be choosen:",input.getPluginType().getValue()));
         List<PluginManifest> pluginManifests = pl.getPluginManifestsByLoaderInput(input);
@@ -73,28 +73,12 @@ public class InputErrorHandler {
             PluginManifest pluginManifest = pluginManifests.get(i);
             cw.println(String.format("(%s) " + pluginManifest.getPluginName(), i+1));
         }
-        Integer intInput = getIntInput();
+        Integer intInput = cw.getIntInput();
         if (intInput > 0 && intInput < pluginManifests.size()+1) {
             input.setPluginName(pluginManifests.get(intInput-1).getPluginName());
         } else {
             throw new RuntimeException("User aborted task.");
         }
-    }
-
-    private Integer getIntInput() {
-        boolean inputOk = false;
-        Integer intInput = null;
-        do {
-            try {
-                intInput = cw.getIntInput();
-                inputOk = true;
-            } catch (InputMismatchException e) {
-                cw.printErrorln("Please define an integer.");
-                cw.resetScanner();
-            }
-        }
-        while(!inputOk);
-        return intInput;
     }
 
     private boolean checkLoderInput(LoaderInput input) {

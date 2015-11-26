@@ -3,6 +3,7 @@ package org.mdconverter.plugin.type;
 import com.google.gson.annotations.SerializedName;
 
 /**
+ * Defines available script types
  * Created by miso on 13.11.2015.
  */
 public enum ScriptType {

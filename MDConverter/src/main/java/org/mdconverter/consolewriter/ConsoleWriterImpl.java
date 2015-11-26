@@ -7,6 +7,7 @@ import javax.inject.Singleton;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
@@ -71,18 +72,38 @@ public class ConsoleWriterImpl extends PrintStream implements ConsoleWriter {
     }
 
     public int getIntInput() {
-        return sc.nextInt();
+        boolean inputOk = false;
+        Integer intInput = null;
+        do {
+            try {
+                intInput = sc.nextInt();
+                inputOk = true;
+            } catch (InputMismatchException e) {
+                this.printErrorln("Please define an integer.");
+                this.resetScanner();
+            }
+        }
+        while(!inputOk);
+        return intInput;
     }
 
     public String getStringInput() {
-        return sc.nextLine();
+        boolean inputOk = false;
+        String stringInput = null;
+        do {
+            try {
+                stringInput = sc.nextLine();
+                inputOk = true;
+            } catch (InputMismatchException e) {
+                this.printErrorln("Please define a string.");
+                this.resetScanner();
+            }
+        }
+        while(!inputOk);
+        return stringInput;
     }
 
-    public OutputStream getInfoStram() {
-        return infoStram;
-    }
-
-    public void resetScanner() {
+    private void resetScanner() {
         sc.reset();
         sc = new Scanner(System.in);
     }

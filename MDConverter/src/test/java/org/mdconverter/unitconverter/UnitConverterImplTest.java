@@ -1,7 +1,7 @@
 package org.mdconverter.unitconverter;
 
-import com.beust.jcommander.internal.Lists;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.collect.Lists;
 import org.biojava.nbio.structure.*;
 import org.junit.Before;
 import org.junit.Test;

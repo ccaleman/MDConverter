@@ -1,96 +1,41 @@
 package org.mdconverter.plugin.reader;
 
-import org.mdconverter.consolewriter.ConsoleWriter;
+import org.mdconverter.plugin.AbstractPlugin;
 import org.mdconverter.plugin.InvalidParameterException;
-import org.mdconverter.plugin.PluginManifest;
-import org.mdconverter.unitconverter.UnitConverter;
 
-import javax.inject.Inject;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Map;
 
 /**
+ * Abstract class which has to be implemented by custom reader plugins to be loadable by the framework
+ * @see AbstractPlugin
  * Created by miso on 28.10.2015.
  */
-public abstract class AbstractReader<T> implements Reader<T> {
+public abstract class AbstractReader<T> extends AbstractPlugin<T> implements Reader<T> {
 
-    @Inject
-    private ConsoleWriter consoleWriter;
-    @Inject
-    private UnitConverter unitConverter;
-
-    private PluginManifest pluginManifest;
-    private Map<String, String> arguments;
+    /**
+     * Holds the {@link Path} to the input file defined by the user
+     * File exists already checked, file extension already checked
+     */
     private Path inputFile;
-    private List<String> unspecifiedArgs;
-    private T structure;
-
-    public String getDescription() {
-        return "Description not defined";
-    }
 
     @Override
-    public T getMetaModel() throws InvalidParameterException{
-        return this.structure;
+    public T getMetaModel() throws InvalidParameterException {
+        return this.getStructure();
     }
 
-    @Override
-    public final void setStructure(T structure) {
-        this.structure = structure;
-    }
-
-    @Override
-    public final void setUnspecifiedArguments(List<String> args) {
-        this.unspecifiedArgs=args;
-    }
-
-    @Override
-    public String getUsage() {
-        return "No Usage defined!";
-    }
-
-    public final PluginManifest getPluginManifest() {
-        return this.pluginManifest;
-    }
-
-    public final String getName() {
-        return getPluginManifest().getPluginName();
-    }
-
-    public final void setPluginManifest(PluginManifest pluginManifest) {
-        this.pluginManifest = pluginManifest;
-    }
-
-    public final void setArguments(Map<String, String> args) {
-        this.arguments = args;
-    }
-
+    /**
+     * @see #setInputFile(Path)
+     * @param input path to defined input file
+     */
     public final void setInputFile(Path input) {
         this.inputFile = input;
     }
 
-    protected final List<String> getUnspecifiedArgs() {
-        return unspecifiedArgs;
-    }
-
-    protected final Map<String, String> getArguments() {
-        return arguments;
-    }
-
+    /**
+     * provides access to the input file specified by the user
+     * @return a {@link Path} to input file
+     */
     protected final Path getInputFile() {
         return inputFile;
-    }
-
-    protected final T getStructure() {
-        return structure;
-    }
-
-    protected final ConsoleWriter getConsoleWriter() {
-        return consoleWriter;
-    }
-
-    protected final UnitConverter getUnitConverter() {
-        return unitConverter;
     }
 }

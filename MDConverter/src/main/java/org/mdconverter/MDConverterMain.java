@@ -76,6 +76,7 @@ public class MDConverterMain {
                 try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
                         new FileOutputStream(file.toString()), Charsets.UTF_8))) {
                     out.write(output);
+                    consoleWriter.printInfoln("Output was written into " + file.toString());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

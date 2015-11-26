@@ -3,6 +3,7 @@ package org.mdconverter.plugin.type;
 import com.google.gson.annotations.SerializedName;
 
 /**
+ * Defines available plugin types
  * Created by miso on 28.10.2015.
  */
 public enum PluginType {

@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.List;
 
 /**
@@ -82,6 +83,8 @@ public class ArgumentParser {
             consoleWriter.printErrorln(e.getMessage() != null ? e.getMessage() : "Error not defined.");
         } catch (PluginMisconfigurationException e) {
             consoleWriter.printErrorln(e.getMessage() + "\n");
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
         }
     }
 
