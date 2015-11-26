@@ -1,5 +1,5 @@
 # MDConverter
 
-[JavaDoc][1]
+[GitHub page][1]
 
-[1]: http://ccaleman.github.io/MDConverter/apidocs/
+[1]: http://ccaleman.github.io/MDConverter/
