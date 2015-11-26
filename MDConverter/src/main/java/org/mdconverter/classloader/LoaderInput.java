@@ -1,12 +1,8 @@
 package org.mdconverter.classloader;
 
 
-import org.mdconverter.plugin.type.FileType;
-import org.mdconverter.plugin.type.PluginType;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-import java.nio.file.Path;
+import org.mdconverter.api.plugin.type.FileType;
+import org.mdconverter.api.plugin.type.PluginType;
 
 /**
  * Created by miso on 28.10.2015.

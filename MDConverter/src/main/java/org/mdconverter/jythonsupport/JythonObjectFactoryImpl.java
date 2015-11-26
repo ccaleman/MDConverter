@@ -1,6 +1,6 @@
 package org.mdconverter.jythonsupport;
 
-import org.mdconverter.jython.JythonObjectFactory;
+import org.mdconverter.api.jython.JythonObjectFactory;
 import org.python.core.PyObject;
 import org.python.core.PyString;
 import org.python.core.PySystemState;
@@ -21,8 +21,6 @@ public class JythonObjectFactoryImpl implements JythonObjectFactory {
     public JythonObjectFactoryImpl(PythonInterpreter interpreter) {
         this.interpreter = interpreter;
     }
-
-    //@Override
     public void addPluginToInterpreter(String pluginJarPath) {
         PySystemState sys = interpreter.getSystemState();
         sys.path.insert(0, new PyString(pluginJarPath));
@@ -33,12 +31,12 @@ public class JythonObjectFactoryImpl implements JythonObjectFactory {
      * Jython object into Java bytecode.
      */
     @Override
-    public Object createObject(Object interfaceType, String moduleName) {
+    public Object createObject(Object interfaceType, String moduleName, String pathToPackage) {
         if (interpreter == null) {
             throw new RuntimeException("You have to add the pluginJar --> call 'addPluginToInterpreter' first.");
         }
         Object javaInt = null;
-        interpreter.exec("from Lib." + moduleName + " import " + moduleName);
+        interpreter.exec("from " + pathToPackage + moduleName + " import " + moduleName);
         PyObject pyObject = interpreter.get(moduleName);
 
         try {

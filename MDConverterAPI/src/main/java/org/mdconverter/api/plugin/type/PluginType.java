@@ -1,4 +1,4 @@
-package org.mdconverter.plugin.type;
+package org.mdconverter.api.plugin.type;
 
 import com.google.gson.annotations.SerializedName;
 

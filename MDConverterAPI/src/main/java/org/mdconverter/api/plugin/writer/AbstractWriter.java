@@ -1,7 +1,7 @@
-package org.mdconverter.plugin.writer;
+package org.mdconverter.api.plugin.writer;
 
-import org.mdconverter.plugin.AbstractPlugin;
-import org.mdconverter.plugin.InvalidParameterException;
+import org.mdconverter.api.plugin.AbstractPlugin;
+import org.mdconverter.api.plugin.InvalidParameterException;
 
 /**
  * Abstract class which has to be implemented by custom writer plugins to be loadable by the framework

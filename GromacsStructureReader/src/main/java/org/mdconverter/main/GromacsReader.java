@@ -4,9 +4,9 @@ package org.mdconverter.main;
 import org.biojava.nbio.structure.Chain;
 import org.biojava.nbio.structure.PDBHeader;
 import org.biojava.nbio.structure.Structure;
+import org.mdconverter.api.plugin.InvalidParameterException;
+import org.mdconverter.api.plugin.reader.AbstractReader;
 import org.mdconverter.fileparser.ParseInputFile;
-import org.mdconverter.plugin.InvalidParameterException;
-import org.mdconverter.plugin.reader.AbstractReader;
 
 import javax.inject.Singleton;
 import java.io.IOException;

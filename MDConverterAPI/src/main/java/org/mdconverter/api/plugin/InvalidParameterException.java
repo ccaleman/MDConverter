@@ -1,4 +1,4 @@
-package org.mdconverter.plugin;
+package org.mdconverter.api.plugin;
 
 /**
  * This exception is thrown if a plugin misses some necessary arguments to process

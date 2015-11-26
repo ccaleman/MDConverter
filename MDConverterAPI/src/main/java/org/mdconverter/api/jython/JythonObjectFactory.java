@@ -1,4 +1,4 @@
-package org.mdconverter.jython;
+package org.mdconverter.api.jython;
 
 /**
  * This interface provides access to the Python interpreter
@@ -10,7 +10,8 @@ public interface JythonObjectFactory {
     /**
      * @param interfaceType the expected Java interface which is implemented in Python
      * @param moduleName the module name of the Python implementation
+     * @param pathToPackage the hierarchy to module (e.g. Lib.package.package.)
      * @return the requested module as Java class (needs to be casted to expected Java interface)
      */
-    Object createObject(Object interfaceType, String moduleName);
+    Object createObject(Object interfaceType, String moduleName, String pathToPackage);
 }

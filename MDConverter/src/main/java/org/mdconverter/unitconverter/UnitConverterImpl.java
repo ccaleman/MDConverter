@@ -2,7 +2,7 @@ package org.mdconverter.unitconverter;
 
 import org.biojava.nbio.structure.Structure;
 import org.jscience.mathematics.number.Real;
-import org.mdconverter.plugin.type.FileType;
+import org.mdconverter.api.plugin.type.FileType;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import org.biojava.nbio.structure.*;
 import org.junit.Before;
 import org.junit.Test;
-import org.mdconverter.plugin.type.FileType;
+import org.mdconverter.api.plugin.type.FileType;
 
 import javax.measure.converter.ConversionException;
 

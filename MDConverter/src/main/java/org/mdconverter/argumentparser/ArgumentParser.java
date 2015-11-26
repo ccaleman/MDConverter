@@ -4,13 +4,13 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.internal.Lists;
 import com.google.common.io.Files;
+import org.mdconverter.api.consolewriter.ConsoleWriter;
+import org.mdconverter.api.plugin.type.FileType;
+import org.mdconverter.api.plugin.type.PluginType;
 import org.mdconverter.argumentparser.argumentdefinition.MainArguments;
 import org.mdconverter.classloader.LoaderInput;
 import org.mdconverter.classloader.PluginLoader;
 import org.mdconverter.classloader.PluginMisconfigurationException;
-import org.mdconverter.consolewriter.ConsoleWriter;
-import org.mdconverter.plugin.type.FileType;
-import org.mdconverter.plugin.type.PluginType;
 
 import javax.inject.Inject;
 import javax.inject.Named;

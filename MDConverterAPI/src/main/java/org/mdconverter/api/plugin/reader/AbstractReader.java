@@ -1,7 +1,7 @@
-package org.mdconverter.plugin.reader;
+package org.mdconverter.api.plugin.reader;
 
-import org.mdconverter.plugin.AbstractPlugin;
-import org.mdconverter.plugin.InvalidParameterException;
+import org.mdconverter.api.plugin.AbstractPlugin;
+import org.mdconverter.api.plugin.InvalidParameterException;
 
 import java.nio.file.Path;
 

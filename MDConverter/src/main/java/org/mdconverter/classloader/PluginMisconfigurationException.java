@@ -1,6 +1,6 @@
 package org.mdconverter.classloader;
 
-import org.mdconverter.plugin.PluginManifest;
+import org.mdconverter.api.plugin.PluginManifest;
 
 /**
  * Created by miso on 07.11.2015.

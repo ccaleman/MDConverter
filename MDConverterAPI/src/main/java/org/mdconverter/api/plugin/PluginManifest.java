@@ -1,8 +1,8 @@
-package org.mdconverter.plugin;
+package org.mdconverter.api.plugin;
 
-import org.mdconverter.plugin.type.FileType;
-import org.mdconverter.plugin.type.PluginType;
-import org.mdconverter.plugin.type.ScriptType;
+import org.mdconverter.api.plugin.type.FileType;
+import org.mdconverter.api.plugin.type.PluginType;
+import org.mdconverter.api.plugin.type.ScriptType;
 
 import java.util.Map;
 

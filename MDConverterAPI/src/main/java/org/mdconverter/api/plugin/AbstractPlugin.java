@@ -1,13 +1,15 @@
-package org.mdconverter.plugin;
+package org.mdconverter.api.plugin;
 
 import org.biojava.nbio.structure.Structure;
-import org.mdconverter.consolewriter.ConsoleWriter;
-import org.mdconverter.jython.JythonObjectFactory;
-import org.mdconverter.plugin.context.Context;
-import org.mdconverter.plugin.type.PluginType;
-import org.mdconverter.plugin.type.ScriptType;
+import org.mdconverter.api.consolewriter.ConsoleWriter;
+import org.mdconverter.api.jython.JythonObjectFactory;
+import org.mdconverter.api.plugin.context.Context;
+import org.mdconverter.api.plugin.type.PluginType;
+import org.mdconverter.api.plugin.type.ScriptType;
 
 import javax.inject.Inject;
+import java.net.URISyntaxException;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
@@ -155,5 +157,14 @@ public abstract class AbstractPlugin<T> implements Context {
      */
     protected final JythonObjectFactory getJythonObjectFactory() {
         return jythonObjectFactory;
+    }
+
+
+    public final String getPluginPath() {
+        try {
+            return Paths.get(getClass().getProtectionDomain().getCodeSource().getLocation().toURI()).toString();
+        } catch (URISyntaxException e) {
+            throw new RuntimeException();
+        }
     }
 }

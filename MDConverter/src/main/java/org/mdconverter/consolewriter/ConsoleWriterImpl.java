@@ -1,6 +1,8 @@
 
 package org.mdconverter.consolewriter;
 
+import org.mdconverter.api.consolewriter.ConsoleWriter;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;

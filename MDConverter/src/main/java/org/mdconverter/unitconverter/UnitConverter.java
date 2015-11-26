@@ -1,6 +1,6 @@
 package org.mdconverter.unitconverter;
 
-import org.mdconverter.plugin.type.FileType;
+import org.mdconverter.api.plugin.type.FileType;
 
 /**
  *

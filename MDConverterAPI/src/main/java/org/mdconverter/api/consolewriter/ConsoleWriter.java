@@ -1,4 +1,4 @@
-package org.mdconverter.consolewriter;
+package org.mdconverter.api.consolewriter;
 
 /**
  * This interface defines the in- and output controls from and to the console to interact with the user

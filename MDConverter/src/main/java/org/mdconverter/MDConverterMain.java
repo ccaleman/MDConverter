@@ -3,14 +3,14 @@ package org.mdconverter;
 import com.google.common.base.Charsets;
 import org.biojava.nbio.structure.Structure;
 import org.biojava.nbio.structure.StructureImpl;
+import org.mdconverter.api.plugin.InvalidParameterException;
+import org.mdconverter.api.plugin.reader.AbstractReader;
+import org.mdconverter.api.plugin.type.FileType;
+import org.mdconverter.api.plugin.writer.AbstractWriter;
 import org.mdconverter.argumentparser.ArgumentParser;
 import org.mdconverter.argumentparser.argumentdefinition.MainArguments;
 import org.mdconverter.classloader.PluginLoader;
 import org.mdconverter.consolewriter.ConsoleWriterImpl;
-import org.mdconverter.plugin.InvalidParameterException;
-import org.mdconverter.plugin.reader.AbstractReader;
-import org.mdconverter.plugin.type.FileType;
-import org.mdconverter.plugin.writer.AbstractWriter;
 import org.mdconverter.unitconverter.UnitConverterImpl;
 
 import javax.inject.Inject;

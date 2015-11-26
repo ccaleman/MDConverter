@@ -1,8 +1,8 @@
-package org.mdconverter.plugin.reader;
+package org.mdconverter.api.plugin.reader;
 
 import org.biojava.nbio.structure.Structure;
-import org.mdconverter.plugin.InvalidParameterException;
-import org.mdconverter.plugin.context.Context;
+import org.mdconverter.api.plugin.InvalidParameterException;
+import org.mdconverter.api.plugin.context.Context;
 
 import java.nio.file.Path;
 

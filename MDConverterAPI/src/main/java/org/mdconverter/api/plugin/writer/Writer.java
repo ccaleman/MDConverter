@@ -1,7 +1,7 @@
-package org.mdconverter.plugin.writer;
+package org.mdconverter.api.plugin.writer;
 
-import org.mdconverter.plugin.InvalidParameterException;
-import org.mdconverter.plugin.context.Context;
+import org.mdconverter.api.plugin.InvalidParameterException;
+import org.mdconverter.api.plugin.context.Context;
 
 /**
  * This interface defines the explicit methods for writer plugins

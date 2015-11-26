@@ -1,6 +1,7 @@
-package org.mdconverter.plugin.context;
+package org.mdconverter.api.plugin.context;
 
-import org.mdconverter.plugin.PluginManifest;
+import org.mdconverter.api.plugin.InvalidParameterException;
+import org.mdconverter.api.plugin.PluginManifest;
 
 import java.util.List;
 import java.util.Map;
@@ -42,7 +43,7 @@ public interface Context {
     void setUnspecifiedArguments(List<String> args);
 
     /**
-     * This method is called by the framework, if plugin throws {@link org.mdconverter.plugin.InvalidParameterException}
+     * This method is called by the framework, if plugin throws {@link InvalidParameterException}
      * @return a {@link String} containing the help for a plugin
      */
     String getUsage();
