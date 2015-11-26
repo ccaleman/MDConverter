@@ -2,9 +2,9 @@ package org.mdconverter.main;
 
 import org.biojava.nbio.structure.Structure;
 import org.mdconverter.api.ReadStructure;
-import org.mdconverter.jython.JythonObjectFactory;
-import org.mdconverter.plugin.InvalidParameterException;
-import org.mdconverter.plugin.reader.AbstractReader;
+import org.mdconverter.api.jython.JythonObjectFactory;
+import org.mdconverter.api.plugin.InvalidParameterException;
+import org.mdconverter.api.plugin.reader.AbstractReader;
 
 /**
  * Created by miso on 19.11.2015.
@@ -28,8 +28,10 @@ public class AmberReader extends AbstractReader {
 
     private Structure LoadJythonScripts() {
         JythonObjectFactory jof = getJythonObjectFactory();
-        ReadStructure readstructureimpl = (ReadStructure) jof.createObject(ReadStructure.class, "readstructureimpl");
-        Structure structure = readstructureimpl.readFileToStructure(getInputFile().toString());
+        jof.addPluginToInterpreter(getPluginPath());
+        ReadStructure readStructureImpl = (ReadStructure) jof.createObject(ReadStructure.class, "ReadStructureImpl");
+        ReadStructure test = (ReadStructure) jof.createObject(ReadStructure.class, "Test");
+        Structure structure = readStructureImpl.readFileToStructure(getInputFile().toString());
         getConsoleWriter().printErrorln(structure.getName());
         return structure;
     }
