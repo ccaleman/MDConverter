@@ -4,6 +4,7 @@ package org.mdconverter.main;
 import com.google.common.collect.Lists;
 import org.biojava.nbio.structure.PDBCrystallographicInfo;
 import org.biojava.nbio.structure.Structure;
+import org.mdconverter.api.plugin.InvalidInputException;
 import org.mdconverter.api.plugin.InvalidParameterException;
 import org.mdconverter.api.plugin.writer.AbstractWriter;
 
@@ -22,35 +23,40 @@ public class PDBWriter extends AbstractWriter {
     }
 
     @Override
-    public String getOutput() throws InvalidParameterException {
-        Structure structure = (Structure) getStructure();
+    public String getOutput() throws InvalidParameterException, InvalidInputException {
+        try {
+            Structure structure = (Structure) getStructure();
 
-        PDBCrystallographicInfo info = structure.getCrystallographicInfo();
-        List<String> lines = Lists.newArrayList(structure.toPDB().split("\r\n"));
-        for (int i = 0; i < lines.size(); i++) {
-            String line = lines.get(i);
-            if (line.contains("TITLE")) {
-                continue;
-            } else {
-                lines.add(i, "REMARK    THIS IS A SIMULATION BOX");
+            PDBCrystallographicInfo info = structure.getCrystallographicInfo();
+            List<String> lines = Lists.newArrayList(structure.toPDB().split(System.lineSeparator()));
+            for (int i = 0; i < lines.size(); i++) {
+                String line = lines.get(i);
+                if (line.contains("TITLE")) {
+                    continue;
+                } else {
+                /*lines.add(i, "REMARK    THIS IS A SIMULATION BOX");
                 if (info != null) {
                     lines.add(i + 1, generateCrystEntry(info));
+                }*/
+                    //+2 if other lines active
+                    lines.add(i, "MODEL        " + structure.nrModels());
+                    break;
                 }
-                lines.add(i + 2, "MODEL        " + structure.nrModels());
-                break;
             }
-        }
-        lines.add("TER");
-        lines.add("ENDMDL");
-        StringBuffer text = new StringBuffer();
-        for (int i = 0; i < lines.size(); i++) {
-            String line = lines.get(i);
-            text.append(line);
-            if (i < lines.size() - 1) {
-                text.append(System.lineSeparator());
+            lines.add("TER");
+            lines.add("ENDMDL");
+            StringBuffer text = new StringBuffer();
+            for (int i = 0; i < lines.size(); i++) {
+                String line = lines.get(i);
+                text.append(line);
+                if (i < lines.size() - 1) {
+                    text.append(System.lineSeparator());
+                }
             }
+            return text.toString();
+        } catch (Exception e) {
+            throw new InvalidInputException(e.getMessage());
         }
-        return text.toString();
     }
 
     @Override

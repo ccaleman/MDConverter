@@ -1,6 +1,7 @@
 package org.mdconverter.api.plugin.reader;
 
 import org.biojava.nbio.structure.Structure;
+import org.mdconverter.api.plugin.InvalidInputException;
 import org.mdconverter.api.plugin.InvalidParameterException;
 import org.mdconverter.api.plugin.context.Context;
 
@@ -26,6 +27,7 @@ public interface Reader<T> {
      * @see Context#getUsage()
      * @return the structure which can either be {@link Structure} or a TOPOLOGY STRUCTURE
      * @throws InvalidParameterException if plugin is missing parameter
+     * @throws InvalidInputException if the given input file is not correct
      */
-    T getMetaModel() throws InvalidParameterException;
+    T getMetaModel() throws InvalidParameterException, InvalidInputException;
 }

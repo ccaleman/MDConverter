@@ -7,5 +7,5 @@ import org.biojava.nbio.structure.Structure;
  */
 public interface ReadStructure {
 
-    Structure readFileToStructure(String file);
+    Structure readFileToStructure(String file, Structure structure);
 }

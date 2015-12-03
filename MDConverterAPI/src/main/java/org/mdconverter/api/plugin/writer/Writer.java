@@ -1,5 +1,6 @@
 package org.mdconverter.api.plugin.writer;
 
+import org.mdconverter.api.plugin.InvalidInputException;
 import org.mdconverter.api.plugin.InvalidParameterException;
 import org.mdconverter.api.plugin.context.Context;
 
@@ -14,6 +15,7 @@ public interface Writer {
      * @see Context#getUsage()
      * @return the {@link String} holding the requested file in plugin format
      * @throws InvalidParameterException if plugin is missing parameter
+     * @throws InvalidInputException if the given {@link org.biojava.nbio.structure.Structure} is incomplete
      */
-    String getOutput() throws InvalidParameterException;
+    String getOutput() throws InvalidParameterException, InvalidInputException;
 }

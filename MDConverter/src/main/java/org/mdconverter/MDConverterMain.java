@@ -3,6 +3,7 @@ package org.mdconverter;
 import com.google.common.base.Charsets;
 import org.biojava.nbio.structure.Structure;
 import org.biojava.nbio.structure.StructureImpl;
+import org.mdconverter.api.plugin.InvalidInputException;
 import org.mdconverter.api.plugin.InvalidParameterException;
 import org.mdconverter.api.plugin.reader.AbstractReader;
 import org.mdconverter.api.plugin.type.FileType;
@@ -54,7 +55,7 @@ public class MDConverterMain {
         Object structure = null;
         try {
             structure = reader.getMetaModel();
-        } catch (InvalidParameterException e) {
+        } catch (InvalidParameterException | InvalidInputException e) {
             consoleWriter.printErrorln(e.getMessage());
             consoleWriter.printInfoln(reader.getUsage());
             throw new RuntimeException();
@@ -83,7 +84,7 @@ public class MDConverterMain {
             } else {
                 consoleWriter.printErrorln("\n" + output);
             }
-        } catch (InvalidParameterException e) {
+        } catch (InvalidParameterException | InvalidInputException e) {
             consoleWriter.printErrorln(e.getMessage());
             consoleWriter.printInfoln(writer.getUsage());
             throw new RuntimeException();

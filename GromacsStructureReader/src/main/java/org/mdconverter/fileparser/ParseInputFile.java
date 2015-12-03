@@ -33,7 +33,7 @@ public class ParseInputFile {
             reader = Files.newBufferedReader(inputFile, Charsets.UTF_8);
             lineReader = new LineNumberReader(reader);
             String line = lineReader.readLine();
-            if (TITLE_PATTERN.matcher(line).matches()) {
+            if (line != null && TITLE_PATTERN.matcher(line).matches()) {
                 return line;
             }
         } finally {
@@ -105,6 +105,7 @@ public class ParseInputFile {
                 residueNumber.setSeqNum(Integer.parseInt(id));
                 group.setResidueNumber(residueNumber);
             }
+            atom.setOccupancy(1);
             atom.setName(split.get(1));
             atom.setPDBserial(Integer.parseInt(split.get(2)));
             atom.setX(Double.parseDouble(split.get(3)));

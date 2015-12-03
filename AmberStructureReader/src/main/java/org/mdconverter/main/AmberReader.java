@@ -3,6 +3,7 @@ package org.mdconverter.main;
 import org.biojava.nbio.structure.Structure;
 import org.mdconverter.api.ReadStructure;
 import org.mdconverter.api.jython.JythonObjectFactory;
+import org.mdconverter.api.plugin.InvalidInputException;
 import org.mdconverter.api.plugin.InvalidParameterException;
 import org.mdconverter.api.plugin.reader.AbstractReader;
 
@@ -17,7 +18,7 @@ public class AmberReader extends AbstractReader {
     }
 
     @Override
-    public Structure getMetaModel() throws InvalidParameterException {
+    public Structure getMetaModel() throws InvalidParameterException, InvalidInputException {
         return LoadJythonScripts();
     }
 
@@ -26,12 +27,10 @@ public class AmberReader extends AbstractReader {
         return super.getUsage();
     }
 
-    private Structure LoadJythonScripts() {
+    private Structure LoadJythonScripts() throws InvalidInputException {
         JythonObjectFactory jof = getJythonObjectFactory();
-        jof.addPluginToInterpreter(getPluginPath());
-        ReadStructure readStructureImpl = (ReadStructure) jof.createObject(ReadStructure.class, "ReadStructureImpl");
-        ReadStructure test = (ReadStructure) jof.createObject(ReadStructure.class, "Test");
-        Structure structure = readStructureImpl.readFileToStructure(getInputFile().toString());
+        ReadStructure readFile = (ReadStructure) jof.createObject(ReadStructure.class, "ReadFile", "Lib.processfile.");
+        Structure structure = readFile.readFileToStructure(getInputFile().toString(), (Structure) getStructure());
         getConsoleWriter().printErrorln(structure.getName());
         return structure;
     }

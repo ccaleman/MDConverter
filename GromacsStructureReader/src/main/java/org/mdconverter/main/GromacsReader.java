@@ -8,6 +8,7 @@ import org.biojava.nbio.structure.Structure;
 import org.biojava.nbio.structure.xtal.BravaisLattice;
 import org.biojava.nbio.structure.xtal.CrystalCell;
 import org.biojava.nbio.structure.xtal.SpaceGroup;
+import org.mdconverter.api.plugin.InvalidInputException;
 import org.mdconverter.api.plugin.InvalidParameterException;
 import org.mdconverter.api.plugin.reader.AbstractReader;
 import org.mdconverter.fileparser.ParseInputFile;
@@ -29,7 +30,7 @@ public class GromacsReader extends AbstractReader {
     }
 
     @Override
-    public Structure getMetaModel() throws InvalidParameterException {
+    public Structure getMetaModel() throws InvalidParameterException, InvalidInputException {
         try {
             Structure structure = (Structure) getStructure();
             PDBHeader pdbHeader = new PDBHeader();
@@ -47,7 +48,7 @@ public class GromacsReader extends AbstractReader {
             return structure;
         } catch (IOException e) {
             getConsoleWriter().printErrorln(e.getMessage());
-            throw new RuntimeException(getName() + " wasn't able to parse input file!");
+            throw new InvalidInputException(getName() + " wasn't able to parse input file!");
         }
     }
 

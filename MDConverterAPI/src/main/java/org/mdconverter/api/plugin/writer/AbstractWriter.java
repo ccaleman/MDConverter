@@ -1,6 +1,7 @@
 package org.mdconverter.api.plugin.writer;
 
 import org.mdconverter.api.plugin.AbstractPlugin;
+import org.mdconverter.api.plugin.InvalidInputException;
 import org.mdconverter.api.plugin.InvalidParameterException;
 
 /**
@@ -12,10 +13,10 @@ public abstract class AbstractWriter<T> extends AbstractPlugin<T> implements Wri
 
     /**
      * @see Writer#getOutput()
-     * @throws InvalidParameterException
+     * @throws InvalidParameterException, InvalidInputException
      */
     @Override
-    public String getOutput() throws InvalidParameterException {
+    public String getOutput() throws InvalidParameterException, InvalidInputException {
         return null;
     }
 }

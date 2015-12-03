@@ -1,6 +1,7 @@
 package org.mdconverter.api.plugin.reader;
 
 import org.mdconverter.api.plugin.AbstractPlugin;
+import org.mdconverter.api.plugin.InvalidInputException;
 import org.mdconverter.api.plugin.InvalidParameterException;
 
 import java.nio.file.Path;
@@ -18,8 +19,12 @@ public abstract class AbstractReader<T> extends AbstractPlugin<T> implements Rea
      */
     private Path inputFile;
 
+    /**
+     * @see Reader#getMetaModel()
+     * @throws InvalidParameterException, InvalidInputException
+     */
     @Override
-    public T getMetaModel() throws InvalidParameterException {
+    public T getMetaModel() throws InvalidParameterException, InvalidInputException {
         return this.getStructure();
     }
 
