@@ -1,16 +1,19 @@
 import com.google.common.collect.Lists as Lists
+import java.lang.Object as Object
 import java.nio.file.Paths as Paths
 import org.biojava.nbio.structure.AminoAcidImpl as Group
 import org.biojava.nbio.structure.AtomImpl as Atom
 import org.biojava.nbio.structure.ChainImpl as ChainImpl
 import org.biojava.nbio.structure.Element as Element
+import org.biojava.nbio.structure.PDBCrystallographicInfo as PdbCryst
 import org.biojava.nbio.structure.PDBHeader as PdbHeader
 import org.biojava.nbio.structure.ResidueNumber as ResidueNumber
+import org.biojava.nbio.structure.xtal.BravaisLattice as BravaisL
+import org.biojava.nbio.structure.xtal.SpaceGroup as SpaceGroup
 import re as re
-from java.lang import Object
 
+import org.mdconverter.api.ReadStructure as ReadStructure
 import org.mdconverter.api.plugin.InvalidInputException as Invalid
-from org.mdconverter.api import ReadStructure
 
 
 class ReadFile(ReadStructure, Object):
@@ -22,27 +25,42 @@ class ReadFile(ReadStructure, Object):
         BOND_DEF_PATTERN = "^@<[A-Z]*>BOND$"
         STRUCTURE_DEF_PATTERN = "^@<[A-Z]*>SUBSTRUCTURE$"
 
+    highestX = 0
+    highestY = 0
+    highestZ = 0
+    lowestX = 0
+    lowestY = 0
+    lowestZ = 0
+
     def __init__(self):
-        pass
+        global highestX, highestY, highestZ, lowestX, lowestY, lowestZ
+        highestX = 0
+        highestY = 0
+        highestZ = 0
+        lowestX = 0
+        lowestY = 0
+        lowestZ = 0
 
     def readFileToStructure(self, path, structure):
         header = PdbHeader()
         header.setTitle(Paths.get(path).getFileName().toString())
         structure.setPDBHeader(header)
-        model = ReadFile.getModelFromFile(path)
+        model = ReadFile.getModelFromFile(self, path)
         structure.setChains(Lists.newArrayList(model))
+        info = PdbCryst()
+        info.setSpaceGroup(SpaceGroup(0, 1, 1, "P 1", "P 1", BravaisL.CUBIC))
+        info.setCrystalCell(ReadFile.getBox(self, info.getSpaceGroup().getBravLattice().getExampleUnitCell()))
+        header.setCrystallographicInfo(info)
         return structure
 
-    @staticmethod
-    def getModelFromFile(path):
+    def getModelFromFile(self, path):
         with open(path) as f:
             all_lines = f.readlines()
         chain = ChainImpl()
-        chain.setAtomGroups(ReadFile.getGroups(all_lines))
+        chain.setAtomGroups(ReadFile.getGroups(self, all_lines))
         return chain
 
-    @staticmethod
-    def getGroups(all_lines):
+    def getGroups(self, all_lines):
         groups = []
         area = ''
         atom_count = 0
@@ -85,7 +103,7 @@ class ReadFile(ReadStructure, Object):
                 if m is not None:
                     atom_check += 1
                     words = all_lines[idx].split()
-                    atom = ReadFile.getAtom(words)
+                    atom = ReadFile.getAtom(self, words)
                     if len(words) > 5:
                         group = groups[int(words[6]) - 1]
                         if group.getPDBName() is None:
@@ -104,24 +122,47 @@ class ReadFile(ReadStructure, Object):
                     continue
             if area == 'sub':
                 sub_check = 1
-                group = groups[sub_check-1]
+                group = groups[sub_check - 1]
                 words = all_lines[idx].split()
                 if group.getPDBName is None:
                     group.setPDBName(words[1])
                     group.setResidueNumber(int(words[0]))
         if sub_check != sub_count:
-                raise Invalid('Substructure definition count do not equal found substructures')
+            raise Invalid('Substructure definition count do not equal found substructures')
         return groups
 
-    @staticmethod
-    def getAtom(words):
+    def getAtom(self, words):
+        global highestX, highestY, highestZ, lowestX, lowestY, lowestZ
         atom = Atom()
         atom.setOccupancy(1)
         atom.setPDBserial(int(words[0]))
         atom.setName(words[1])
-        atom.setX(float(words[2]))
-        atom.setY(float(words[3]))
-        atom.setZ(float(words[4]))
+        x = float(words[2])
+        y = float(words[3])
+        z = float(words[4])
+        if highestX <= x:
+            highestX = x
+        elif lowestX >= x:
+            lowestX = x
+        if highestY <= y:
+            highestY = y
+        elif lowestY >= y:
+            lowestY = y
+        if highestZ <= z:
+            highestZ = z
+        elif lowestZ >= z:
+            lowestZ = z
+        atom.setX(x)
+        atom.setY(y)
+        atom.setZ(z)
         atom.setAltLoc(' ')
         atom.setElement(Element.valueOf(atom.getName()[:1]))
         return atom
+
+    def getBox(self, cell):
+        global highestX, highestY, highestZ, lowestX, lowestY, lowestZ
+        doubles = [highestX + (-lowestX), highestY + (-lowestY), highestZ + (-lowestZ)]
+        cell.setA(doubles[0])
+        cell.setB(doubles[1])
+        cell.setC(doubles[2])
+        return cell

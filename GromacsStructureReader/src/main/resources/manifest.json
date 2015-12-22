@@ -14,6 +14,7 @@
         "charge": "e",
         "temperature": "K",
         "energy": "kJ/mol",
-        "force": "kJ/mol/nm"
+        "force": "kJ/mol/nm",
+        "pressure": "kJ/mol/nm^3"
     }
 }

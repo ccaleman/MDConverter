@@ -29,23 +29,30 @@ public class PDBWriter extends AbstractWriter {
 
             PDBCrystallographicInfo info = structure.getCrystallographicInfo();
             List<String> lines = Lists.newArrayList(structure.toPDB().split(System.lineSeparator()));
+            int a = 0;
             for (int i = 0; i < lines.size(); i++) {
                 String line = lines.get(i);
                 if (line.contains("TITLE")) {
                     continue;
                 } else {
-                /*lines.add(i, "REMARK    THIS IS A SIMULATION BOX");
-                if (info != null) {
-                    lines.add(i + 1, generateCrystEntry(info));
-                }*/
-                    //+2 if other lines active
-                    lines.add(i, "MODEL        " + structure.nrModels());
+                    if (info != null) {
+                        lines.add(i + a, "REMARK    THIS IS A SIMULATION BOX");
+                        ++a;
+                        lines.add(i + a, generateCrystEntry(info));
+                        ++a;
+                    }
+                    lines.add(i + a, "MODEL        " + structure.nrModels());
                     break;
                 }
             }
+            if (structure.nrModels() > 1) {
+                getConsoleWriter().printErrorln("Error happened according to number of containing models.\n" +
+                        "This is an known issue and will be fixed in future release");
+            }
+            //TODO check number of models --> generate entries
             lines.add("TER");
             lines.add("ENDMDL");
-            StringBuffer text = new StringBuffer();
+            StringBuilder text = new StringBuilder();
             for (int i = 0; i < lines.size(); i++) {
                 String line = lines.get(i);
                 text.append(line);

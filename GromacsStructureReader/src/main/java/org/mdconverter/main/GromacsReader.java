@@ -1,6 +1,7 @@
 package org.mdconverter.main;
 
 
+import com.google.inject.Inject;
 import org.biojava.nbio.structure.Chain;
 import org.biojava.nbio.structure.PDBCrystallographicInfo;
 import org.biojava.nbio.structure.PDBHeader;
@@ -16,13 +17,15 @@ import org.mdconverter.fileparser.ParseInputFile;
 import javax.inject.Singleton;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * Created by miso on 04.11.2015.
  */
 @Singleton
 public class GromacsReader extends AbstractReader {
+
+    @Inject
+    private ParseInputFile inputParser;
 
     @Override
     public String getDescription() {
@@ -34,17 +37,19 @@ public class GromacsReader extends AbstractReader {
         try {
             Structure structure = (Structure) getStructure();
             PDBHeader pdbHeader = new PDBHeader();
-            pdbHeader.setTitle(ParseInputFile.getTitleFromFile(getInputFile()));
+            pdbHeader.setTitle(inputParser.getTitleFromFile(getInputFile()));
             PDBCrystallographicInfo pdbCrystallographicInfo = new PDBCrystallographicInfo();
-            Optional<CrystalCell> crystlCell = ParseInputFile.getCrystlCell(getInputFile());
-            if (crystlCell.isPresent()) {
-                pdbCrystallographicInfo.setCrystalCell(crystlCell.get());
-                pdbCrystallographicInfo.setSpaceGroup(new SpaceGroup(0, 1, 1, "P 1", "P 1", BravaisLattice.CUBIC));
-                pdbHeader.setCrystallographicInfo(pdbCrystallographicInfo);
-            }
-            structure.setPDBHeader(pdbHeader);
-            List<Chain> modelFromFile = ParseInputFile.getModelFromFile(getInputFile());
+            List<Chain> modelFromFile = inputParser.getModelFromFile(getInputFile());
             structure.setModel(0, modelFromFile);
+
+            pdbCrystallographicInfo.setSpaceGroup(new SpaceGroup(0, 1, 1, "P 1", "P 1", BravaisLattice.CUBIC));
+            CrystalCell crystalCell = pdbCrystallographicInfo.getSpaceGroup().getBravLattice().getExampleUnitCell();
+            //call always after getModelFromFile --> box calculation
+            inputParser.getCrystlCell(getInputFile(), crystalCell);
+            pdbCrystallographicInfo.setCrystalCell(crystalCell);
+            pdbHeader.setCrystallographicInfo(pdbCrystallographicInfo);
+
+            structure.setPDBHeader(pdbHeader);
             return structure;
         } catch (IOException e) {
             getConsoleWriter().printErrorln(e.getMessage());
@@ -56,5 +61,6 @@ public class GromacsReader extends AbstractReader {
     public String getUsage() {
         return "GromacsSR do not need any special arguments aberrant from normal usage.";
     }
+
 }
 

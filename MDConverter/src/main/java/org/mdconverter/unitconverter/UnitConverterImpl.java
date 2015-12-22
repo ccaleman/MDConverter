@@ -45,9 +45,6 @@ public class UnitConverterImpl implements UnitConverter {
                 crystalCell.setA(getLengthFromXInY(Real.valueOf(crystalCell.getA()), lengthX, lengthY).doubleValue());
                 crystalCell.setB(getLengthFromXInY(Real.valueOf(crystalCell.getB()), lengthX, lengthY).doubleValue());
                 crystalCell.setC(getLengthFromXInY(Real.valueOf(crystalCell.getC()), lengthX, lengthY).doubleValue());
-                crystalCell.setAlpha(getLengthFromXInY(Real.valueOf(crystalCell.getAlpha()), lengthX, lengthY).doubleValue());
-                crystalCell.setBeta(getLengthFromXInY(Real.valueOf(crystalCell.getBeta()), lengthX, lengthY).doubleValue());
-                crystalCell.setGamma(getLengthFromXInY(Real.valueOf(crystalCell.getGamma()), lengthX, lengthY).doubleValue());
             }
             return struct;
         } else {

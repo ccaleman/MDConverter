@@ -2,8 +2,10 @@ package org.mdconverter.fileparser;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
+import com.google.inject.Inject;
 import org.biojava.nbio.structure.*;
 import org.biojava.nbio.structure.xtal.CrystalCell;
+import org.mdconverter.api.consolewriter.ConsoleWriter;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -11,7 +13,6 @@ import java.io.LineNumberReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Optional;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -25,8 +26,28 @@ public class ParseInputFile {
     private static Pattern NUM_PATTERN = Pattern.compile("^[1-9][0-9]*");
     private static Pattern TITLE_PATTERN = Pattern.compile("^[a-zA-z0-9`\\-=\\[\\];',./~!@#$%^&*()_+{}|:\"<>? ]*");
     private static Pattern CRYSTAL_CELL_PATTERN = Pattern.compile("^([ \\t]+[-]?[0-9]+[.][0-9]+){3,6}");
+    private double highestX;
+    private double highestY;
+    private double highestZ;
+    private double lowestX;
+    private double lowestY;
+    private double lowestZ;
 
-    public static String getTitleFromFile(Path inputFile) throws IOException {
+    private ConsoleWriter cw;
+
+    @Inject
+    public ParseInputFile(ConsoleWriter cw) {
+        this.cw = cw;
+        highestX = 0;
+        highestY = 0;
+        highestZ = 0;
+        lowestX = 0;
+        lowestY = 0;
+        lowestZ = 0;
+    }
+
+
+    public String getTitleFromFile(Path inputFile) throws IOException {
         BufferedReader reader = null;
         LineNumberReader lineReader = null;
         try {
@@ -47,30 +68,33 @@ public class ParseInputFile {
         return "NO TITLE FOUND!";
     }
 
-    public static Optional<CrystalCell> getCrystlCell(Path inputFile) throws IOException {
+    public CrystalCell getCrystlCell(Path inputFile, CrystalCell cell) throws IOException {
         List<String> allLines = Files.readAllLines(inputFile);
         for (String line : allLines) {
             if (CRYSTAL_CELL_PATTERN.matcher(line).matches()) {
                 String trim = line.trim();
                 List<String> split = Lists.newArrayList(trim.split(" +"));
                 List<Double> doubles = split.stream().map(Double::parseDouble).collect(Collectors.toList());
-                if (doubles.size() == 3) {
-                    doubles.addAll(Lists.newArrayList(9.0, 9.0, 9.0));
-                }
-                return Optional.of(new CrystalCell(doubles.get(0), doubles.get(1), doubles.get(2), doubles.get(3), doubles.get(4), doubles.get(5)));
+                double[] boxSize = sumBoxSize();
+                if (doubles.get(0) >= boxSize[0]) doubles.set(0, boxSize[0]);
+                if (doubles.get(1) >= boxSize[1]) doubles.set(1, boxSize[1]);
+                if (doubles.get(2) >= boxSize[2]) doubles.set(2, boxSize[2]);
+                cell.setA(doubles.get(0));
+                cell.setB(doubles.get(1));
+                cell.setC(doubles.get(2));
             }
         }
-        return Optional.empty();
+        return cell;
     }
 
-    public static List<Chain> getModelFromFile(Path input) throws IOException {
+    public List<Chain> getModelFromFile(Path input) throws IOException {
         List<String> strings = Files.readAllLines(input);
         Chain chain = new ChainImpl();
         chain.setAtomGroups(getGroups(strings));
         return Lists.newArrayList(chain);
     }
 
-    private static List<Group> getGroups(List<String> groupGroups) {
+    private List<Group> getGroups(List<String> groupGroups) {
         List<Group> groups = Lists.newArrayList();
         List<String> groupList = Lists.newArrayList();
         Integer i = 1;
@@ -92,7 +116,7 @@ public class ParseInputFile {
         return groups;
     }
 
-    private static Group getAtoms(List<String> groupAtoms, String id) {
+    private Group getAtoms(List<String> groupAtoms, String id) {
         Group group = new AminoAcidImpl();
         String chainId = null;
         for (String groupAtom : groupAtoms) {
@@ -108,9 +132,13 @@ public class ParseInputFile {
             atom.setOccupancy(1);
             atom.setName(split.get(1));
             atom.setPDBserial(Integer.parseInt(split.get(2)));
-            atom.setX(Double.parseDouble(split.get(3)));
-            atom.setY(Double.parseDouble(split.get(4)));
-            atom.setZ(Double.parseDouble(split.get(5)));
+            double x = Double.parseDouble(split.get(3));
+            double y = Double.parseDouble(split.get(4));
+            double z = Double.parseDouble(split.get(5));
+            checkHighestAndLowest(x, y, z);
+            atom.setX(x);
+            atom.setY(y);
+            atom.setZ(z);
             atom.setAltLoc(' ');
             List<String> elements = Lists.newArrayList();
             Lists.newArrayList(Element.values()).stream().forEach(elem -> elements.add(elem.toString()));
@@ -120,5 +148,22 @@ public class ParseInputFile {
             group.addAtom(atom);
         }
         return group;
+    }
+
+    private void checkHighestAndLowest(double x, double y, double z) {
+        if (highestX <= x) highestX = x;
+        else if (lowestX >= x) lowestX = x;
+        if (highestY <= y) highestY = y;
+        else if (lowestY >= y) lowestY = y;
+        if (highestZ <= z) highestZ = z;
+        else if (lowestZ >= z) lowestZ = z;
+    }
+
+    private double[] sumBoxSize() {
+        double[] boxSize = new double[3];
+        boxSize[0] = highestX + (-lowestX);
+        boxSize[1] = highestY + (-lowestY);
+        boxSize[2] = highestZ + (-lowestZ);
+        return boxSize;
     }
 }

@@ -48,6 +48,7 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <minimizeJar>true</minimizeJar>
                     <finalName>PdbSW</finalName>
                     <outputDirectory>${plugin.output.writer.structure}</outputDirectory>
                 </configuration>

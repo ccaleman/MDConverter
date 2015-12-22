@@ -76,6 +76,7 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <minimizeJar>true</minimizeJar>
                     <finalName>AmberSR</finalName>
                     <outputDirectory>${plugin.output.reader.structure}</outputDirectory>
                 </configuration>
