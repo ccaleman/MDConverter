@@ -1,0 +1,19 @@
+{
+  "pluginName": "gromacs",
+  "className": "org.mdconverter.main.GromacsTReader",
+  "version": "1.0",
+  "fileExtension": "top",
+  "fileType": "topology",
+  "pluginType": "reader",
+  "script": false,
+  "scriptType": "none",
+  "measurementUnits": {
+    "length": "nm",
+    "mass": "kg",
+    "time": "ps",
+    "charge": "e",
+    "temperature": "K",
+    "energy": "kJ/mol",
+    "force": "kJ/mol/nm"
+  }
+}
