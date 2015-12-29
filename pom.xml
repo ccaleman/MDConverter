@@ -15,6 +15,7 @@
         <module>GromacsTopologyReader</module>
         <module>PDBStructureWriter</module>
         <module>AmberStructureReader</module>
+        <module>GromacsTopologyWriter</module>
     </modules>
 
     <properties>

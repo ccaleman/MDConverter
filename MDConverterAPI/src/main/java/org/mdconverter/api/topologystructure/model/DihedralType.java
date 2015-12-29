@@ -11,23 +11,137 @@ public class DihedralType {
     private String aj;
     private String ak;
     private String al;
-    private int funcType;
-    private BigDecimal phase;
-    private BigDecimal kd;
-    private BigDecimal pn;
+    private Integer funcType;
+    private BigDecimal c1;
+    private BigDecimal c2;
+    private BigDecimal c3;
+    private BigDecimal c4;
+    private BigDecimal c5;
+    private BigDecimal c6;
+    private Boolean outer;
 
     public DihedralType() {
     }
 
-    public DihedralType(String ai, String aj, String ak, String al, int funcType, BigDecimal phase, BigDecimal kd, BigDecimal pn) {
+    public DihedralType(String ai, String aj, String ak, String al, Integer funcType, BigDecimal c1, BigDecimal c2) {
         this.ai = ai;
         this.aj = aj;
         this.ak = ak;
         this.al = al;
         this.funcType = funcType;
-        this.phase = phase;
-        this.kd = kd;
-        this.pn = pn;
+        this.c1 = c1;
+        this.c2 = c2;
+    }
+
+    public DihedralType(String ai, String aj, String ak, String al, Integer funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3) {
+        this.ai = ai;
+        this.aj = aj;
+        this.ak = ak;
+        this.al = al;
+        this.funcType = funcType;
+        this.c1 = c1;
+        this.c2 = c2;
+        this.c3 = c3;
+    }
+
+    public DihedralType(String ai, String aj, String ak, String al, Integer funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3,
+                        BigDecimal c4) {
+        this.ai = ai;
+        this.aj = aj;
+        this.ak = ak;
+        this.al = al;
+        this.funcType = funcType;
+        this.c1 = c1;
+        this.c2 = c2;
+        this.c3 = c3;
+        this.c4 = c4;
+    }
+
+    public DihedralType(String ai, String aj, String ak, String al, Integer funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3,
+                        BigDecimal c4, BigDecimal c5) {
+        this.ai = ai;
+        this.aj = aj;
+        this.ak = ak;
+        this.al = al;
+        this.funcType = funcType;
+        this.c1 = c1;
+        this.c2 = c2;
+        this.c3 = c3;
+        this.c4 = c4;
+        this.c5 = c5;
+    }
+
+    public DihedralType(String ai, String aj, String ak, String al, Integer funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3,
+                        BigDecimal c4, BigDecimal c5, BigDecimal c6) {
+        this.ai = ai;
+        this.aj = aj;
+        this.ak = ak;
+        this.al = al;
+        this.funcType = funcType;
+        this.c1 = c1;
+        this.c2 = c2;
+        this.c3 = c3;
+        this.c4 = c4;
+        this.c5 = c5;
+        this.c6 = c6;
+    }
+
+    public DihedralType(String ai, String al, Integer funcType, BigDecimal c1, BigDecimal c2, Boolean outer) {
+        this.ai = ai;
+        this.al = al;
+        this.funcType = funcType;
+        this.c1 = c1;
+        this.c2 = c2;
+        this.outer = outer;
+    }
+
+    public DihedralType(String ai, String al, Integer funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3, Boolean outer) {
+        this.ai = ai;
+        this.al = al;
+        this.funcType = funcType;
+        this.c1 = c1;
+        this.c2 = c2;
+        this.c3 = c3;
+        this.outer = outer;
+    }
+
+    public DihedralType(String ai, String al, Integer funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3,
+                        BigDecimal c4, Boolean outer) {
+        this.ai = ai;
+        this.al = al;
+        this.funcType = funcType;
+        this.c1 = c1;
+        this.c2 = c2;
+        this.c3 = c3;
+        this.c4 = c4;
+        this.outer = outer;
+    }
+
+    public DihedralType(String ai, String al, Integer funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3,
+                        BigDecimal c4, BigDecimal c5, Boolean outer) {
+        this.ai = ai;
+        this.al = al;
+        this.funcType = funcType;
+        this.c1 = c1;
+        this.c2 = c2;
+        this.c3 = c3;
+        this.c4 = c4;
+        this.c5 = c5;
+        this.outer = outer;
+    }
+
+    public DihedralType(String ai, String al, Integer funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3,
+                        BigDecimal c4, BigDecimal c5, BigDecimal c6, Boolean outer) {
+        this.ai = ai;
+        this.al = al;
+        this.funcType = funcType;
+        this.c1 = c1;
+        this.c2 = c2;
+        this.c3 = c3;
+        this.c4 = c4;
+        this.c5 = c5;
+        this.c6 = c6;
+        this.outer = outer;
     }
 
     public String getAi() {
@@ -62,35 +176,67 @@ public class DihedralType {
         this.al = al;
     }
 
-    public int getFuncType() {
+    public Integer getFuncType() {
         return funcType;
     }
 
-    public void setFuncType(int funcType) {
+    public void setFuncType(Integer funcType) {
         this.funcType = funcType;
     }
 
-    public BigDecimal getPhase() {
-        return phase;
+    public BigDecimal getC1() {
+        return c1;
     }
 
-    public void setPhase(BigDecimal phase) {
-        this.phase = phase;
+    public void setC1(BigDecimal c1) {
+        this.c1 = c1;
     }
 
-    public BigDecimal getKd() {
-        return kd;
+    public BigDecimal getC2() {
+        return c2;
     }
 
-    public void setKd(BigDecimal kd) {
-        this.kd = kd;
+    public void setC2(BigDecimal c2) {
+        this.c2 = c2;
     }
 
-    public BigDecimal getPn() {
-        return pn;
+    public BigDecimal getC3() {
+        return c3;
     }
 
-    public void setPn(BigDecimal pn) {
-        this.pn = pn;
+    public void setC3(BigDecimal c3) {
+        this.c3 = c3;
+    }
+
+    public BigDecimal getC4() {
+        return c4;
+    }
+
+    public void setC4(BigDecimal c4) {
+        this.c4 = c4;
+    }
+
+    public BigDecimal getC5() {
+        return c5;
+    }
+
+    public void setC5(BigDecimal c5) {
+        this.c5 = c5;
+    }
+
+    public BigDecimal getC6() {
+        return c6;
+    }
+
+    public void setC6(BigDecimal c6) {
+        this.c6 = c6;
+    }
+
+    public Boolean isOuter() {
+        return outer;
+    }
+
+    public void setOuter(Boolean outer) {
+        this.outer = outer;
     }
 }

@@ -9,27 +9,27 @@ public class OrientationRestraint {
 
     private String ai;
     private String aj;
-    private int type;
+    private int funcType;
     private Integer exp;
     private Integer label;
     private Integer alpha;
-    private BigDecimal constant;
-    private BigDecimal observeable;
-    private BigDecimal weight;
+    private BigDecimal c1;
+    private BigDecimal c2;
+    private BigDecimal c3;
 
     public OrientationRestraint() {
     }
 
-    public OrientationRestraint(String ai, String aj, int type, Integer exp, Integer label, Integer alpha, BigDecimal constant, BigDecimal observeable, BigDecimal weight) {
+    public OrientationRestraint(String ai, String aj, int funcType, Integer exp, Integer label, Integer alpha, BigDecimal c1, BigDecimal c2, BigDecimal c3) {
         this.ai = ai;
         this.aj = aj;
-        this.type = type;
+        this.funcType = funcType;
         this.exp = exp;
         this.label = label;
         this.alpha = alpha;
-        this.constant = constant;
-        this.observeable = observeable;
-        this.weight = weight;
+        this.c1 = c1;
+        this.c2 = c2;
+        this.c3 = c3;
     }
 
     public String getAi() {
@@ -48,12 +48,12 @@ public class OrientationRestraint {
         this.aj = aj;
     }
 
-    public int getType() {
-        return type;
+    public int getFuncType() {
+        return funcType;
     }
 
-    public void setType(int type) {
-        this.type = type;
+    public void setFuncType(int funcType) {
+        this.funcType = funcType;
     }
 
     public Integer getExp() {
@@ -80,27 +80,27 @@ public class OrientationRestraint {
         this.alpha = alpha;
     }
 
-    public BigDecimal getConstant() {
-        return constant;
+    public BigDecimal getC1() {
+        return c1;
     }
 
-    public void setConstant(BigDecimal constant) {
-        this.constant = constant;
+    public void setC1(BigDecimal c1) {
+        this.c1 = c1;
     }
 
-    public BigDecimal getObserveable() {
-        return observeable;
+    public BigDecimal getC2() {
+        return c2;
     }
 
-    public void setObserveable(BigDecimal observeable) {
-        this.observeable = observeable;
+    public void setC2(BigDecimal c2) {
+        this.c2 = c2;
     }
 
-    public BigDecimal getWeight() {
-        return weight;
+    public BigDecimal getC3() {
+        return c3;
     }
 
-    public void setWeight(BigDecimal weight) {
-        this.weight = weight;
+    public void setC3(BigDecimal c3) {
+        this.c3 = c3;
     }
 }

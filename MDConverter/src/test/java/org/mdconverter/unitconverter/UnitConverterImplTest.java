@@ -36,8 +36,8 @@ public class UnitConverterImplTest {
 
     @Test
     public void testConvertStructure() throws Exception {
-        unitConverter.setReaderUnits(ImmutableMap.of("length", "nm"));
-        unitConverter.setWriterUnits(ImmutableMap.of("length", "Å"));
+        unitConverter.setReaderUnits(ImmutableMap.of("global", ImmutableMap.of("standard", ImmutableMap.of("length", "nm"))));
+        unitConverter.setWriterUnits(ImmutableMap.of("global", ImmutableMap.of("standard", ImmutableMap.of("length", "Å"))));
         Structure structure = (Structure) unitConverter.convertStructure(this.struct, FileType.STRUCTURE);
         assertEquals(10, structure.getChain(0).getAtomGroup(0).getAtom(0).getX(), 0);
         assertEquals(120, structure.getChain(0).getAtomGroup(0).getAtom(0).getY(), 0);
@@ -46,8 +46,8 @@ public class UnitConverterImplTest {
 
     @Test(expected=ConversionException.class)
     public void testConvertStructureError() throws Exception {
-        unitConverter.setReaderUnits(ImmutableMap.of("length", "nm"));
-        unitConverter.setWriterUnits(ImmutableMap.of("length", "ps"));
+        unitConverter.setReaderUnits(ImmutableMap.of("global", ImmutableMap.of("standard", ImmutableMap.of("length", "nm"))));
+        unitConverter.setWriterUnits(ImmutableMap.of("global", ImmutableMap.of("standard", ImmutableMap.of("length", "ps"))));
         unitConverter.convertStructure(this.struct, FileType.STRUCTURE);
     }
 

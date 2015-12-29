@@ -10,18 +10,25 @@ public class Constraint {
     private String ai;
     private String aj;
     private int funcType;
-    private BigDecimal lengthA;
-    private BigDecimal lengthB;
+    private BigDecimal c1;
+    private BigDecimal c2;
 
     public Constraint() {
     }
 
-    public Constraint(String ai, String aj, int funcType, BigDecimal lengthA, BigDecimal lengthB) {
+    public Constraint(String ai, String aj, int funcType, BigDecimal c1) {
         this.ai = ai;
         this.aj = aj;
         this.funcType = funcType;
-        this.lengthA = lengthA;
-        this.lengthB = lengthB;
+        this.c1 = c1;
+    }
+
+    public Constraint(String ai, String aj, int funcType, BigDecimal c1, BigDecimal c2) {
+        this.ai = ai;
+        this.aj = aj;
+        this.funcType = funcType;
+        this.c1 = c1;
+        this.c2 = c2;
     }
 
     public String getAi() {
@@ -48,19 +55,19 @@ public class Constraint {
         this.funcType = funcType;
     }
 
-    public BigDecimal getLengthA() {
-        return lengthA;
+    public BigDecimal getC1() {
+        return c1;
     }
 
-    public void setLengthA(BigDecimal lengthA) {
-        this.lengthA = lengthA;
+    public void setC1(BigDecimal c1) {
+        this.c1 = c1;
     }
 
-    public BigDecimal getLengthB() {
-        return lengthB;
+    public BigDecimal getC2() {
+        return c2;
     }
 
-    public void setLengthB(BigDecimal lengthB) {
-        this.lengthB = lengthB;
+    public void setC2(BigDecimal c2) {
+        this.c2 = c2;
     }
 }

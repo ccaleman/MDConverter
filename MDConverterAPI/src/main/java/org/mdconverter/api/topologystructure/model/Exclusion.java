@@ -9,23 +9,23 @@ import java.util.List;
  */
 public class Exclusion {
 
-    private Integer aIdx;
+    private Integer atomIdx;
     private List<Integer> bonds = Lists.newArrayList();
 
     public Exclusion() {
     }
 
-    public Exclusion(Integer aIdx, List<Integer> bonds) {
-        this.aIdx = aIdx;
+    public Exclusion(Integer atomIdx, List<Integer> bonds) {
+        this.atomIdx = atomIdx;
         this.bonds = bonds;
     }
 
-    public Integer getaIdx() {
-        return aIdx;
+    public Integer getAtomIdx() {
+        return atomIdx;
     }
 
-    public void setaIdx(Integer aIdx) {
-        this.aIdx = aIdx;
+    public void setAtomIdx(Integer atomIdx) {
+        this.atomIdx = atomIdx;
     }
 
     public List<Integer> getBonds() {

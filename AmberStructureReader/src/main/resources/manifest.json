@@ -1,17 +1,21 @@
 {
-    "pluginName": "amber",
-    "className": "org.mdconverter.main.AmberReader",
-    "version": "1.0",
-    "fileExtension": "mol2",
-    "fileType": "structure",
-    "pluginType": "reader",
-    "script": true,
-    "scriptType": "jython",
-    "measurementUnits": {
+  "pluginName": "amber",
+  "className": "org.mdconverter.main.AmberReader",
+  "version": "1.0",
+  "fileExtension": "mol2",
+  "fileType": "structure",
+  "pluginType": "reader",
+  "script": true,
+  "scriptType": "jython",
+  "measurementUnits": {
+    "global": {
+      "standard": {
         "length": "Å",
         "mass": "kg",
         "time": "s",
         "charge": "e",
         "energy": "kcal/mol"
+      }
     }
+  }
 }

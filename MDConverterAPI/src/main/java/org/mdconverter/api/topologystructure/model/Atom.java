@@ -36,6 +36,17 @@ public class Atom {
         this.massB = massB;
     }
 
+    public Atom(Integer nr, String type, Integer resNr, String resName, String atomName, Integer chargeGroupNr, BigDecimal charge, BigDecimal mass) {
+        this.nr = nr;
+        this.type = type;
+        this.resNr = resNr;
+        this.resName = resName;
+        this.atomName = atomName;
+        this.chargeGroupNr = chargeGroupNr;
+        this.charge = charge;
+        this.mass = mass;
+    }
+
     public Integer getNr() {
         return nr;
     }

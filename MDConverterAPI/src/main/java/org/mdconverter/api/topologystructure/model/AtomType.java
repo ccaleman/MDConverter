@@ -9,7 +9,6 @@ public class AtomType {
 
     private String name;
     private Integer num;
-    private String bondType;
     private BigDecimal mass;
     private BigDecimal charge;
     private String particleType;
@@ -19,10 +18,9 @@ public class AtomType {
     public AtomType() {
     }
 
-    public AtomType(String name, Integer num, String bondType, BigDecimal mass, BigDecimal charge, String particleType, BigDecimal sigma, BigDecimal epsilon) {
+    public AtomType(String name, Integer num, BigDecimal mass, BigDecimal charge, String particleType, BigDecimal sigma, BigDecimal epsilon) {
         this.name = name;
         this.num = num;
-        this.bondType = bondType;
         this.mass = mass;
         this.charge = charge;
         this.particleType = particleType;
@@ -44,14 +42,6 @@ public class AtomType {
 
     public void setNum(Integer num) {
         this.num = num;
-    }
-
-    public String getBondType() {
-        return bondType;
-    }
-
-    public void setBondType(String bondType) {
-        this.bondType = bondType;
     }
 
     public BigDecimal getMass() {

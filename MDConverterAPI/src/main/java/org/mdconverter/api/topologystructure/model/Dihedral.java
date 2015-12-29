@@ -12,28 +12,77 @@ public class Dihedral {
     private String ak;
     private String al;
     private int funcType;
-    private BigDecimal c0;
     private BigDecimal c1;
     private BigDecimal c2;
     private BigDecimal c3;
     private BigDecimal c4;
     private BigDecimal c5;
+    private BigDecimal c6;
 
     public Dihedral() {
     }
 
-    public Dihedral(String ai, String aj, String ak, String al, int funcType, BigDecimal c0, BigDecimal c1, BigDecimal c2, BigDecimal c3, BigDecimal c4, BigDecimal c5) {
+    public Dihedral(String ai, String aj, String ak, String al, int funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3,
+                    BigDecimal c4, BigDecimal c5, BigDecimal c6) {
         this.ai = ai;
         this.aj = aj;
         this.ak = ak;
         this.al = al;
         this.funcType = funcType;
-        this.c0 = c0;
         this.c1 = c1;
         this.c2 = c2;
         this.c3 = c3;
         this.c4 = c4;
         this.c5 = c5;
+        this.c6 = c6;
+    }
+
+    public Dihedral(String ai, String aj, String ak, String al, int funcType, BigDecimal c1, BigDecimal c2) {
+        this.ai = ai;
+        this.aj = aj;
+        this.ak = ak;
+        this.al = al;
+        this.funcType = funcType;
+        this.c1 = c1;
+        this.c2 = c2;
+    }
+
+    public Dihedral(String ai, String aj, String ak, String al, int funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3) {
+        this.ai = ai;
+        this.aj = aj;
+        this.ak = ak;
+        this.al = al;
+        this.funcType = funcType;
+        this.c1 = c1;
+        this.c2 = c2;
+        this.c3 = c3;
+    }
+
+    public Dihedral(String ai, String aj, String ak, String al, int funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3,
+                    BigDecimal c4, BigDecimal c5) {
+        this.ai = ai;
+        this.aj = aj;
+        this.ak = ak;
+        this.al = al;
+        this.funcType = funcType;
+        this.c1 = c1;
+        this.c2 = c2;
+        this.c3 = c3;
+        this.c4 = c4;
+        this.c5 = c5;
+    }
+
+    public Dihedral(String ai, String aj, String ak, String al, int funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3,
+                    BigDecimal c4) {
+        this.ai = ai;
+        this.aj = aj;
+        this.ak = ak;
+        this.al = al;
+        this.funcType = funcType;
+        this.c1 = c1;
+        this.c2 = c2;
+        this.c3 = c3;
+        this.c4 = c4;
     }
 
     public String getAi() {
@@ -76,14 +125,6 @@ public class Dihedral {
         this.funcType = funcType;
     }
 
-    public BigDecimal getC0() {
-        return c0;
-    }
-
-    public void setC0(BigDecimal c0) {
-        this.c0 = c0;
-    }
-
     public BigDecimal getC1() {
         return c1;
     }
@@ -122,5 +163,13 @@ public class Dihedral {
 
     public void setC5(BigDecimal c5) {
         this.c5 = c5;
+    }
+
+    public BigDecimal getC6() {
+        return c6;
+    }
+
+    public void setC6(BigDecimal c6) {
+        this.c6 = c6;
     }
 }

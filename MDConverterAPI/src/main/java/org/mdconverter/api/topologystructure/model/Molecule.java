@@ -5,23 +5,23 @@ package org.mdconverter.api.topologystructure.model;
  */
 public class Molecule {
 
-    private String compound;
+    private String name;
     private Integer nrMol;
 
     public Molecule() {
     }
 
     public Molecule(String compound, Integer nrMol) {
-        this.compound = compound;
+        this.name = compound;
         this.nrMol = nrMol;
     }
 
-    public String getCompound() {
-        return compound;
+    public String getName() {
+        return name;
     }
 
-    public void setCompound(String compound) {
-        this.compound = compound;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Integer getNrMol() {

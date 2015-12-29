@@ -9,27 +9,27 @@ public class DistanceRestraint {
 
     private String ai;
     private String aj;
-    private int type;
-    private Integer idx;
-    private int typeTwo;
-    private BigDecimal low;
-    private BigDecimal up1;
-    private BigDecimal up2;
-    private BigDecimal fac;
+    private Integer funcType;
+    private Integer type;
+    private Integer label;
+    private BigDecimal c1;
+    private BigDecimal c2;
+    private BigDecimal c3;
+    private BigDecimal c4;
 
     public DistanceRestraint() {
     }
 
-    public DistanceRestraint(String ai, String aj, int type, Integer idx, int typeTwo, BigDecimal low, BigDecimal up1, BigDecimal up2, BigDecimal fac) {
+    public DistanceRestraint(String ai, String aj, Integer type, Integer label, Integer funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3, BigDecimal c4) {
         this.ai = ai;
         this.aj = aj;
         this.type = type;
-        this.idx = idx;
-        this.typeTwo = typeTwo;
-        this.low = low;
-        this.up1 = up1;
-        this.up2 = up2;
-        this.fac = fac;
+        this.label = label;
+        this.funcType = funcType;
+        this.c1 = c1;
+        this.c2 = c2;
+        this.c3 = c3;
+        this.c4 = c4;
     }
 
     public String getAj() {
@@ -48,59 +48,59 @@ public class DistanceRestraint {
         this.ai = ai;
     }
 
-    public int getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(int type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 
-    public Integer getIdx() {
-        return idx;
+    public Integer getLabel() {
+        return label;
     }
 
-    public void setIdx(Integer idx) {
-        this.idx = idx;
+    public void setLabel(Integer label) {
+        this.label = label;
     }
 
-    public int getTypeTwo() {
-        return typeTwo;
+    public Integer getFuncType() {
+        return funcType;
     }
 
-    public void setTypeTwo(int typeTwo) {
-        this.typeTwo = typeTwo;
+    public void setFuncType(Integer funcType) {
+        this.funcType = funcType;
     }
 
-    public BigDecimal getLow() {
-        return low;
+    public BigDecimal getC1() {
+        return c1;
     }
 
-    public void setLow(BigDecimal low) {
-        this.low = low;
+    public void setC1(BigDecimal c1) {
+        this.c1 = c1;
     }
 
-    public BigDecimal getUp1() {
-        return up1;
+    public BigDecimal getC2() {
+        return c2;
     }
 
-    public void setUp1(BigDecimal up1) {
-        this.up1 = up1;
+    public void setC2(BigDecimal c2) {
+        this.c2 = c2;
     }
 
-    public BigDecimal getUp2() {
-        return up2;
+    public BigDecimal getC3() {
+        return c3;
     }
 
-    public void setUp2(BigDecimal up2) {
-        this.up2 = up2;
+    public void setC3(BigDecimal c3) {
+        this.c3 = c3;
     }
 
-    public BigDecimal getFac() {
-        return fac;
+    public BigDecimal getC4() {
+        return c4;
     }
 
-    public void setFac(BigDecimal fac) {
-        this.fac = fac;
+    public void setC4(BigDecimal c4) {
+        this.c4 = c4;
     }
 }

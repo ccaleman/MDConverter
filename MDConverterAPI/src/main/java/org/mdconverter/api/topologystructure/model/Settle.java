@@ -9,17 +9,17 @@ public class Settle {
 
     private Integer atom;
     private int funcType;
-    private BigDecimal doh;
-    private BigDecimal dhh;
+    private BigDecimal c1;
+    private BigDecimal c2;
 
     public Settle() {
     }
 
-    public Settle(Integer atom, int funcType, BigDecimal doh, BigDecimal dhh) {
+    public Settle(Integer atom, int funcType, BigDecimal c1, BigDecimal c2) {
         this.atom = atom;
         this.funcType = funcType;
-        this.doh = doh;
-        this.dhh = dhh;
+        this.c1 = c1;
+        this.c2 = c2;
     }
 
     public Integer getAtom() {
@@ -38,19 +38,19 @@ public class Settle {
         this.funcType = funcType;
     }
 
-    public BigDecimal getDoh() {
-        return doh;
+    public BigDecimal getC1() {
+        return c1;
     }
 
-    public void setDoh(BigDecimal doh) {
-        this.doh = doh;
+    public void setC1(BigDecimal c1) {
+        this.c1 = c1;
     }
 
-    public BigDecimal getDhh() {
-        return dhh;
+    public BigDecimal getC2() {
+        return c2;
     }
 
-    public void setDhh(BigDecimal dhh) {
-        this.dhh = dhh;
+    public void setC2(BigDecimal c2) {
+        this.c2 = c2;
     }
 }

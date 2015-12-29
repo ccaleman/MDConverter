@@ -8,22 +8,22 @@ import java.math.BigDecimal;
 public class ImplicitGenbornParam {
 
     private String atom;
-    private BigDecimal sar;
-    private BigDecimal st;
-    private BigDecimal pi;
-    private BigDecimal gbr;
-    private BigDecimal hct;
+    private BigDecimal c1;
+    private BigDecimal c2;
+    private BigDecimal c3;
+    private BigDecimal c4;
+    private BigDecimal c5;
 
     public ImplicitGenbornParam() {
     }
 
-    public ImplicitGenbornParam(String atom, BigDecimal sar, BigDecimal st, BigDecimal pi, BigDecimal gbr, BigDecimal hct) {
+    public ImplicitGenbornParam(String atom, BigDecimal c1, BigDecimal c2, BigDecimal c3, BigDecimal c4, BigDecimal c5) {
         this.atom = atom;
-        this.sar = sar;
-        this.st = st;
-        this.pi = pi;
-        this.gbr = gbr;
-        this.hct = hct;
+        this.c1 = c1;
+        this.c2 = c2;
+        this.c3 = c3;
+        this.c4 = c4;
+        this.c5 = c5;
     }
 
     public String getAtom() {
@@ -34,43 +34,43 @@ public class ImplicitGenbornParam {
         this.atom = atom;
     }
 
-    public BigDecimal getSar() {
-        return sar;
+    public BigDecimal getC1() {
+        return c1;
     }
 
-    public void setSar(BigDecimal sar) {
-        this.sar = sar;
+    public void setC1(BigDecimal c1) {
+        this.c1 = c1;
     }
 
-    public BigDecimal getSt() {
-        return st;
+    public BigDecimal getC2() {
+        return c2;
     }
 
-    public void setSt(BigDecimal st) {
-        this.st = st;
+    public void setC2(BigDecimal c2) {
+        this.c2 = c2;
     }
 
-    public BigDecimal getPi() {
-        return pi;
+    public BigDecimal getC3() {
+        return c3;
     }
 
-    public void setPi(BigDecimal pi) {
-        this.pi = pi;
+    public void setC3(BigDecimal c3) {
+        this.c3 = c3;
     }
 
-    public BigDecimal getGbr() {
-        return gbr;
+    public BigDecimal getC4() {
+        return c4;
     }
 
-    public void setGbr(BigDecimal gbr) {
-        this.gbr = gbr;
+    public void setC4(BigDecimal c4) {
+        this.c4 = c4;
     }
 
-    public BigDecimal getHct() {
-        return hct;
+    public BigDecimal getC5() {
+        return c5;
     }
 
-    public void setHct(BigDecimal hct) {
-        this.hct = hct;
+    public void setC5(BigDecimal c5) {
+        this.c5 = c5;
     }
 }

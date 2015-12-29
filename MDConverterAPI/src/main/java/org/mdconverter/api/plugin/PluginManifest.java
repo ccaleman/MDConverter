@@ -62,7 +62,7 @@ public class PluginManifest {
      * Holds the different mesurement units for the plugin (depends on simulation tool)
      * will be used by the framework to convert units between different tools
      */
-    private Map<String, String> measurementUnits;
+    private Map<String, Map<String, Map<String, String>>> measurementUnits;
 
     public String getVersion() {
         return version;
@@ -88,7 +88,7 @@ public class PluginManifest {
         return pluginType;
     }
 
-    public Map<String, String> getMeasurementUnits() {
+    public Map<String, Map<String, Map<String, String>>> getMeasurementUnits() {
         return measurementUnits;
     }
 
@@ -98,5 +98,9 @@ public class PluginManifest {
 
     public ScriptType getScriptType() {
         return scriptType;
+    }
+
+    public Map<String, Map<String, String>> unitsForType(Class clazz) {
+        return measurementUnits.getOrDefault(clazz.getName(), measurementUnits.get("global"));
     }
 }

@@ -1,20 +1,24 @@
 {
-    "pluginName": "gromacs",
-    "className": "org.mdconverter.main.GromacsReader",
-    "version": "1.0",
-    "fileExtension": "gro",
-    "fileType": "structure",
-    "pluginType": "reader",
-    "script": false,
-    "scriptType": "none",
-    "measurementUnits": {
+  "pluginName": "gromacs",
+  "className": "org.mdconverter.main.GromacsReader",
+  "version": "1.0",
+  "fileExtension": "gro",
+  "fileType": "structure",
+  "pluginType": "reader",
+  "script": false,
+  "scriptType": "none",
+  "measurementUnits": {
+    "global": {
+      "standard": {
         "length": "nm",
-        "mass": "kg",
+        "mass": "amu",
         "time": "ps",
         "charge": "e",
         "temperature": "K",
         "energy": "kJ/mol",
         "force": "kJ/mol/nm",
         "pressure": "kJ/mol/nm^3"
+      }
     }
+  }
 }

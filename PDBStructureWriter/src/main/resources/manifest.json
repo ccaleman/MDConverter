@@ -8,6 +8,10 @@
     "script": false,
     "scriptType": "none",
     "measurementUnits": {
-        "length": "Å"
+        "global": {
+            "standard": {
+                "length": "Å"
+            }
+        }
     }
 }

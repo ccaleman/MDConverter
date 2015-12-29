@@ -8,12 +8,238 @@
   "script": false,
   "scriptType": "none",
   "measurementUnits": {
-    "length": "nm",
-    "mass": "kg",
-    "time": "ps",
-    "charge": "e",
-    "temperature": "K",
-    "energy": "kJ/mol",
-    "force": "kJ/mol/nm"
+    "global": {
+      "standard": {
+        "length": "nm",
+        "mass": "kg",
+        "time": "ps",
+        "charge": "e",
+        "temperature": "K",
+        "energy": "kJ/mol",
+        "force": "kJ/mol/nm"
+      }
+    },
+    "atom/atomTypes": {
+      "none": {
+        "mass": "amu",
+        "charge": "e",
+        "V1": "kJ/mol·nm^6",
+        "W1": "kJ/mol·nm^12",
+        "V": "nm",
+        "W": "kJ/mol"
+      }
+    },
+    "bond/bondTypes": {
+      "1": {
+        "c1": "nm",
+        "c2": "kJ/mol/nm^2"
+      },
+      "2": {
+        "c1": "nm",
+        "c2": "kJ/mol/nm^4"
+      },
+      "3": {
+        "c1": "nm",
+        "c2": "kJ/mol",
+        "c3": "1/nm"
+      },
+      "4": {
+        "c1": "nm",
+        "c2": "kJ/mol/nm^2",
+        "c3": "kJ/mol/nm^3"
+      },
+      "6": {
+        "c1": "nm",
+        "c2": "kJ/mol/nm^2"
+      },
+      "7": {
+        "c1": "nm",
+        "c2": "kJ/mol/nm^2"
+      },
+      "8": {
+        "c2": "kJ/mol"
+      },
+      "9": {
+        "c2": "kJ/mol"
+      },
+      "10": {
+        "c1": "nm",
+        "c2": "nm",
+        "c3": "nm",
+        "c4": "kJ/mol/nm^2"
+      }
+    },
+    "pair/pairTypes": {
+      "1": {
+        "c1_1": "kJ/mol·nm^6",
+        "c2_1": "kJ/mol·nm^12",
+        "c1_2": "nm",
+        "c2_2": "kJ/mol"
+      },
+      "2": {
+        "c2": "e",
+        "c3": "e",
+        "c4_1": "kJ/mol·nm^6",
+        "c5_1": "kJ/mol·nm^12",
+        "c4_2": "nm",
+        "c5_2": "kJ/mol"
+      }
+    },
+    "pairNB": {
+      "1": {
+        "c1": "e",
+        "c2": "e",
+        "c3_1": "kJ/mol·nm^6",
+        "c4_1": "kJ/mol·nm^12",
+        "c3_2": "nm",
+        "c4_2": "kJ/mol"
+      }
+    },
+    "angle/angleTypes": {
+      "1": {
+        "c1": "deg",
+        "c2": "kJ/mol·rad^2"
+      },
+      "2": {
+        "c1": "deg",
+        "c2": "kJ/mol"
+      },
+      "3": {
+        "c1": "nm",
+        "c2": "nm",
+        "c3": "kJ/mol·nm^2"
+      },
+      "4": {
+        "c1": "nm",
+        "c2": "nm",
+        "c3": "nm",
+        "c4": "kJ/mol·nm^2"
+      },
+      "5": {
+        "c1": "deg",
+        "c2": "kJ/mol·rad^2",
+        "c3": "nm",
+        "c4": "kJ/mol·nm^2"
+      },
+      "6": {
+        "c1": "deg",
+        "c2": "kJ/mol·rad^0",
+        "c3": "kJ/mol·rad^1",
+        "c4": "kJ/mol·rad^2",
+        "c5": "kJ/mol·rad^3",
+        "c6": "kJ/mol·rad^4"
+      },
+      "8": {
+        "c2": "kJ/mol"
+      },
+      "10": {
+        "c1": "deg",
+        "c2": "kJ/mol"
+      }
+    },
+    "dihedral/dihedralTypes": {
+      "1": {
+        "c1": "deg",
+        "c2": "kJ/mol"
+      },
+      "2": {
+        "c1": "deg",
+        "c2": "kJ/mol·rad^2"
+      },
+      "3": {
+        "c1": "kJ/mol",
+        "c2": "kJ/mol",
+        "c3": "kJ/mol",
+        "c4": "kJ/mol",
+        "c5": "kJ/mol",
+        "c6": "kJ/mol"
+      },
+      "4": {
+        "c1": "deg",
+        "c2": "kJ/mol"
+      },
+      "5": {
+        "c1": "kJ/mol",
+        "c2": "kJ/mol",
+        "c3": "kJ/mol",
+        "c4": "kJ/mol"
+      },
+      "8": {
+        "c2": "kJ/mol"
+      },
+      "9": {
+        "c1": "deg",
+        "c2": "kJ/mol"
+      },
+      "10": {
+        "c1": "deg",
+        "c2": "kJ/mol"
+      },
+      "11": {
+        "c1": "kJ/mol",
+        "c2": "kJ/mol",
+        "c3": "kJ/mol",
+        "c4": "kJ/mol",
+        "c5": "kJ/mol"
+      }
+    },
+    "constraint/constraintTypes": {
+      "1": {
+        "c1": "nm"
+      },
+      "2": {
+        "c1": "nm"
+      }
+    },
+    "settle": {
+      "1": {
+        "c1": "nm",
+        "c2": "nm"
+      }
+    },
+    "positionRestraint": {
+      "1": {
+        "c1": "kJ/mol·nm^2",
+        "c2": "kJ/mol·nm^2",
+        "c3": "kJ/mol·nm^2"
+      },
+      "2": {
+        "c1": "nm",
+        "c2": "nm",
+        "c3": "kJ/mol·nm^2"
+      }
+    },
+    "distanceRestraint": {
+      "1": {
+        "c1": "kJ/mol·nm^2",
+        "c2": "kJ/mol·nm^2",
+        "c3": "kJ/mol·nm^2"
+      }
+    },
+    "dihedralRestraint": {
+      "1": {
+        "c1": "deg",
+        "c2": "deg"
+      }
+    },
+    "orientationRestraint": {
+      "1": {
+        "c1": "U·nm^",
+        "c2": "U",
+        "c3": "1/U"
+      }
+    },
+    "angleRestraint": {
+      "1": {
+        "c1": "deg",
+        "c2": "kJ/mol"
+      }
+    },
+    "angleRestraintZ": {
+      "1": {
+        "c1": "deg",
+        "c2": "kJ/mol"
+      }
+    }
   }
 }

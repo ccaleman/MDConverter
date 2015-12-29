@@ -81,10 +81,13 @@ public class ArgumentParser {
             throw new IllegalArgumentException("Given arguments are wrong!");
         } catch (IOException | RuntimeException e) {
             consoleWriter.printErrorln(e.getMessage() != null ? e.getMessage() : "Error not defined.");
+            throw new RuntimeException();
         } catch (PluginMisconfigurationException e) {
             consoleWriter.printErrorln(e.getMessage() + "\n");
+            throw new RuntimeException();
         } catch (URISyntaxException e) {
             e.printStackTrace();
+            throw new RuntimeException();
         }
     }
 
@@ -126,9 +129,9 @@ public class ArgumentParser {
     }
 
     private LoaderInput checkForFileType(LoaderInput loaderInput) {
-        if (getMainArguments().isStructure()) {
+        if (getMainArguments().isStructure() && !getMainArguments().isTopology()) {
             loaderInput.setFileType(FileType.STRUCTURE);
-        } else if (getMainArguments().isTopology()) {
+        } else if (getMainArguments().isTopology() && !getMainArguments().isStructure()) {
             loaderInput.setFileType(FileType.TOPOLOGY);
         } else {
             if (!argumentsErrors.contains(InputError.NO_FILETYPE)) {

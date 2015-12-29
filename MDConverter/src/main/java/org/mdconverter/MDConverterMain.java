@@ -1,13 +1,13 @@
 package org.mdconverter;
 
 import com.google.common.base.Charsets;
-import org.biojava.nbio.structure.Structure;
 import org.biojava.nbio.structure.StructureImpl;
 import org.mdconverter.api.plugin.InvalidInputException;
 import org.mdconverter.api.plugin.InvalidParameterException;
 import org.mdconverter.api.plugin.reader.AbstractReader;
 import org.mdconverter.api.plugin.type.FileType;
 import org.mdconverter.api.plugin.writer.AbstractWriter;
+import org.mdconverter.api.topologystructure.TopologyStructure;
 import org.mdconverter.argumentparser.ArgumentParser;
 import org.mdconverter.argumentparser.argumentdefinition.MainArguments;
 import org.mdconverter.classloader.PluginLoader;
@@ -46,16 +46,14 @@ public class MDConverterMain {
         argumentParser.parseArguments(args);
         AbstractReader reader = setupReader();
         if (reader.getPluginManifest().getFileType().equals(FileType.STRUCTURE)) {
-            Structure structure = new StructureImpl();
-            reader.setStructure(structure);
+            reader.setStructure(new StructureImpl());
         } else {
-            //TODO: set topology structure
-            reader.setStructure(null);
+            reader.setStructure(new TopologyStructure());
         }
         Object structure = null;
         try {
             structure = reader.getMetaModel();
-        } catch (InvalidParameterException | InvalidInputException e) {
+        } catch (Exception e) {
             consoleWriter.printErrorln(e.getMessage());
             consoleWriter.printInfoln(reader.getUsage());
             throw new RuntimeException();
@@ -63,13 +61,11 @@ public class MDConverterMain {
         AbstractWriter writer = setupWriter();
         FileType fileType = reader.getPluginManifest().getFileType();
         unitConverter.convertStructure(structure, fileType);
-        if (fileType.equals(FileType.STRUCTURE)) {
-            Structure struct = (Structure) structure;
-            writer.setStructure(struct);
+        writer.setStructure(structure);
+        /*if (fileType.equals(FileType.STRUCTURE)) {
         } else {
-            //TODO: set topology structure
-            writer.setStructure(null);
-        }
+            writer.setStructure(structure);
+        }*/
         try {
             String output = writer.getOutput();
             Path file = argumentParser.getMainArguments().getOutputFile();
@@ -104,7 +100,7 @@ public class MDConverterMain {
     private AbstractWriter setupWriter() {
         AbstractWriter writer = pluginLoader.getWriter();
         MainArguments mainArguments = argumentParser.getMainArguments();
-        writer.setArguments(mainArguments.getReaderParams());
+        writer.setArguments(mainArguments.getWriterParams());
         writer.setUnspecifiedArguments(mainArguments.getUnknown());
         unitConverter.setWriterUnits(writer.getPluginManifest().getMeasurementUnits());
         return writer;

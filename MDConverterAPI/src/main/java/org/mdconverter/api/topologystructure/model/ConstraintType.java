@@ -9,17 +9,26 @@ public class ConstraintType {
 
     private String ai;
     private String aj;
-    private int funcType;
-    private BigDecimal b0;
+    private Integer funcType;
+    private BigDecimal c1;
+    private BigDecimal c2;
 
     public ConstraintType() {
     }
 
-    public ConstraintType(String ai, String aj, int funcType, BigDecimal b0) {
+    public ConstraintType(String ai, String aj, Integer funcType, BigDecimal c1) {
         this.ai = ai;
         this.aj = aj;
         this.funcType = funcType;
-        this.b0 = b0;
+        this.c1 = c1;
+    }
+
+    public ConstraintType(String ai, String aj, Integer funcType, BigDecimal c1, BigDecimal c2) {
+        this.ai = ai;
+        this.aj = aj;
+        this.funcType = funcType;
+        this.c1 = c1;
+        this.c2 = c2;
     }
 
     public String getAi() {
@@ -38,19 +47,27 @@ public class ConstraintType {
         this.aj = aj;
     }
 
-    public int getFuncType() {
+    public Integer getFuncType() {
         return funcType;
     }
 
-    public void setFuncType(int funcType) {
+    public void setFuncType(Integer funcType) {
         this.funcType = funcType;
     }
 
-    public BigDecimal getB0() {
-        return b0;
+    public BigDecimal getC1() {
+        return c1;
     }
 
-    public void setB0(BigDecimal b0) {
-        this.b0 = b0;
+    public void setC1(BigDecimal c1) {
+        this.c1 = c1;
+    }
+
+    public BigDecimal getC2() {
+        return c2;
+    }
+
+    public void setC2(BigDecimal c2) {
+        this.c2 = c2;
     }
 }

@@ -14,18 +14,21 @@ public class Section {
     private List<Atom> atoms = Lists.newArrayList();
     private List<Bond> bonds = Lists.newArrayList();
     private List<Pair> pairs = Lists.newArrayList();
+    private List<Pair> pairsNB = Lists.newArrayList();
     private List<Angle> angles = Lists.newArrayList();
     private List<Dihedral> dihedrals = Lists.newArrayList();
     private List<Constraint> constraints = Lists.newArrayList();
-    private List<PostionRestraint> postionRestraints = Lists.newArrayList();
-    private List<AngleRestraint> angleRestraints = Lists.newArrayList();
+    private List<PositionRestraint> positionRestraints = Lists.newArrayList();
+    private List<AngleRestraintZ> angleRestraints = Lists.newArrayList();
     private List<DihedralRestraint> dihedralRestraints = Lists.newArrayList();
     private List<DistanceRestraint> distanceRestraints = Lists.newArrayList();
     private List<OrientationRestraint> orientationRestraints = Lists.newArrayList();
     private List<Settle> settles = Lists.newArrayList();
     private List<Exclusion> exclusions = Lists.newArrayList();
+    private SectionType type;
 
-    public Section() {
+    public Section(SectionType sectionType) {
+        type = sectionType;
     }
 
     public MoleculeType getMoleculeType() {
@@ -60,6 +63,14 @@ public class Section {
         this.pairs = pairs;
     }
 
+    public List<Pair> getPairsNB() {
+        return pairsNB;
+    }
+
+    public void setPairsNB(List<Pair> pairsNB) {
+        this.pairsNB = pairsNB;
+    }
+
     public List<Angle> getAngles() {
         return angles;
     }
@@ -84,19 +95,19 @@ public class Section {
         this.constraints = constraints;
     }
 
-    public List<PostionRestraint> getPostionRestraints() {
-        return postionRestraints;
+    public List<PositionRestraint> getPositionRestraints() {
+        return positionRestraints;
     }
 
-    public void setPostionRestraints(List<PostionRestraint> postionRestraints) {
-        this.postionRestraints = postionRestraints;
+    public void setPositionRestraints(List<PositionRestraint> positionRestraints) {
+        this.positionRestraints = positionRestraints;
     }
 
-    public List<AngleRestraint> getAngleRestraints() {
+    public List<AngleRestraintZ> getAngleRestraints() {
         return angleRestraints;
     }
 
-    public void setAngleRestraints(List<AngleRestraint> angleRestraints) {
+    public void setAngleRestraints(List<AngleRestraintZ> angleRestraints) {
         this.angleRestraints = angleRestraints;
     }
 
@@ -138,5 +149,9 @@ public class Section {
 
     public void setExclusions(List<Exclusion> exclusions) {
         this.exclusions = exclusions;
+    }
+
+    public SectionType getSectionType() {
+        return type;
     }
 }

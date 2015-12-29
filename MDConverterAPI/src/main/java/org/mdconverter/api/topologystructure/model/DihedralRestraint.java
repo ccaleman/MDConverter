@@ -5,62 +5,74 @@ package org.mdconverter.api.topologystructure.model;
  */
 public class DihedralRestraint {
 
-    private Integer ai;
-    private Integer aj;
-    private Integer ak;
-    private Integer al;
+    private String ai;
+    private String aj;
+    private String ak;
+    private String al;
     private int funcType;
     private int label;
-    private Integer phi;
-    private Integer dphi;
-    private Integer kfac;
-    private Integer power;
+    private Integer c1;
+    private Integer c2;
+    private Integer c3;
+    private Integer c4;
 
     public DihedralRestraint() {
     }
 
-    public DihedralRestraint(Integer ai, Integer aj, Integer ak, Integer al, int funcType, int label, Integer phi, Integer dphi, Integer kfac, Integer power) {
+    public DihedralRestraint(String ai, String aj, String ak, String al, int funcType, int label, Integer c1,
+                             Integer c2, Integer c3, Integer c4) {
         this.ai = ai;
         this.aj = aj;
         this.ak = ak;
         this.al = al;
         this.funcType = funcType;
         this.label = label;
-        this.phi = phi;
-        this.dphi = dphi;
-        this.kfac = kfac;
-        this.power = power;
+        this.c1 = c1;
+        this.c2 = c2;
+        this.c3 = c3;
+        this.c4 = c4;
     }
 
-    public Integer getAi() {
+    public DihedralRestraint(String ai, String aj, String ak, String al, int funcType, Integer c1,
+                             Integer c2) {
+        this.ai = ai;
+        this.aj = aj;
+        this.ak = ak;
+        this.al = al;
+        this.funcType = funcType;
+        this.c1 = c1;
+        this.c2 = c2;
+    }
+
+    public String getAi() {
         return ai;
     }
 
-    public void setAi(Integer ai) {
+    public void setAi(String ai) {
         this.ai = ai;
     }
 
-    public Integer getAj() {
+    public String getAj() {
         return aj;
     }
 
-    public void setAj(Integer aj) {
+    public void setAj(String aj) {
         this.aj = aj;
     }
 
-    public Integer getAk() {
+    public String getAk() {
         return ak;
     }
 
-    public void setAk(Integer ak) {
+    public void setAk(String ak) {
         this.ak = ak;
     }
 
-    public Integer getAl() {
+    public String getAl() {
         return al;
     }
 
-    public void setAl(Integer al) {
+    public void setAl(String al) {
         this.al = al;
     }
 
@@ -80,35 +92,35 @@ public class DihedralRestraint {
         this.label = label;
     }
 
-    public Integer getPhi() {
-        return phi;
+    public Integer getC1() {
+        return c1;
     }
 
-    public void setPhi(Integer phi) {
-        this.phi = phi;
+    public void setC1(Integer c1) {
+        this.c1 = c1;
     }
 
-    public Integer getDphi() {
-        return dphi;
+    public Integer getC2() {
+        return c2;
     }
 
-    public void setDphi(Integer dphi) {
-        this.dphi = dphi;
+    public void setC2(Integer c2) {
+        this.c2 = c2;
     }
 
-    public Integer getKfac() {
-        return kfac;
+    public Integer getC3() {
+        return c3;
     }
 
-    public void setKfac(Integer kfac) {
-        this.kfac = kfac;
+    public void setC3(Integer c3) {
+        this.c3 = c3;
     }
 
-    public Integer getPower() {
-        return power;
+    public Integer getC4() {
+        return c4;
     }
 
-    public void setPower(Integer power) {
-        this.power = power;
+    public void setC4(Integer c4) {
+        this.c4 = c4;
     }
 }

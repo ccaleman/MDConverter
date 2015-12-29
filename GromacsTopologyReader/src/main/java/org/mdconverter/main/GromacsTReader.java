@@ -28,10 +28,9 @@ public class GromacsTReader extends AbstractReader {
             inputParser.parseInput(Files.readAllBytes(getInputFile()), path, true, null);
             setStructure(inputParser.getStructure());
             return getStructure();
-        } catch (IOException | URISyntaxException e) {
-            e.printStackTrace();
+        } catch (IOException | URISyntaxException | NumberFormatException e) {
+            throw new RuntimeException(e.getMessage());
         }
-        return getStructure();
     }
 
     @Override
@@ -41,9 +40,10 @@ public class GromacsTReader extends AbstractReader {
 
     @Override
     public String getUsage() {
-        return "GromacsSR:\n" +
+        return "GromacsTR:\n" +
                 "\tFor position restraint definition file:\n" +
-                "\t\tposres:<path/to/file>";
+                "\t\tposres:<path/to/file>" +
+                "Actual resource file version from gromacs: 5.0.5";
     }
 
     private Path checkForParams() {
