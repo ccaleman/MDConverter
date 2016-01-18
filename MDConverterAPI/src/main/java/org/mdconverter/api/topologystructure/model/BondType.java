@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 /**
  * Created by miso on 04.12.2015.
  */
-public class BondType {
+public class BondType extends ValueGS implements FuncType {
 
     private String ai;
     private String aj;

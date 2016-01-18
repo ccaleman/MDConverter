@@ -41,6 +41,10 @@
             <artifactId>biojava-structure</artifactId>
         </dependency>
         <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.mdconverter</groupId>
             <artifactId>MDConverterAPI</artifactId>
             <version>${project.version}</version>

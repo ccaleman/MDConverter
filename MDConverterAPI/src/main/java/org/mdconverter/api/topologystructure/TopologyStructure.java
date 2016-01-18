@@ -11,8 +11,8 @@ import java.util.List;
  */
 public class TopologyStructure {
 
+    private Default def;
     private List<String> headerComments = Lists.newArrayList();
-    private List<Default> defaults = Lists.newArrayList();
     private List<BondType> bondTypes = Lists.newArrayList();
     private List<ConstraintType> constraintTypes = Lists.newArrayList();
     private List<AngleType> angleTypes = Lists.newArrayList();
@@ -36,12 +36,12 @@ public class TopologyStructure {
         this.headerComments = headerComments;
     }
 
-    public List<Default> getDefaults() {
-        return defaults;
+    public Default getDef() {
+        return def;
     }
 
-    public void setDefaults(List<Default> defaults) {
-        this.defaults = defaults;
+    public void setDef(Default def) {
+        this.def = def;
     }
 
     public List<BondType> getBondTypes() {

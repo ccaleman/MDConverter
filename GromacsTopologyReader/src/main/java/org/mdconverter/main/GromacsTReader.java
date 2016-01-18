@@ -24,8 +24,8 @@ public class GromacsTReader extends AbstractReader {
     @Override
     public Object getMetaModel() throws InvalidParameterException, InvalidInputException, NumberFormatException {
         try {
-            Path path = checkForParams();
-            inputParser.parseInput(Files.readAllBytes(getInputFile()), path, true, null);
+            Path path = setDefaultArgs();
+            inputParser.parseInput(Files.readAllBytes(getInputFile()), path, true, null, getArguments());
             setStructure(inputParser.getStructure());
             return getStructure();
         } catch (IOException | URISyntaxException | NumberFormatException e) {
@@ -42,15 +42,37 @@ public class GromacsTReader extends AbstractReader {
     public String getUsage() {
         return "GromacsTR:\n" +
                 "\tFor position restraint definition file:\n" +
-                "\t\tposres:<path/to/file>" +
-                "Actual resource file version from gromacs: 5.0.5";
+                "\t\tposres:<path/to/file>\n" +
+                "\t\tdefault = null\n" +
+                "\tFor position restraint water definition:\n" +
+                "\t\tposreswat:true\n" +
+                "\t\tdefault = false\n" +
+                "\tFor use of heavy water definition:\n" +
+                "\t\theavyW:\n" +
+                "\t\tdefault = false\n" +
+                "\tFor use flexible definition:\n" +
+                "\t\tflex:true\n" +
+                "\t\tdefault = false\n" +
+                "Actual ff resource file version from gromacs: 5.0.5\n";
     }
 
-    private Path checkForParams() {
+    private Path setDefaultArgs() {
         Map<String, String> arguments = getArguments();
         if (arguments != null && !arguments.isEmpty()) {
-            String posres = arguments.get("posres");
-            if (Files.exists(Paths.get(posres))) {
+            String orDefault = arguments.getOrDefault("posreswat", String.valueOf(false));
+            if (orDefault.equals(String.valueOf(false))) {
+                arguments.put("posreswat", orDefault);
+            }
+            orDefault = arguments.getOrDefault("heavyW", String.valueOf(false));
+            if (orDefault.equals(String.valueOf(false))) {
+                arguments.put("heavyW", orDefault);
+            }
+            orDefault = arguments.getOrDefault("flex", String.valueOf(false));
+            if (orDefault.equals(String.valueOf(false))) {
+                arguments.put("flex", orDefault);
+            }
+            String posres = arguments.getOrDefault("posres", String.valueOf(false));
+            if (!posres.contains("false") && Files.exists(Paths.get(posres))) {
                 return Paths.get(posres);
             }
         }

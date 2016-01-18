@@ -6,10 +6,10 @@ import java.math.BigInteger;
 /**
  * Created by miso on 04.12.2015.
  */
-public class PositionRestraint {
+public class PositionRestraint extends ValueGS implements FuncType {
 
-    private Integer ai;
-    private int func;
+    private String ai;
+    private Integer funcType;
     private BigDecimal c1 = new BigDecimal(BigInteger.ZERO);
     private BigDecimal c2 = new BigDecimal(BigInteger.ZERO);
     private BigDecimal c3 = new BigDecimal(BigInteger.ZERO);
@@ -17,28 +17,28 @@ public class PositionRestraint {
     public PositionRestraint() {
     }
 
-    public PositionRestraint(Integer ai, int func, BigDecimal c1, BigDecimal c2, BigDecimal c3) {
+    public PositionRestraint(String ai, Integer funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3) {
         this.ai = ai;
-        this.func = func;
+        this.funcType = funcType;
         this.c1 = c1;
         this.c2 = c2;
         this.c3 = c3;
     }
 
-    public Integer getAi() {
+    public String getAi() {
         return ai;
     }
 
-    public void setAi(Integer ai) {
+    public void setAi(String ai) {
         this.ai = ai;
     }
 
-    public int getFunc() {
-        return func;
+    public Integer getFuncType() {
+        return funcType;
     }
 
-    public void setFunc(int func) {
-        this.func = func;
+    public void setFuncType(Integer funcType) {
+        this.funcType = funcType;
     }
 
     public BigDecimal getC1() {

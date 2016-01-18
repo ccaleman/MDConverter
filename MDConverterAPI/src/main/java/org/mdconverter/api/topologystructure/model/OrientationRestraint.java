@@ -5,14 +5,14 @@ import java.math.BigDecimal;
 /**
  * Created by miso on 04.12.2015.
  */
-public class OrientationRestraint {
+public class OrientationRestraint extends ValueGS implements FuncType {
 
     private String ai;
     private String aj;
-    private int funcType;
-    private Integer exp;
-    private Integer label;
-    private Integer alpha;
+    private Integer funcType;
+    private String exp;
+    private String label;
+    private String alpha;
     private BigDecimal c1;
     private BigDecimal c2;
     private BigDecimal c3;
@@ -20,7 +20,8 @@ public class OrientationRestraint {
     public OrientationRestraint() {
     }
 
-    public OrientationRestraint(String ai, String aj, int funcType, Integer exp, Integer label, Integer alpha, BigDecimal c1, BigDecimal c2, BigDecimal c3) {
+    public OrientationRestraint(String ai, String aj, Integer funcType, String exp, String label, String alpha,
+                                BigDecimal c1, BigDecimal c2, BigDecimal c3) {
         this.ai = ai;
         this.aj = aj;
         this.funcType = funcType;
@@ -48,35 +49,35 @@ public class OrientationRestraint {
         this.aj = aj;
     }
 
-    public int getFuncType() {
+    public Integer getFuncType() {
         return funcType;
     }
 
-    public void setFuncType(int funcType) {
+    public void setFuncType(Integer funcType) {
         this.funcType = funcType;
     }
 
-    public Integer getExp() {
+    public String getExp() {
         return exp;
     }
 
-    public void setExp(Integer exp) {
+    public void setExp(String exp) {
         this.exp = exp;
     }
 
-    public Integer getLabel() {
+    public String getLabel() {
         return label;
     }
 
-    public void setLabel(Integer label) {
+    public void setLabel(String label) {
         this.label = label;
     }
 
-    public Integer getAlpha() {
+    public String getAlpha() {
         return alpha;
     }
 
-    public void setAlpha(Integer alpha) {
+    public void setAlpha(String alpha) {
         this.alpha = alpha;
     }
 

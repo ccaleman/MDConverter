@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 /**
  * Created by miso on 04.12.2015.
  */
-public class ImplicitGenbornParam {
+public class ImplicitGenbornParam extends ValueGS {
 
     private String atom;
     private BigDecimal c1;

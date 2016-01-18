@@ -5,36 +5,36 @@ import java.math.BigDecimal;
 /**
  * Created by miso on 04.12.2015.
  */
-public class Settle {
+public class Settle extends ValueGS implements FuncType {
 
-    private Integer atom;
-    private int funcType;
+    private String atom;
+    private Integer funcType;
     private BigDecimal c1;
     private BigDecimal c2;
 
     public Settle() {
     }
 
-    public Settle(Integer atom, int funcType, BigDecimal c1, BigDecimal c2) {
+    public Settle(String atom, Integer funcType, BigDecimal c1, BigDecimal c2) {
         this.atom = atom;
         this.funcType = funcType;
         this.c1 = c1;
         this.c2 = c2;
     }
 
-    public Integer getAtom() {
+    public String getAtom() {
         return atom;
     }
 
-    public void setAtom(Integer atom) {
+    public void setAtom(String atom) {
         this.atom = atom;
     }
 
-    public int getFuncType() {
+    public Integer getFuncType() {
         return funcType;
     }
 
-    public void setFuncType(int funcType) {
+    public void setFuncType(Integer funcType) {
         this.funcType = funcType;
     }
 

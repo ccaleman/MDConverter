@@ -1,5 +1,7 @@
 package org.mdconverter.utils;
 
+import org.python.apache.commons.compress.utils.IOUtils;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,9 +31,7 @@ public class IncludeHandler {
                 if (entryName.endsWith(path)) { //filter according to the path
                     InputStream stream = jar.getInputStream(jarEntry);
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-
-                    byte[] buffer = new byte[stream.available()];
-                    int read = stream.read(buffer);
+                    byte[] buffer = IOUtils.toByteArray(stream);
                     outputStream.write(buffer);
                     jar.close();
                     return outputStream.toByteArray();

@@ -5,11 +5,11 @@ import java.math.BigDecimal;
 /**
  * Created by miso on 04.12.2015.
  */
-public class PairType {
+public class PairType extends ValueGS implements FuncType {
 
     private String ai;
     private String aj;
-    private int funcType;
+    private Integer funcType;
     private BigDecimal c1;
     private BigDecimal c2;
     private BigDecimal c3;
@@ -20,7 +20,7 @@ public class PairType {
 
     }
 
-    public PairType(String ai, String aj, int funcType, BigDecimal c1, BigDecimal c2) {
+    public PairType(String ai, String aj, Integer funcType, BigDecimal c1, BigDecimal c2) {
         this.ai = ai;
         this.aj = aj;
         this.funcType = funcType;
@@ -28,7 +28,7 @@ public class PairType {
         this.c2 = c2;
     }
 
-    public PairType(String ai, String aj, int funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3, BigDecimal c4) {
+    public PairType(String ai, String aj, Integer funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3, BigDecimal c4) {
         this.ai = ai;
         this.aj = aj;
         this.funcType = funcType;
@@ -38,7 +38,7 @@ public class PairType {
         this.c4 = c4;
     }
 
-    public PairType(String ai, String aj, int funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3, BigDecimal c4, BigDecimal c5) {
+    public PairType(String ai, String aj, Integer funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3, BigDecimal c4, BigDecimal c5) {
         this.ai = ai;
         this.aj = aj;
         this.funcType = funcType;
@@ -65,11 +65,11 @@ public class PairType {
         this.aj = aj;
     }
 
-    public int getFuncType() {
+    public Integer getFuncType() {
         return funcType;
     }
 
-    public void setFuncType(int funcType) {
+    public void setFuncType(Integer funcType) {
         this.funcType = funcType;
     }
 

@@ -5,25 +5,25 @@ import java.math.BigDecimal;
 /**
  * Created by miso on 04.12.2015.
  */
-public class Constraint {
+public class Constraint extends ValueGS implements FuncType {
 
     private String ai;
     private String aj;
-    private int funcType;
+    private Integer funcType;
     private BigDecimal c1;
     private BigDecimal c2;
 
     public Constraint() {
     }
 
-    public Constraint(String ai, String aj, int funcType, BigDecimal c1) {
+    public Constraint(String ai, String aj, Integer funcType, BigDecimal c1) {
         this.ai = ai;
         this.aj = aj;
         this.funcType = funcType;
         this.c1 = c1;
     }
 
-    public Constraint(String ai, String aj, int funcType, BigDecimal c1, BigDecimal c2) {
+    public Constraint(String ai, String aj, Integer funcType, BigDecimal c1, BigDecimal c2) {
         this.ai = ai;
         this.aj = aj;
         this.funcType = funcType;
@@ -47,11 +47,11 @@ public class Constraint {
         this.aj = aj;
     }
 
-    public int getFuncType() {
+    public Integer getFuncType() {
         return funcType;
     }
 
-    public void setFuncType(int funcType) {
+    public void setFuncType(Integer funcType) {
         this.funcType = funcType;
     }
 

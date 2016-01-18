@@ -13,7 +13,7 @@
         "length": "nm",
         "mass": "amu",
         "time": "ps",
-        "charge": "e",
+        "charge": "C",
         "temperature": "K",
         "energy": "kJ/mol",
         "force": "kJ/mol/nm",

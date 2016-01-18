@@ -2,6 +2,7 @@ package org.mdconverter.main;
 
 
 import com.google.common.collect.Lists;
+import org.apache.commons.lang3.StringUtils;
 import org.biojava.nbio.structure.PDBCrystallographicInfo;
 import org.biojava.nbio.structure.Structure;
 import org.mdconverter.api.plugin.InvalidInputException;
@@ -73,23 +74,23 @@ public class PDBWriter extends AbstractWriter {
 
     private String generateCrystEntry(PDBCrystallographicInfo info) {
         String entry = "CRYST1";
-        entry = appendLengthDependant(entry, String.valueOf(info.getA()), 15);
-        entry = appendLengthDependant(entry, String.valueOf(info.getB()), 24);
-        entry = appendLengthDependant(entry, String.valueOf(info.getC()), 33);
-        entry = appendLengthDependant(entry, String.valueOf(info.getAlpha()), 40);
-        entry = appendLengthDependant(entry, String.valueOf(info.getBeta()), 47);
-        entry = appendLengthDependant(entry, String.valueOf(info.getGamma()), 54);
+        entry = appendLengthDependant(entry, String.valueOf(info.getA()), 10);
+        entry = appendLengthDependant(entry, String.valueOf(info.getB()), 10);
+        entry = appendLengthDependant(entry, String.valueOf(info.getC()), 10);
+        entry = appendLengthDependant(entry, String.valueOf(info.getAlpha()), 10);
+        entry = appendLengthDependant(entry, String.valueOf(info.getBeta()), 10);
+        entry = appendLengthDependant(entry, String.valueOf(info.getGamma()), 10);
         entry += "  " + info.getSpaceGroup().getShortSymbol();
         entry = appendLengthDependant(entry, "1", 70);
         return entry;
     }
 
     private String appendLengthDependant(String entry, String value, int len) {
-        int diff = len - value.length() - entry.length();
-        for (int i = 0; i < diff; i++) {
+        int diff = len - value.length();
+        if (diff < 1) {
             entry += " ";
         }
-        return entry += value;
+        return entry + StringUtils.leftPad(value, len);
     }
 }
 

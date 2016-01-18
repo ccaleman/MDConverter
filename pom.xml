@@ -31,6 +31,7 @@
         <jython-standalone.version>2.7.1b2</jython-standalone.version>
         <mockito-all.version>1.10.19</mockito-all.version>
         <jansi.version>1.11</jansi.version>
+        <commonslang.version>3.4</commonslang.version>
         <!-- DIRECTORY DEFINITIONS-->
         <build.dir>${project.basedir}/../build</build.dir>
         <plugin.output.reader.structure>${build.dir}/StructureReader</plugin.output.reader.structure>
@@ -87,6 +88,11 @@
                 <groupId>org.python</groupId>
                 <artifactId>jython-standalone</artifactId>
                 <version>${jython-standalone.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commonslang.version}</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>

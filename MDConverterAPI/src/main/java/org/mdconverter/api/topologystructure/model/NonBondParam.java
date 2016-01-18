@@ -5,11 +5,11 @@ import java.math.BigDecimal;
 /**
  * Created by miso on 04.12.2015.
  */
-public class NonBondParam {
+public class NonBondParam extends ValueGS implements FuncType {
 
     private String ai;
     private String aj;
-    private int funcType;
+    private Integer funcType;
     private BigDecimal c1;
     private BigDecimal c2;
     private BigDecimal c3;
@@ -50,11 +50,11 @@ public class NonBondParam {
         this.ai = ai;
     }
 
-    public int getFuncType() {
+    public Integer getFuncType() {
         return funcType;
     }
 
-    public void setFuncType(int funcType) {
+    public void setFuncType(Integer funcType) {
         this.funcType = funcType;
     }
 

@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 /**
  * Created by miso on 04.12.2015.
  */
-public class Atom {
+public class Atom extends ValueGS {
 
     private Integer nr;
     private String type;
@@ -13,38 +13,38 @@ public class Atom {
     private String resName;
     private String atomName;
     private Integer chargeGroupNr;
-    private BigDecimal charge;
-    private BigDecimal mass;
+    private BigDecimal c1;
+    private BigDecimal c2;
     private String typeB;
-    private BigDecimal chargeB;
-    private BigDecimal massB;
+    private BigDecimal c3;
+    private BigDecimal c4;
 
     public Atom() {
     }
 
-    public Atom(Integer nr, String type, Integer resNr, String resName, String atomName, Integer chargeGroupNr, BigDecimal charge, BigDecimal mass, String typeB, BigDecimal chargeB, BigDecimal massB) {
+    public Atom(Integer nr, String type, Integer resNr, String resName, String atomName, Integer chargeGroupNr, BigDecimal c1, BigDecimal c2, String typeB, BigDecimal c3, BigDecimal c4) {
         this.nr = nr;
         this.type = type;
         this.resNr = resNr;
         this.resName = resName;
         this.atomName = atomName;
         this.chargeGroupNr = chargeGroupNr;
-        this.charge = charge;
-        this.mass = mass;
+        this.c1 = c1;
+        this.c2 = c2;
         this.typeB = typeB;
-        this.chargeB = chargeB;
-        this.massB = massB;
+        this.c3 = c3;
+        this.c4 = c4;
     }
 
-    public Atom(Integer nr, String type, Integer resNr, String resName, String atomName, Integer chargeGroupNr, BigDecimal charge, BigDecimal mass) {
+    public Atom(Integer nr, String type, Integer resNr, String resName, String atomName, Integer chargeGroupNr, BigDecimal c1, BigDecimal c2) {
         this.nr = nr;
         this.type = type;
         this.resNr = resNr;
         this.resName = resName;
         this.atomName = atomName;
         this.chargeGroupNr = chargeGroupNr;
-        this.charge = charge;
-        this.mass = mass;
+        this.c1 = c1;
+        this.c2 = c2;
     }
 
     public Integer getNr() {
@@ -95,20 +95,20 @@ public class Atom {
         this.chargeGroupNr = chargeGroupNr;
     }
 
-    public BigDecimal getCharge() {
-        return charge;
+    public BigDecimal getC1() {
+        return c1;
     }
 
-    public void setCharge(BigDecimal charge) {
-        this.charge = charge;
+    public void setC1(BigDecimal c1) {
+        this.c1 = c1;
     }
 
-    public BigDecimal getMass() {
-        return mass;
+    public BigDecimal getC2() {
+        return c2;
     }
 
-    public void setMass(BigDecimal mass) {
-        this.mass = mass;
+    public void setC2(BigDecimal c2) {
+        this.c2 = c2;
     }
 
     public String getTypeB() {
@@ -119,19 +119,19 @@ public class Atom {
         this.typeB = typeB;
     }
 
-    public BigDecimal getChargeB() {
-        return chargeB;
+    public BigDecimal getC3() {
+        return c3;
     }
 
-    public void setChargeB(BigDecimal chargeB) {
-        this.chargeB = chargeB;
+    public void setC3(BigDecimal c3) {
+        this.c3 = c3;
     }
 
-    public BigDecimal getMassB() {
-        return massB;
+    public BigDecimal getC4() {
+        return c4;
     }
 
-    public void setMassB(BigDecimal massB) {
-        this.massB = massB;
+    public void setC4(BigDecimal c4) {
+        this.c4 = c4;
     }
 }

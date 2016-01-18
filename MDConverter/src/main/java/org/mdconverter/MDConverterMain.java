@@ -2,8 +2,7 @@ package org.mdconverter;
 
 import com.google.common.base.Charsets;
 import org.biojava.nbio.structure.StructureImpl;
-import org.mdconverter.api.plugin.InvalidInputException;
-import org.mdconverter.api.plugin.InvalidParameterException;
+import org.mdconverter.api.consolewriter.ConsoleWriter;
 import org.mdconverter.api.plugin.reader.AbstractReader;
 import org.mdconverter.api.plugin.type.FileType;
 import org.mdconverter.api.plugin.writer.AbstractWriter;
@@ -21,6 +20,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.file.Path;
+import java.util.Arrays;
 
 /**
  * Created by miso on 28.10.2015.
@@ -56,16 +56,18 @@ public class MDConverterMain {
         } catch (Exception e) {
             consoleWriter.printErrorln(e.getMessage());
             consoleWriter.printInfoln(reader.getUsage());
+            //TODO remove or better output
             throw new RuntimeException();
         }
         AbstractWriter writer = setupWriter();
         FileType fileType = reader.getPluginManifest().getFileType();
-        unitConverter.convertStructure(structure, fileType);
+        try {
+            unitConverter.convertStructure(structure, fileType);
+        } catch (Exception e) {
+            consoleWriter.printErrorln(e.getMessage());
+            throw new RuntimeException();
+        }
         writer.setStructure(structure);
-        /*if (fileType.equals(FileType.STRUCTURE)) {
-        } else {
-            writer.setStructure(structure);
-        }*/
         try {
             String output = writer.getOutput();
             Path file = argumentParser.getMainArguments().getOutputFile();
@@ -80,9 +82,16 @@ public class MDConverterMain {
             } else {
                 consoleWriter.printErrorln("\n" + output);
             }
-        } catch (InvalidParameterException | InvalidInputException e) {
+        } catch (Exception e) {
+            String methodName = e.getStackTrace()[0].getMethodName();
+            if (methodName.contains("add")) {
+                String replace = methodName.replace("add", "");
+                consoleWriter.printErrorln(String.format("Type: %s is", methodName));
+            }
             consoleWriter.printErrorln(e.getMessage());
             consoleWriter.printInfoln(writer.getUsage());
+            //TODO remove or better output
+            consoleWriter.println(ConsoleWriter.LinePrefix.ERROR, Arrays.toString(e.getStackTrace()));
             throw new RuntimeException();
         }
     }

@@ -6,6 +6,7 @@ import org.mdconverter.api.jython.JythonObjectFactory;
 import org.mdconverter.api.plugin.context.Context;
 import org.mdconverter.api.plugin.type.PluginType;
 import org.mdconverter.api.plugin.type.ScriptType;
+import org.mdconverter.api.topologystructure.TopologyStructure;
 
 import javax.inject.Inject;
 import java.net.URISyntaxException;
@@ -16,10 +17,9 @@ import java.util.Map;
 
 /**
  * Abstract class which combine identically reader and writer functionality
- * @param <T> can either be a {@link Structure} or a TOPOLOGY STRUCTURE
+ * @param <T> can either be a {@link Structure} or a {@link TopologyStructure}
  * Created by miso on 26.11.2015.
  */
-//TODO: replace TOPOLOGY STRUCTURE with link
 public abstract class AbstractPlugin<T> implements Context {
 
     /**
@@ -64,7 +64,7 @@ public abstract class AbstractPlugin<T> implements Context {
 
     /**
      * Allows framework to set the plugin specific structure
-     * @param structure can be {@link Structure} or a TOPOLOGY STRUCTURE
+     * @param structure can be {@link Structure} or a {@link TopologyStructure}
      */
     public final void setStructure(T structure) {
         this.structure = structure;
@@ -138,9 +138,8 @@ public abstract class AbstractPlugin<T> implements Context {
 
     /**
      * provides access to the MetaModel set by the framework
-     * @return {@link Structure} or TOPOLOGY STRUCTURE
+     * @return {@link Structure} or {@link TopologyStructure}
      */
-    //TODO: replace TOPOLOGY STRUCTURE with link
     protected final T getStructure() {
         return structure;
     }

@@ -5,13 +5,13 @@ import java.math.BigDecimal;
 /**
  * Created by miso on 04.12.2015.
  */
-public class DistanceRestraint {
+public class DistanceRestraint extends ValueGS implements FuncType {
 
     private String ai;
     private String aj;
     private Integer funcType;
-    private Integer type;
-    private Integer label;
+    private String type;
+    private String label;
     private BigDecimal c1;
     private BigDecimal c2;
     private BigDecimal c3;
@@ -20,7 +20,7 @@ public class DistanceRestraint {
     public DistanceRestraint() {
     }
 
-    public DistanceRestraint(String ai, String aj, Integer type, Integer label, Integer funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3, BigDecimal c4) {
+    public DistanceRestraint(String ai, String aj, String type, String label, Integer funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3, BigDecimal c4) {
         this.ai = ai;
         this.aj = aj;
         this.type = type;
@@ -48,19 +48,19 @@ public class DistanceRestraint {
         this.ai = ai;
     }
 
-    public Integer getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(Integer type) {
+    public void setType(String type) {
         this.type = type;
     }
 
-    public Integer getLabel() {
+    public String getLabel() {
         return label;
     }
 
-    public void setLabel(Integer label) {
+    public void setLabel(String label) {
         this.label = label;
     }
 

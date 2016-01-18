@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 /**
  * Created by miso on 04.12.2015.
  */
-public class AngleType {
+public class AngleType extends ValueGS implements FuncType {
 
     private String ai;
     private String aj;

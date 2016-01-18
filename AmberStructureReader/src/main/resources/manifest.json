@@ -13,7 +13,7 @@
         "length": "Å",
         "mass": "kg",
         "time": "s",
-        "charge": "e",
+        "charge": "C",
         "energy": "kcal/mol"
       }
     }

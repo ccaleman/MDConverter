@@ -5,8 +5,7 @@ import java.math.BigDecimal;
 /**
  * Created by miso on 27.12.2015.
  */
-public class AngleRestraintZ {
-
+public class AngleRestraintZ extends ValueGS implements FuncType {
 
     private String ai;
     private String aj;

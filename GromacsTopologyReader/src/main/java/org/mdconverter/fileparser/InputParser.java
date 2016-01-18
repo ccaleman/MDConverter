@@ -1,6 +1,10 @@
 package org.mdconverter.fileparser;
 
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import org.mdconverter.api.consolewriter.ConsoleWriter;
 import org.mdconverter.api.topologystructure.Section;
 import org.mdconverter.api.topologystructure.SectionType;
@@ -18,7 +22,9 @@ import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.regex.Pattern;
 
 /**
@@ -31,23 +37,25 @@ public class InputParser {
 
     private static final Pattern INCLUDE_PATTERN = Pattern.compile("^[ \t]*#include \"[\\w\\d\\./]*\"(;.*)?$");
 
+    private static final Pattern LOGICAL_PATTERN = Pattern.compile("#((ifdef)|(ifndef)|(else)|(endif)|(define))+.*$");
+
     private static final Pattern DEFAULTS_PATTERN_1 = Pattern.compile("^\\[ defaults \\]$");
     private static final Pattern DEFAULTS_PATTERN_2 = Pattern.compile("^[ \\t]*([\\d]+[ \\t]+){2}((no)|(yes))[ \\t]*([\\d-]+[.\\d]*([Ee][\\+-][\\d]{2,})?[ \\t]*){2}[ \\t]*(;.*)?$");
 
     private static final Pattern ATOMS_PATTERN_1 = Pattern.compile("^\\[ atoms \\]$");
-    private static final Pattern ATOMS_PATTERN_2 = Pattern.compile("^[ \\t]*[\\d]+[ \\t]+[\\w\\d*]+[ \\t]+[\\d]+[ \\t]+[\\w]+[ \\t]+[\\w\\d+-]+[ \\t]+[\\d]+[ \\t]+([\\d-]+[.\\d]*([Ee][\\+-][\\d]{2,})?[ \\t]*){2}([ \\t]*[\\w\\d*]+[ \\t]+([\\d-]+[.\\d]*([Ee][\\+-][\\d]{2,})?[ \\t]*){2})?[ \\t]*(;.*)?$");
+    private static final Pattern ATOMS_PATTERN_2 = Pattern.compile("^[ \\t]*[\\d]+[ \\t]+[\\w\\d*-+!]+[ \\t]+[\\d]+[ \\t]+[\\w]+[ \\t]+[\\w\\d+-]+[ \\t]+[\\d]+[ \\t]+([\\d-]+[.\\d]*([Ee][\\+-][\\d]{2,})?[ \\t]*){2}([ \\t]*[\\w\\d*]+[ \\t]+([\\d-]+[.\\d]*([Ee][\\+-][\\d]{2,})?[ \\t]*){2})?[ \\t]*(;.*)?$");
 
     private static final Pattern ATOMTYPES_PATTERN_1 = Pattern.compile("^\\[ atomtypes \\]$");
-    private static final Pattern ATOMTYPES_PATTERN_2 = Pattern.compile("^[ \\t]*[\\w\\d*]+[ \\t]+[\\d]+([ \\t]+[\\d-]+[.\\d]*){2}[ \\t]+[\\w]+[ \\t]+([\\d]+[.\\d]*([Ee][\\+-][\\d]{2,})?[ \\t]*){2}[ \\t]*(;.*)?$");
+    private static final Pattern ATOMTYPES_PATTERN_2 = Pattern.compile("^[ \\t]*[\\w\\d+*=!]+([ \\t]+[\\d\\w*!+-=]+)+([ \\t]+[\\d-]+[.\\d]*){2}[ \\t]+[\\w]+[ \\t]+([\\d]+[.\\d]*([Ee][\\+-][\\d]{2,})?[ \\t]*){2}[ \\t]*(;.*)?$");
 
     private static final Pattern BONDS_PATTERN_1 = Pattern.compile("^\\[ bonds \\]$");
     private static final Pattern BONDTYPES_PATTERN_1 = Pattern.compile("^\\[ bondtypes \\]$");
-    private static final Pattern BONDS_PATTERN_2 = Pattern.compile("^((([ \\t]*[\\d]+){2,3})|(([ \\t]*[-\\w\\d*]+){2,3})(((([ \\t]+[\\d]+[.\\d]*([Ee][\\+-][\\d]{2,})?){2,4})?)|(([ \\t]*[\\w\\d]+){2})))[ \\t]*(;.*)?$");
+    private static final Pattern BONDS_PATTERN_2 = Pattern.compile("^((([ \\t]*[\\d]+){2,3})|(([ \\t]*[-\\w\\d*]+){2,3})(((([ \\t]+[\\d-]+[.\\d]*([Ee][\\+-][\\d]{2,})?){2,4})?)|(([ \\t]*[\\w\\d]+){2})))[ \\t]*(;.*)?$");
 
     private static final Pattern PAIRS_PATTERN_1 = Pattern.compile("^\\[ pairs \\]$");
     private static final Pattern PAIRSNB_PATTERN_1 = Pattern.compile("^\\[ pairs_nb \\]$");
     private static final Pattern PAIRTYPES_PATTERN_1 = Pattern.compile("^\\[ pairtypes \\]$");
-    private static final Pattern PAIRS_PATTERN_2 = Pattern.compile("^([ \\t]*[\\w\\d*]+){3}(([ \\t]*[\\d]+[.\\d]*([Ee][+-][\\d]{2,})?){2,5})?[ \\t]*(;.*)?$");
+    private static final Pattern PAIRS_PATTERN_2 = Pattern.compile("^([ \\t]*[\\w\\d*]+){3}(([ \\t]*[\\d-]+[.\\d]*([Ee][+-][\\d]{2,})?){2,5})?[ \\t]*(;.*)?$");
 
     private static final Pattern CONSTRAINTS_PATTERN_1 = Pattern.compile("^\\[ constraints \\]$");
     private static final Pattern CONSTRAINTTYPES_PATTERN_1 = Pattern.compile("^\\[ constrainttypes \\]$");
@@ -55,11 +63,11 @@ public class InputParser {
 
     private static final Pattern ANGLES_PATTERN_1 = Pattern.compile("^\\[ angles \\]$");
     private static final Pattern ANGLETYPES_PATTERN_1 = Pattern.compile("^\\[ angletypes \\]$");
-    private static final Pattern ANGLES_PATTERN_2 = Pattern.compile("^([ \\t]*[\\w\\d*]+){4}(([ \\t]+[\\d]+[.\\d]*([Ee][+-][\\d]{2,})?){2,6})?[ \\t]*(;.*)?$");
+    private static final Pattern ANGLES_PATTERN_2 = Pattern.compile("^([ \\t]*[\\w\\d*]+){4}(([ \\t]+[-+\\d]+[.\\d]*([Ee][+-][\\d]{2,})?){2,6})?[ \\t]*(;.*)?$");
 
     private static final Pattern DIHEDRALS_PATTERN_1 = Pattern.compile("^\\[ dihedrals \\]$");
     private static final Pattern DIHEDRALTYPES_PATTERN_1 = Pattern.compile("^\\[ dihedraltypes \\]$");
-    private static final Pattern DIHEDRALS_PATTERN_2 = Pattern.compile("^([ \\t]*[\\w\\d*]+){5}(([ \\t]*[\\d]+[.\\d]*([Ee][+-][\\d]{2,})?){0,6})?[ \\t]*(;.*)?$");
+    private static final Pattern DIHEDRALS_PATTERN_2 = Pattern.compile("^([ \\t]*[\\w\\d*]+){5}(([ \\t]*[-+\\d]+[.\\d]*([Ee][+-][\\d]{2,})?){0,6})?[ \\t]*(;.*)?$");
 
     private static final Pattern MOLECULES_PATTERN_1 = Pattern.compile("^\\[ molecules \\]$");
     private static final Pattern MOLECULETYPES_PATTERN_1 = Pattern.compile("^\\[ moleculetype \\]$");
@@ -69,16 +77,16 @@ public class InputParser {
     private static final Pattern IMPLICIT_GENBORN_PARAMS_PATTERN_2 = Pattern.compile("^[ \\t]*[\\w\\d*]+[ \\t]+([\\d-]+[.\\d]*([Ee][\\+-][\\d]{2,})?[ \\t]*){5}[ \\t]*(;.*)?$");
 
     private static final Pattern SETTLES_PATTERN_1 = Pattern.compile("^\\[ settles \\]$");
-    private static final Pattern SETTLES_PATTERN_2 = Pattern.compile("^([ \\t]*[\\d]+){2}([ \\t]+[\\d]+[.\\d]*([Ee][+-][\\d]{2,})?){2}[ \\t]*(;.*)?$");
+    private static final Pattern SETTLES_PATTERN_2 = Pattern.compile("^([ \\t]*[\\d]+){2}([ \\t]+[\\d-]+[.\\d]*([Ee][+-][\\d]{2,})?){2}[ \\t]*(;.*)?$");
 
     private static final Pattern SYSTEM_PATTERN_1 = Pattern.compile("^\\[ system \\]$");
-    private static final Pattern SYSTEM_PATTERN_2 = Pattern.compile("^[ \\t]*[\\w\\d]+[ \\t]*(;.*)?$");
+    private static final Pattern SYSTEM_PATTERN_2 = Pattern.compile("^[ \\t]*[\\w\\d ]+[ \\t]*(;.*)?$");
 
     private static final Pattern EXCLUSIONS_PATTERN_1 = Pattern.compile("^\\[ exclusions \\]$");
     private static final Pattern EXCLUSIONS_PATTERN_2 = Pattern.compile("^([ \\t]*[\\d]+){2,}[ \\t]*(;.*)?$");
 
     private static final Pattern POSRES_PATTERN_1 = Pattern.compile("^\\[ position_restraints \\]$");
-    private static final Pattern POSRES_PATTERN_2 = Pattern.compile("^([ \\t]*[\\d]+){5}[ \\t]*(;.*)?$");
+    private static final Pattern POSRES_PATTERN_2 = Pattern.compile("^([ \\t]*[\\d-]+[.\\d]*([Ee][\\+-][\\d]{2,})?[ \\t]*){5}[ \\t]*(;.*)?$");
 
     private static final Pattern DISTANCERES_PATTERN_1 = Pattern.compile("^\\[ distance_restraints \\]$");
     private static final Pattern DISTANCERES_PATTERN_2 = Pattern.compile("^([ \\t]*[\\w\\d*]+){5}([ \\t]+[\\d-]+[.\\d]*([Ee][\\+-][\\d]{2,})?[ \\t]*){4}[ \\t]*(;.*)?$");
@@ -96,8 +104,16 @@ public class InputParser {
     private static final Pattern ANGLERESZ_PATTERN_1 = Pattern.compile("^\\[ angle_restraints_z \\]$");
     private static final Pattern ANGLERES_PATTERN_2 = Pattern.compile("^([ \\t]*[\\w\\d*]+){3,5}([ \\t]+[\\d-]+[.\\d]*([Ee][\\+-][\\d]{2,})?[ \\t]*){3}[ \\t]*(;.*)?$");
 
+    private static final String define = "#define";
+    private static final String ifdef = "#ifdef";
+    private static final String ifndef = "#ifndef";
+    private static final String elsse = "#else";
+    private static final String endif = "#endif";
+
     private TopologyStructure structure;
     private ConsoleWriter cw;
+    private Map<String, String> args = Maps.newHashMap();
+    private Map<String, String> defines = Maps.newHashMap();
 
     @Inject
 
@@ -106,11 +122,12 @@ public class InputParser {
         this.cw = cw;
     }
 
-    public void parseInput(byte[] input, Path posres, boolean header, String previousPath) throws IOException, URISyntaxException, NumberFormatException {
+    public void parseInput(byte[] input, Path posres, boolean header, String previousPath, Map<String, String> arguments) throws IOException, URISyntaxException, NumberFormatException {
+        //TODO: exclude unnecessary data
         if (input == null) return;
-        String line;
-        InputStream stream = new ByteArrayInputStream(input);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+        if (arguments != null) {
+            args = arguments;
+        }
         boolean defaults = false;
         boolean pairs = false;
         boolean pairNB = false;
@@ -137,15 +154,92 @@ public class InputParser {
         boolean dihedralsRes = false;
         boolean orientationRes = false;
         boolean angleRes = false;
+        boolean skipIfPath = false;
+        boolean skipElsePath = true;
+        boolean elseReached = false;
 
         Section actualSection = null;
+        String line;
+        InputStream stream = new ByteArrayInputStream(input);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
         while ((line = reader.readLine()) != null) {
             line = line.trim();
-            if (INCLUDE_PATTERN.matcher(line).matches()) {
+            line = replaceDefineCalls(line);
+            if (LOGICAL_PATTERN.matcher(line).matches()) {
+                if (line.contains("HEAVY_H")) {
+                    if (line.contains(ifdef)) {
+                        if (args.get("heavyW").equals("false")) {
+                            skipIfPath = true;
+                            skipElsePath = false;
+                        }
+                    } else if (line.contains(ifndef)) {
+                        if (args.get("heavyW").equals("true")) {
+                            skipIfPath = true;
+                            skipElsePath = false;
+                        }
+                    }
+                } else if (line.contains("FLEXIBLE")) {
+                    if (line.contains(ifdef)) {
+                        if (args.get("flex").equals("false")) {
+                            skipIfPath = true;
+                            skipElsePath = false;
+                        }
+                    } else if (line.contains(ifndef)) {
+                        if (args.get("flex").equals("true")) {
+                            skipIfPath = true;
+                            skipElsePath = false;
+                        }
+                    }
+                } else if (line.contains("POSRES_WATER")) {
+                    if (line.contains(ifdef)) {
+                        if (args.get("posreswat").equals("false")) {
+                            skipIfPath = true;
+                            skipElsePath = false;
+                        }
+                    } else if (line.contains(ifndef)) {
+                        if (args.get("posreswat").equals("true")) {
+                            skipIfPath = true;
+                            skipElsePath = false;
+                        }
+                    }
+                } else if (line.contains("define")) {
+                    List<String> strings = reworkLineRemovePrefix(line, define);
+                    defines.put(strings.get(0), Joiner.on(" ").join(strings.subList(1, strings.size())));
+                } else if (line.contains(elsse)) {
+                    elseReached = true;
+                    if (skipIfPath) skipElsePath = false;
+                    skipIfPath = false;
+                } else if (line.contains(endif)) {
+                    skipIfPath = false;
+                    skipElsePath = true;
+                    elseReached = false;
+                }
+                if (INCLUDE_PATTERN.matcher(line).matches()) {
+                    String file = line.split(" ")[1];
+                    file = file.substring(1, file.length() - 1);
+                    if (posres != null && posres.endsWith(file)) {
+                        parseInput(Files.readAllBytes(posres), null, false, previousPath != null ? previousPath : file.split("/")[0], null);
+                        continue;
+                    }
+                    if (previousPath != null) {
+                        file = previousPath + "/" + file;
+                    }
+                    byte[] byName = IncludeHandler.getFileByName(GromacsTReader.class, file);
+                    if (byName == null) {
+                        throw new RuntimeException(String.format("File: %s could not be found!", file));
+                    }
+                    parseInput(byName, null, false, previousPath != null ? previousPath : file.split("/")[0], null);
+                }
+                continue;
+            }
+            if (skipIfPath || (skipElsePath && elseReached)) {
+                continue;
+            }
+            /*if (INCLUDE_PATTERN.matcher(line).matches()) {
                 String file = line.split(" ")[1];
                 file = file.substring(1, file.length() - 1);
                 if (posres != null && posres.endsWith(file)) {
-                    parseInput(Files.readAllBytes(posres), null, false, previousPath != null ? previousPath : file.split("/")[0]);
+                    parseInput(Files.readAllBytes(posres), null, false, previousPath != null ? previousPath : file.split("/")[0], null);
                     continue;
                 }
                 if (previousPath != null) {
@@ -155,8 +249,8 @@ public class InputParser {
                 if (byName == null) {
                     throw new RuntimeException(String.format("File: %s could not be found!", file));
                 }
-                parseInput(byName, null, false, previousPath != null ? previousPath : file.split("/")[0]);
-            }
+                parseInput(byName, null, false, previousPath != null ? previousPath : file.split("/")[0], null);
+            }*/
             if (COMMENT_PATTERN.matcher(line).matches() && header) {
                 if (line.length() > 0) {
                     addHeader(line);
@@ -342,8 +436,8 @@ public class InputParser {
             if (MOLECULES_PATTERN_1.matcher(line).matches() || molecules) {
                 molecules = true;
                 if (MOLECULES_PATTERN_2.matcher(line).matches() && structure.getMolecule() == null) {
-                    String[] split = reworkLine(line).split(" ");
-                    structure.setMolecule(new Molecule(split[0], Integer.parseInt(split[1])));
+                    List<String> split = reworkLine(line);
+                    structure.setMolecule(new Molecule(split.get(0), Integer.parseInt(split.get(1))));
                 } else if (isDataRow(line) && !MOLECULES_PATTERN_1.matcher(line).matches()) {
                     molecules = false;
                 }
@@ -354,8 +448,8 @@ public class InputParser {
                 }
                 moleculeTypes = true;
                 if (MOLECULES_PATTERN_2.matcher(line).matches() && actualSection == null) {
-                    String[] split = reworkLine(line).split(" ");
-                    MoleculeType moleculeType = new MoleculeType(split[0], Integer.parseInt(split[1]));
+                    List<String> split = reworkLine(line);
+                    MoleculeType moleculeType = new MoleculeType(split.get(0), Integer.parseInt(split.get(1)));
                     if (previousPath == null) {
                         actualSection = new Section(SectionType.STRUCTUREDATA);
                     } else {
@@ -393,7 +487,7 @@ public class InputParser {
             }
             if (EXCLUSIONS_PATTERN_1.matcher(line).matches() || exclusions) {
                 exclusions = true;
-                if (actualSection == null) {
+                if (actualSection == null && EXCLUSIONS_PATTERN_2.matcher(line).matches()) {
                     List<Section> sections = structure.getSections();
                     if (!sections.isEmpty()) {
                         actualSection = setSection(sections, SectionType.FORCEFIELD);
@@ -512,29 +606,64 @@ public class InputParser {
                 }
             }
         }
+        removeUnnecessaryData();
+    }
+
+    private void removeUnnecessaryData() {
+        Set<AtomType> clear = Sets.newHashSet();
+        List<Atom> atoms = Lists.newArrayList();
+        List<AtomType> atomTypes = structure.getAtomTypes();
+
+        for (Section section : structure.getSections()) {
+            if (section.getSectionType().equals(SectionType.STRUCTUREDATA)) {
+                atoms.addAll(section.getAtoms());
+            }
+        }
+        for (AtomType atomType : atomTypes) {
+            AtomType delete = atomType;
+            for (Atom atom : atoms) {
+                if (atomType.getName().contains(atom.getType())) {
+                    delete = null;
+                }
+            }
+            if (delete != null) {
+                clear.add(delete);
+            }
+        }
+        clear.forEach(atomTypes::remove);
+    }
+
+    private String replaceDefineCalls(String line) {
+        Set<String> strings = defines.keySet();
+        for (String s : strings) {
+            if (line.contains(s)) {
+                line = line.replace(s, defines.get(s));
+            }
+        }
+        return line;
     }
 
     private void addPair(String line, Section actualSection) {
         if (actualSection != null) {
             List<Pair> pairs = actualSection.getPairs();
-            String[] split = reworkLine(line).split(" ");
+            List<String> split = reworkLine(line);
             Pair p = new Pair();
-            int length = split.length;
+            int length = split.size();
             if (length >= 3) {
-                p.setAi(split[0]);
-                p.setAj(split[1]);
-                p.setFuncType(Integer.parseInt(split[2]));
+                p.setAi(split.get(0));
+                p.setAj(split.get(1));
+                p.setFuncType(Integer.parseInt(split.get(2)));
             }
             if (length >= 5) {
-                p.setC1(new BigDecimal(split[3]));
-                p.setC2(new BigDecimal(split[4]));
+                p.setC1(new BigDecimal(split.get(3)));
+                p.setC2(new BigDecimal(split.get(4)));
             }
             if (length >= 7) {
-                p.setC3(new BigDecimal(split[5]));
-                p.setC4(new BigDecimal(split[6]));
+                p.setC3(new BigDecimal(split.get(5)));
+                p.setC4(new BigDecimal(split.get(6)));
             }
             if (length == 8) {
-                p.setC5(new BigDecimal(split[7]));
+                p.setC5(new BigDecimal(split.get(7)));
             }
             if (length < 3 || length > 8) {
                 cw.printErrorln(String.format("some PAIRS values are lost! --> %s", line));
@@ -547,16 +676,16 @@ public class InputParser {
     private void addPairNB(String line, Section actualSection) {
         if (actualSection != null) {
             List<Pair> pairsNB = actualSection.getPairsNB();
-            String[] split = reworkLine(line).split(" ");
-            if (split.length == 7) {
+            List<String> split = reworkLine(line);
+            if (split.size() == 7) {
                 PairNB p = new PairNB();
-                p.setAi(split[0]);
-                p.setAj(split[1]);
-                p.setFuncType(Integer.parseInt(split[2]));
-                p.setC1(new BigDecimal(split[3]));
-                p.setC2(new BigDecimal(split[4]));
-                p.setC3(new BigDecimal(split[5]));
-                p.setC4(new BigDecimal(split[6]));
+                p.setAi(split.get(0));
+                p.setAj(split.get(1));
+                p.setFuncType(Integer.parseInt(split.get(2)));
+                p.setC1(new BigDecimal(split.get(3)));
+                p.setC2(new BigDecimal(split.get(4)));
+                p.setC3(new BigDecimal(split.get(5)));
+                p.setC4(new BigDecimal(split.get(6)));
                 pairsNB.add(p);
             } else {
                 cw.printErrorln(String.format("some PAIRS values are lost! --> %s", line));
@@ -565,25 +694,25 @@ public class InputParser {
     }
 
     private void addPairType(String line) {
-        String[] split = reworkLine(line).split(" ");
+        List<String> split = reworkLine(line);
         List<PairType> pairTypes = structure.getPairTypes();
         PairType pt = new PairType();
-        int length = split.length;
+        int length = split.size();
         if (length >= 3) {
-            pt.setAi(split[0]);
-            pt.setAj(split[1]);
-            pt.setFuncType(Integer.parseInt(split[2]));
+            pt.setAi(split.get(0));
+            pt.setAj(split.get(1));
+            pt.setFuncType(Integer.parseInt(split.get(2)));
         }
         if (length >= 5) {
-            pt.setC1(new BigDecimal(split[3]));
-            pt.setC2(new BigDecimal(split[4]));
+            pt.setC1(new BigDecimal(split.get(3)));
+            pt.setC2(new BigDecimal(split.get(4)));
         }
         if (length >= 7) {
-            pt.setC3(new BigDecimal(split[5]));
-            pt.setC4(new BigDecimal(split[6]));
+            pt.setC3(new BigDecimal(split.get(5)));
+            pt.setC4(new BigDecimal(split.get(6)));
         }
         if (length == 8) {
-            pt.setC5(new BigDecimal(split[7]));
+            pt.setC5(new BigDecimal(split.get(7)));
         }
         if (length < 3 || length > 8) {
             cw.printErrorln(String.format("some PAIRTYPES values are lost! --> %s", line));
@@ -593,16 +722,15 @@ public class InputParser {
     }
 
     private void addDefault(String line) {
-        String[] split = reworkLine(line).split(" ");
-        if (split.length == 5) {
+        List<String> split = reworkLine(line);
+        if (split.size() == 5) {
             Default def = new Default();
-            List<Default> defaults = structure.getDefaults();
-            def.setNboudnFT(Integer.parseInt(split[0]));
-            def.setCombRule(Integer.parseInt(split[1]));
-            def.setGenPair(split[2].equals("yes"));
-            def.setFudgeLJ(new BigDecimal(split[3]));
-            def.setFudgeQQ(new BigDecimal(split[4]));
-            defaults.add(def);
+            def.setNboudnFT(Integer.parseInt(split.get(0)));
+            def.setCombRule(Integer.parseInt(split.get(1)));
+            def.setGenPair(split.get(2).equals("yes"));
+            def.setFudgeLJ(new BigDecimal(split.get(3)));
+            def.setFudgeQQ(new BigDecimal(split.get(4)));
+            structure.setDef(def);
         } else {
             cw.printErrorln(String.format("some DEFAULTS values are lost! --> %s", line));
         }
@@ -619,26 +747,26 @@ public class InputParser {
 
     private void addAtom(String line, Section actualSection) {
         if (actualSection != null) {
-            String[] split = reworkLine(line).split(" ");
+            List<String> split = reworkLine(line);
             List<Atom> atoms = actualSection.getAtoms();
             Atom a = new Atom();
-            int length = split.length;
+            int length = split.size();
             if (length >= 7) {
-                a.setNr(Integer.parseInt(split[0]));
-                a.setType(split[1]);
-                a.setResNr(Integer.parseInt(split[2]));
-                a.setResName(split[3]);
-                a.setAtomName(split[4]);
-                a.setChargeGroupNr(Integer.parseInt(split[5]));
-                a.setCharge(new BigDecimal(split[6]));
+                a.setNr(Integer.parseInt(split.get(0)));
+                a.setType(split.get(1));
+                a.setResNr(Integer.parseInt(split.get(2)));
+                a.setResName(split.get(3));
+                a.setAtomName(split.get(4));
+                a.setChargeGroupNr(Integer.parseInt(split.get(5)));
+                a.setC1(new BigDecimal(split.get(6)));
             }
             if (length >= 8) {
-                a.setMass(new BigDecimal(split[7]));
+                a.setC2(new BigDecimal(split.get(7)));
             }
             if (length == 11) {
-                a.setTypeB(split[8]);
-                a.setChargeB(new BigDecimal(split[9]));
-                a.setMassB(new BigDecimal(split[10]));
+                a.setTypeB(split.get(8));
+                a.setC3(new BigDecimal(split.get(9)));
+                a.setC4(new BigDecimal(split.get(10)));
             }
             if (length < 7 || length > 11) {
                 cw.printErrorln(String.format("some ATOMS values are lost! --> %s", line));
@@ -649,17 +777,24 @@ public class InputParser {
     }
 
     private void addAtomType(String line) {
-        String[] split = reworkLine(line).split(" ");
-        if (split.length == 7) {
+        List<String> split = reworkLine(line);
+        if (split.size() == 8) {
+            String s = split.get(0);
+            String s1 = split.get(1);
+            split.remove(0);
+            split.remove(0);
+            split.add(0, s + " " + s1);
+        }
+        if (split.size() == 7) {
             List<AtomType> atomTypes = structure.getAtomTypes();
             AtomType at = new AtomType();
-            at.setName(split[0]);
-            at.setNum(Integer.parseInt(split[1]));
-            at.setMass(new BigDecimal(split[2]));
-            at.setCharge(new BigDecimal(split[3]));
-            at.setParticleType(split[4]);
-            at.setSigma(new BigDecimal(split[5]));
-            at.setEpsilon(new BigDecimal(split[6]));
+            at.setName(split.get(0));
+            at.setNum(split.get(1));
+            at.setC1(new BigDecimal(split.get(2)));
+            at.setC2(new BigDecimal(split.get(3)));
+            at.setParticleType(split.get(4));
+            at.setC3(new BigDecimal(split.get(5)));
+            at.setC4(new BigDecimal(split.get(6)));
             atomTypes.add(at);
         } else {
             cw.printErrorln(String.format("some ATOMTYPES values are lost! --> %s", line));
@@ -668,24 +803,24 @@ public class InputParser {
 
     private void addBond(String line, Section actualSection) {
         if (actualSection != null) {
-            String[] split = reworkLine(line).split(" ");
+            List<String> split = reworkLine(line);
             List<Bond> bonds = actualSection.getBonds();
-            int length = split.length;
+            int length = split.size();
             Bond b = new Bond();
             if (length >= 3) {
-                b.setAi(split[0]);
-                b.setAj(split[1]);
-                b.setFuncType(Integer.parseInt(split[2]));
+                b.setAi(split.get(0));
+                b.setAj(split.get(1));
+                b.setFuncType(Integer.parseInt(split.get(2)));
             }
             if (length >= 5) {
-                b.setC1(new BigDecimal(split[3]));
-                b.setC2(new BigDecimal(split[4]));
+                b.setC1(new BigDecimal(split.get(3)));
+                b.setC2(new BigDecimal(split.get(4)));
             }
             if (length >= 6) {
-                b.setC3(new BigDecimal(split[5]));
+                b.setC3(new BigDecimal(split.get(5)));
             }
             if (length >= 7) {
-                b.setC4(new BigDecimal(split[6]));
+                b.setC4(new BigDecimal(split.get(6)));
             }
             if (length < 3 || length > 7) {
                 cw.printErrorln(String.format("some BONDS values are lost! --> %s", line));
@@ -696,24 +831,24 @@ public class InputParser {
     }
 
     private void addBondType(String line) {
-        String[] split = reworkLine(line).split(" ");
+        List<String> split = reworkLine(line);
         List<BondType> bondTypes = structure.getBondTypes();
-        int length = split.length;
+        int length = split.size();
         BondType bt = new BondType();
         if (length >= 3) {
-            bt.setAi(split[0]);
-            bt.setAj(split[1]);
-            bt.setFuncType(Integer.parseInt(split[2]));
+            bt.setAi(split.get(0));
+            bt.setAj(split.get(1));
+            bt.setFuncType(Integer.parseInt(split.get(2)));
         }
         if (length >= 5) {
-            bt.setC1(new BigDecimal(split[3]));
-            bt.setC2(new BigDecimal(split[4]));
+            bt.setC1(new BigDecimal(split.get(3)));
+            bt.setC2(new BigDecimal(split.get(4)));
         }
         if (length >= 6) {
-            bt.setC3(new BigDecimal(split[5]));
+            bt.setC3(new BigDecimal(split.get(5)));
         }
         if (length >= 7) {
-            bt.setC4(new BigDecimal(split[6]));
+            bt.setC4(new BigDecimal(split.get(6)));
         }
         if (length < 3 || length > 7) {
             cw.printErrorln(String.format("some BONDTYPES values are lost! --> %s", line));
@@ -724,18 +859,18 @@ public class InputParser {
 
     private void addConstraint(String line, Section actualSection) {
         if (actualSection != null) {
-            String[] split = reworkLine(line).split(" ");
+            List<String> split = reworkLine(line);
             List<Constraint> constraints = actualSection.getConstraints();
             Constraint c = new Constraint();
-            int length = split.length;
+            int length = split.size();
             if (length >= 4) {
-                c.setAi(split[0]);
-                c.setAj(split[1]);
-                c.setFuncType(Integer.parseInt(split[2]));
-                c.setC1(new BigDecimal(split[3]));
+                c.setAi(split.get(0));
+                c.setAj(split.get(1));
+                c.setFuncType(Integer.parseInt(split.get(2)));
+                c.setC1(new BigDecimal(split.get(3)));
             }
             if (length == 5) {
-                c.setC2(new BigDecimal(split[4]));
+                c.setC2(new BigDecimal(split.get(4)));
             }
             if (length < 4 || length > 5) {
                 cw.printErrorln(String.format("some CONSTRAINTS values are lost! --> %s", line));
@@ -746,18 +881,18 @@ public class InputParser {
     }
 
     private void addConstraintType(String line) {
-        String[] split = reworkLine(line).split(" ");
+        List<String> split = reworkLine(line);
         List<ConstraintType> constraintTypes = structure.getConstraintTypes();
         ConstraintType ct = new ConstraintType();
-        int length = split.length;
+        int length = split.size();
         if (length >= 4) {
-            ct.setAi(split[0]);
-            ct.setAj(split[1]);
-            ct.setFuncType(Integer.parseInt(split[2]));
-            ct.setC1(new BigDecimal(split[3]));
+            ct.setAi(split.get(0));
+            ct.setAj(split.get(1));
+            ct.setFuncType(Integer.parseInt(split.get(2)));
+            ct.setC1(new BigDecimal(split.get(3)));
         }
         if (length == 5) {
-            ct.setC2(new BigDecimal(split[4]));
+            ct.setC2(new BigDecimal(split.get(4)));
         }
         if (length < 4 || length > 5) {
             cw.printErrorln(String.format("some CONSTRAINTTYPES values are lost! --> %s", line));
@@ -769,28 +904,28 @@ public class InputParser {
     private void addAngle(String line, Section actualSection) {
         if (actualSection != null) {
             List<Angle> angles = actualSection.getAngles();
-            String[] split = reworkLine(line).split(" ");
-            int length = split.length;
+            List<String> split = reworkLine(line);
+            int length = split.size();
             Angle a = new Angle();
             if (length >= 4) {
-                a.setAi(split[0]);
-                a.setAj(split[1]);
-                a.setAk(split[2]);
-                a.setFuncType(Integer.parseInt(split[3]));
+                a.setAi(split.get(0));
+                a.setAj(split.get(1));
+                a.setAk(split.get(2));
+                a.setFuncType(Integer.parseInt(split.get(3)));
             }
             if (length >= 6) {
-                a.setC1(new BigDecimal(split[4]));
-                a.setC2(new BigDecimal(split[5]));
+                a.setC1(new BigDecimal(split.get(4)));
+                a.setC2(new BigDecimal(split.get(5)));
             }
             if (length >= 7) {
-                a.setC3(new BigDecimal(split[6]));
+                a.setC3(new BigDecimal(split.get(6)));
             }
             if (length >= 8) {
-                a.setC4(new BigDecimal(split[7]));
+                a.setC4(new BigDecimal(split.get(7)));
             }
             if (length >= 10) {
-                a.setC5(new BigDecimal(split[8]));
-                a.setC6(new BigDecimal(split[9]));
+                a.setC5(new BigDecimal(split.get(8)));
+                a.setC6(new BigDecimal(split.get(9)));
             }
             if (length < 4 || length > 10) {
                 cw.printErrorln(String.format("some ANGLES values are lost! --> %s", line));
@@ -802,26 +937,26 @@ public class InputParser {
 
     private void addAngleType(String line) {
         List<AngleType> angleTypes = structure.getAngleTypes();
-        String[] split = reworkLine(line).split(" ");
-        int length = split.length;
+        List<String> split = reworkLine(line);
+        int length = split.size();
         AngleType a = new AngleType();
         if (length >= 6) {
-            a.setAi(split[0]);
-            a.setAj(split[1]);
-            a.setAk(split[2]);
-            a.setFuncType(Integer.parseInt(split[3]));
-            a.setC1(new BigDecimal(split[4]));
-            a.setC2(new BigDecimal(split[5]));
+            a.setAi(split.get(0));
+            a.setAj(split.get(1));
+            a.setAk(split.get(2));
+            a.setFuncType(Integer.parseInt(split.get(3)));
+            a.setC1(new BigDecimal(split.get(4)));
+            a.setC2(new BigDecimal(split.get(5)));
         }
         if (length >= 7) {
-            a.setC3(new BigDecimal(split[6]));
+            a.setC3(new BigDecimal(split.get(6)));
         }
         if (length >= 8) {
-            a.setC4(new BigDecimal(split[7]));
+            a.setC4(new BigDecimal(split.get(7)));
         }
         if (length >= 10) {
-            a.setC5(new BigDecimal(split[8]));
-            a.setC6(new BigDecimal(split[9]));
+            a.setC5(new BigDecimal(split.get(8)));
+            a.setC6(new BigDecimal(split.get(9)));
         }
         if (length < 6 || length > 10) {
             cw.printErrorln(String.format("some ANGLETYPES values are lost! --> %s", line));
@@ -833,31 +968,31 @@ public class InputParser {
     private void addDihedral(String line, Section actualSection) {
         if (actualSection != null) {
             List<Dihedral> dihedrals = actualSection.getDihedrals();
-            String[] split = reworkLine(line).split(" ");
+            List<String> split = reworkLine(line);
             Dihedral dh = new Dihedral();
-            int length = split.length;
+            int length = split.size();
             if (length >= 5) {
-                dh.setAi(split[0]);
-                dh.setAj(split[1]);
-                dh.setAk(split[2]);
-                dh.setAl(split[3]);
-                dh.setFuncType(Integer.parseInt(split[4]));
+                dh.setAi(split.get(0));
+                dh.setAj(split.get(1));
+                dh.setAk(split.get(2));
+                dh.setAl(split.get(3));
+                dh.setFuncType(Integer.parseInt(split.get(4)));
             }
             if (length >= 7) {
-                dh.setC1(new BigDecimal(split[5]));
-                dh.setC2(new BigDecimal(split[6]));
+                dh.setC1(new BigDecimal(split.get(5)));
+                dh.setC2(new BigDecimal(split.get(6)));
             }
             if (length >= 8) {
-                dh.setC3(new BigDecimal(split[7]));
+                dh.setC3(new BigDecimal(split.get(7)));
             }
             if (length >= 9) {
-                dh.setC4(new BigDecimal(split[8]));
+                dh.setC4(new BigDecimal(split.get(8)));
             }
             if (length >= 10) {
-                dh.setC5(new BigDecimal(split[9]));
+                dh.setC5(new BigDecimal(split.get(9)));
             }
             if (length == 11) {
-                dh.setC6(new BigDecimal(split[10]));
+                dh.setC6(new BigDecimal(split.get(10)));
             }
             if (length < 5 || length > 11) {
                 cw.printErrorln(String.format("some DIHEDRALS values are lost! --> %s", line));
@@ -869,31 +1004,38 @@ public class InputParser {
 
     private void addDihedralType(String line) {
         List<DihedralType> dihedralTypes = structure.getDihedralTypes();
-        String[] split = reworkLine(line).split(" ");
+        List<String> split = reworkLine(line);
         DihedralType dt = new DihedralType();
-        int length = split.length;
-        if (length >= 7) {
-            dt.setAi(split[0]);
-            dt.setAj(split[1]);
-            dt.setAk(split[2]);
-            dt.setAl(split[3]);
-            dt.setFuncType(Integer.parseInt(split[4]));
-            dt.setC1(new BigDecimal(split[5]));
-            dt.setC2(new BigDecimal(split[6]));
+        int length = split.size();
+        if (length == 6) {
+            dt.setAi(split.get(0));
+            dt.setAj(split.get(1));
+            dt.setFuncType(Integer.parseInt(split.get(2)));
+            dt.setC1(new BigDecimal(split.get(3)));
+            dt.setC2(new BigDecimal(split.get(4)));
+            dt.setC3(new BigDecimal(split.get(5)));
+        } else if (length >= 7) {
+            dt.setAi(split.get(0));
+            dt.setAj(split.get(1));
+            dt.setAk(split.get(2));
+            dt.setAl(split.get(3));
+            dt.setFuncType(Integer.parseInt(split.get(4)));
+            dt.setC1(new BigDecimal(split.get(5)));
+            dt.setC2(new BigDecimal(split.get(6)));
         }
         if (length >= 8) {
-            dt.setC3(new BigDecimal(split[7]));
+            dt.setC3(new BigDecimal(split.get(7)));
         }
         if (length >= 9) {
-            dt.setC4(new BigDecimal(split[8]));
+            dt.setC4(new BigDecimal(split.get(8)));
         }
         if (length >= 10) {
-            dt.setC5(new BigDecimal(split[9]));
+            dt.setC5(new BigDecimal(split.get(9)));
         }
         if (length == 11) {
-            dt.setC6(new BigDecimal(split[10]));
+            dt.setC6(new BigDecimal(split.get(10)));
         }
-        if (length < 7 || length > 11) {
+        if (length < 6 || length > 11) {
             cw.printErrorln(String.format("some DIHEDRALTYPES values are lost! --> %s", line));
         } else {
             dihedralTypes.add(dt);
@@ -901,16 +1043,16 @@ public class InputParser {
     }
 
     private void addGenbornParam(String line) {
-        String[] split = reworkLine(line).split(" ");
-        if (split.length == 6) {
+        List<String> split = reworkLine(line);
+        if (split.size() == 6) {
             List<ImplicitGenbornParam> genbornParams = structure.getGenbornParams();
             ImplicitGenbornParam gp = new ImplicitGenbornParam();
-            gp.setAtom(split[0]);
-            gp.setC1(new BigDecimal(split[1]));
-            gp.setC2(new BigDecimal(split[2]));
-            gp.setC3(new BigDecimal(split[3]));
-            gp.setC4(new BigDecimal(split[4]));
-            gp.setC5(new BigDecimal(split[5]));
+            gp.setAtom(split.get(0));
+            gp.setC1(new BigDecimal(split.get(1)));
+            gp.setC2(new BigDecimal(split.get(2)));
+            gp.setC3(new BigDecimal(split.get(3)));
+            gp.setC4(new BigDecimal(split.get(4)));
+            gp.setC5(new BigDecimal(split.get(5)));
             genbornParams.add(gp);
         } else {
             cw.printErrorln(String.format("some GENBORN values are lost! --> %s", line));
@@ -919,14 +1061,14 @@ public class InputParser {
 
     private void addSettle(String line, Section actualSection) {
         if (actualSection != null) {
-            String[] split = reworkLine(line).split(" ");
-            if (split.length == 4) {
+            List<String> split = reworkLine(line);
+            if (split.size() == 4) {
                 List<Settle> settles = actualSection.getSettles();
                 Settle s = new Settle();
-                s.setAtom(Integer.parseInt(split[0]));
-                s.setFuncType(Integer.parseInt(split[1]));
-                s.setC1(new BigDecimal(split[2]));
-                s.setC2(new BigDecimal(split[3]));
+                s.setAtom(split.get(0));
+                s.setFuncType(Integer.parseInt(split.get(1)));
+                s.setC1(new BigDecimal(split.get(2)));
+                s.setC2(new BigDecimal(split.get(3)));
                 settles.add(s);
             } else {
                 cw.printErrorln(String.format("some SETTLES values are lost! --> %s", line));
@@ -936,14 +1078,14 @@ public class InputParser {
 
     private void addExclusion(String line, Section actualSection) {
         if (actualSection != null) {
-            String[] split = reworkLine(line).split(" ");
-            if (split.length >= 2) {
+            List<String> split = reworkLine(line);
+            if (split.size() >= 2) {
                 List<Exclusion> exclusions = actualSection.getExclusions();
                 Exclusion e = new Exclusion();
-                e.setAtomIdx(Integer.parseInt(split[0]));
+                e.setAtomIdx(Integer.parseInt(split.get(0)));
                 List<Integer> bonds = e.getBonds();
-                for (int i = 1; i < split.length; i++) {
-                    bonds.add(Integer.parseInt(split[i]));
+                for (int i = 1; i < split.size(); i++) {
+                    bonds.add(Integer.parseInt(split.get(i)));
                 }
                 exclusions.add(e);
             } else {
@@ -954,15 +1096,15 @@ public class InputParser {
 
     private void addPosres(String line, Section actualSection) {
         if (actualSection != null) {
-            String[] split = reworkLine(line).split(" ");
-            if (split.length == 5) {
+            List<String> split = reworkLine(line);
+            if (split.size() == 5) {
                 List<PositionRestraint> posres = actualSection.getPositionRestraints();
                 PositionRestraint pr = new PositionRestraint();
-                pr.setAi(Integer.parseInt(split[0]));
-                pr.setFunc(Integer.parseInt(split[1]));
-                pr.setC1(new BigDecimal(split[2]));
-                pr.setC2(new BigDecimal(split[3]));
-                pr.setC3(new BigDecimal(split[4]));
+                pr.setAi(split.get(0));
+                pr.setFuncType(Integer.parseInt(split.get(1)));
+                pr.setC1(new BigDecimal(split.get(2)));
+                pr.setC2(new BigDecimal(split.get(3)));
+                pr.setC3(new BigDecimal(split.get(4)));
                 posres.add(pr);
             } else {
                 cw.printErrorln(String.format("some POSRES values are lost! --> %s", line));
@@ -972,19 +1114,19 @@ public class InputParser {
 
     private void addDistanceRes(String line, Section actualSection) {
         if (actualSection != null) {
-            String[] split = reworkLine(line).split(" ");
-            if (split.length == 9) {
+            List<String> split = reworkLine(line);
+            if (split.size() == 9) {
                 List<DistanceRestraint> distRes = actualSection.getDistanceRestraints();
                 DistanceRestraint res = new DistanceRestraint();
-                res.setAi(split[0]);
-                res.setAj(split[1]);
-                res.setFuncType(Integer.parseInt(split[2]));
-                res.setType(Integer.parseInt(split[3]));
-                res.setLabel(Integer.parseInt(split[4]));
-                res.setC1(new BigDecimal(split[5]));
-                res.setC2(new BigDecimal(split[6]));
-                res.setC3(new BigDecimal(split[7]));
-                res.setC4(new BigDecimal(split[8]));
+                res.setAi(split.get(0));
+                res.setAj(split.get(1));
+                res.setFuncType(Integer.parseInt(split.get(2)));
+                res.setType(split.get(3));
+                res.setLabel(split.get(4));
+                res.setC1(new BigDecimal(split.get(5)));
+                res.setC2(new BigDecimal(split.get(6)));
+                res.setC3(new BigDecimal(split.get(7)));
+                res.setC4(new BigDecimal(split.get(8)));
                 distRes.add(res);
             } else {
                 cw.printErrorln(String.format("some DISTANCERES values are lost! --> %s", line));
@@ -993,19 +1135,19 @@ public class InputParser {
     }
 
     private void addNonbondParams(String line) {
-        String[] split = reworkLine(line).split(" ");
+        List<String> split = reworkLine(line);
         List<NonBondParam> nonbondRes = structure.getNonBondParams();
-        int length = split.length;
+        int length = split.size();
         NonBondParam param = new NonBondParam();
         if (length >= 5) {
-            param.setAi(split[0]);
-            param.setAj(split[1]);
-            param.setFuncType(Integer.parseInt(split[2]));
-            param.setC1(new BigDecimal(split[3]));
-            param.setC1(new BigDecimal(split[4]));
+            param.setAi(split.get(0));
+            param.setAj(split.get(1));
+            param.setFuncType(Integer.parseInt(split.get(2)));
+            param.setC1(new BigDecimal(split.get(3)));
+            param.setC2(new BigDecimal(split.get(4)));
         }
         if (length >= 6) {
-            param.setC1(new BigDecimal(split[5]));
+            param.setC3(new BigDecimal(split.get(5)));
         }
         if (length < 5 || length > 6) {
             cw.printErrorln(String.format("some nonbond params values are lost! --> %s", line));
@@ -1016,29 +1158,29 @@ public class InputParser {
 
     private void addDihedralRes(String line, Section actualSection) {
         if (actualSection != null) {
-            String[] split = reworkLine(line).split(" ");
+            List<String> split = reworkLine(line);
             List<DihedralRestraint> diheRes = actualSection.getDihedralRestraints();
             DihedralRestraint res = new DihedralRestraint();
-            if (split.length == 7) {
-                res.setAi(split[0]);
-                res.setAj(split[1]);
-                res.setAk(split[2]);
-                res.setAl(split[3]);
-                res.setFuncType(Integer.parseInt(split[4]));
-                res.setC1(Integer.parseInt(split[5]));
-                res.setC2(Integer.parseInt(split[6]));
+            if (split.size() == 7) {
+                res.setAi(split.get(0));
+                res.setAj(split.get(1));
+                res.setAk(split.get(2));
+                res.setAl(split.get(3));
+                res.setFuncType(Integer.parseInt(split.get(4)));
+                res.setC1(new BigDecimal(split.get(5)));
+                res.setC2(new BigDecimal(split.get(6)));
                 diheRes.add(res);
-            } else if (split.length == 10) {
-                res.setAi(split[0]);
-                res.setAj(split[1]);
-                res.setAk(split[2]);
-                res.setAl(split[3]);
-                res.setFuncType(Integer.parseInt(split[4]));
-                res.setLabel(Integer.parseInt(split[5]));
-                res.setC1(Integer.parseInt(split[6]));
-                res.setC2(Integer.parseInt(split[7]));
-                res.setC3(Integer.parseInt(split[8]));
-                res.setC4(Integer.parseInt(split[9]));
+            } else if (split.size() == 10) {
+                res.setAi(split.get(0));
+                res.setAj(split.get(1));
+                res.setAk(split.get(2));
+                res.setAl(split.get(3));
+                res.setFuncType(Integer.parseInt(split.get(4)));
+                res.setLabel(split.get(5));
+                res.setC1(new BigDecimal(split.get(6)));
+                res.setC2(new BigDecimal(split.get(7)));
+                res.setC3(new BigDecimal(split.get(8)));
+                res.setC4(new BigDecimal(split.get(9)));
                 diheRes.add(res);
             } else {
                 cw.printErrorln(String.format("some dihedral restraints values are lost! --> %s", line));
@@ -1048,19 +1190,19 @@ public class InputParser {
 
     private void addOrientationRes(String line, Section actualSection) {
         if (actualSection != null) {
-            String[] split = reworkLine(line).split(" ");
-            if (split.length == 9) {
+            List<String> split = reworkLine(line);
+            if (split.size() == 9) {
                 List<OrientationRestraint> oriRes = actualSection.getOrientationRestraints();
                 OrientationRestraint res = new OrientationRestraint();
-                res.setAi(split[0]);
-                res.setAj(split[1]);
-                res.setFuncType(Integer.parseInt(split[2]));
-                res.setExp(Integer.parseInt(split[3]));
-                res.setLabel(Integer.parseInt(split[3]));
-                res.setAlpha(Integer.parseInt(split[3]));
-                res.setC1(new BigDecimal(split[3]));
-                res.setC2(new BigDecimal(split[3]));
-                res.setC3(new BigDecimal(split[3]));
+                res.setAi(split.get(0));
+                res.setAj(split.get(1));
+                res.setFuncType(Integer.parseInt(split.get(2)));
+                res.setExp(split.get(3));
+                res.setLabel(split.get(3));
+                res.setAlpha(split.get(3));
+                res.setC1(new BigDecimal(split.get(3)));
+                res.setC2(new BigDecimal(split.get(3)));
+                res.setC3(new BigDecimal(split.get(3)));
                 oriRes.add(res);
             } else {
                 cw.printErrorln(String.format("some orientation restraints values are lost! --> %s", line));
@@ -1070,27 +1212,27 @@ public class InputParser {
 
     private void addAngleRes(String line, Section actualSection) {
         if (actualSection != null) {
-            String[] split = reworkLine(line).split(" ");
+            List<String> split = reworkLine(line);
             List<AngleRestraintZ> angleRes = actualSection.getAngleRestraints();
-            if (split.length == 6) {
+            if (split.size() == 6) {
                 AngleRestraintZ resZ = new AngleRestraintZ();
-                resZ.setAi(split[0]);
-                resZ.setAj(split[1]);
-                resZ.setFuncType(Integer.parseInt(split[2]));
-                resZ.setC1(new BigDecimal(split[3]));
-                resZ.setC2(new BigDecimal(split[4]));
-                resZ.setC3(new BigDecimal(split[5]));
+                resZ.setAi(split.get(0));
+                resZ.setAj(split.get(1));
+                resZ.setFuncType(Integer.parseInt(split.get(2)));
+                resZ.setC1(new BigDecimal(split.get(3)));
+                resZ.setC2(new BigDecimal(split.get(4)));
+                resZ.setC3(new BigDecimal(split.get(5)));
                 angleRes.add(resZ);
-            } else if (split.length == 8) {
+            } else if (split.size() == 8) {
                 AngleRestraint res = new AngleRestraint();
-                res.setAi(split[0]);
-                res.setAj(split[1]);
-                res.setAk(split[2]);
-                res.setAl(split[3]);
-                res.setFuncType(Integer.parseInt(split[4]));
-                res.setC1(new BigDecimal(split[5]));
-                res.setC2(new BigDecimal(split[6]));
-                res.setC3(new BigDecimal(split[7]));
+                res.setAi(split.get(0));
+                res.setAj(split.get(1));
+                res.setAk(split.get(2));
+                res.setAl(split.get(3));
+                res.setFuncType(Integer.parseInt(split.get(4)));
+                res.setC1(new BigDecimal(split.get(5)));
+                res.setC2(new BigDecimal(split.get(6)));
+                res.setC3(new BigDecimal(split.get(7)));
                 angleRes.add(res);
             } else {
                 cw.printErrorln(String.format("some angles restraints(z) values are lost! --> %s", line));
@@ -1108,13 +1250,23 @@ public class InputParser {
     }
 
     private boolean isDataRow(String line) {
-        return !COMMENT_PATTERN.matcher(line).matches() && !line.trim().isEmpty();
+        if (LOGICAL_PATTERN.matcher(line).matches()) {
+            cw.printInfoln(String.format("LOGICAL: %s", line));
+        }
+        return !COMMENT_PATTERN.matcher(line).matches() && !LOGICAL_PATTERN.matcher(line).matches() && !line.trim().isEmpty();
     }
 
-    private String reworkLine(String line) {
+    private List<String> reworkLine(String line) {
         line = line.replaceAll("\\s+", " ");
         String[] split = line.split(";");
-        return split[0];
+        return Lists.newArrayList(split[0].split(" "));
+    }
+
+    private List<String> reworkLineRemovePrefix(String line, String prefix) {
+        line = line.replace(prefix, "").trim();
+        line = line.replaceAll("\\s+", " ");
+        String[] split = line.split(";");
+        return Lists.newArrayList(split[0].split(" "));
     }
 
     public TopologyStructure getStructure() {
