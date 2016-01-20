@@ -1,7 +1,6 @@
 package org.mdconverter.fileparser;
 
 
-import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
@@ -37,7 +36,7 @@ public class InputParser {
 
     private static final Pattern INCLUDE_PATTERN = Pattern.compile("^[ \t]*#include \"[\\w\\d\\./]*\"(;.*)?$");
 
-    private static final Pattern LOGICAL_PATTERN = Pattern.compile("#((ifdef)|(ifndef)|(else)|(endif)|(define))+.*$");
+    private static final Pattern LOGICAL_PATTERN = Pattern.compile("#((ifdef)|(ifndef)|(else)|(endif)|(define)|(include))+.*$");
 
     private static final Pattern DEFAULTS_PATTERN_1 = Pattern.compile("^\\[ defaults \\]$");
     private static final Pattern DEFAULTS_PATTERN_2 = Pattern.compile("^[ \\t]*([\\d]+[ \\t]+){2}((no)|(yes))[ \\t]*([\\d-]+[.\\d]*([Ee][\\+-][\\d]{2,})?[ \\t]*){2}[ \\t]*(;.*)?$");
@@ -203,8 +202,8 @@ public class InputParser {
                         }
                     }
                 } else if (line.contains("define")) {
-                    List<String> strings = reworkLineRemovePrefix(line, define);
-                    defines.put(strings.get(0), Joiner.on(" ").join(strings.subList(1, strings.size())));
+                    //List<String> strings = reworkLineRemovePrefix(line, define);
+                    //defines.put(strings.get(0), Joiner.on(" ").join(strings.subList(1, strings.size())));
                 } else if (line.contains(elsse)) {
                     elseReached = true;
                     if (skipIfPath) skipElsePath = false;
@@ -235,22 +234,6 @@ public class InputParser {
             if (skipIfPath || (skipElsePath && elseReached)) {
                 continue;
             }
-            /*if (INCLUDE_PATTERN.matcher(line).matches()) {
-                String file = line.split(" ")[1];
-                file = file.substring(1, file.length() - 1);
-                if (posres != null && posres.endsWith(file)) {
-                    parseInput(Files.readAllBytes(posres), null, false, previousPath != null ? previousPath : file.split("/")[0], null);
-                    continue;
-                }
-                if (previousPath != null) {
-                    file = previousPath + "/" + file;
-                }
-                byte[] byName = IncludeHandler.getFileByName(GromacsTReader.class, file);
-                if (byName == null) {
-                    throw new RuntimeException(String.format("File: %s could not be found!", file));
-                }
-                parseInput(byName, null, false, previousPath != null ? previousPath : file.split("/")[0], null);
-            }*/
             if (COMMENT_PATTERN.matcher(line).matches() && header) {
                 if (line.length() > 0) {
                     addHeader(line);
@@ -606,7 +589,9 @@ public class InputParser {
                 }
             }
         }
-        removeUnnecessaryData();
+        if (arguments != null) {
+            removeUnnecessaryData();
+        }
     }
 
     private void removeUnnecessaryData() {
