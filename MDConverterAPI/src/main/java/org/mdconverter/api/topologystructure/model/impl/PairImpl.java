@@ -1,29 +1,46 @@
 package org.mdconverter.api.topologystructure.model.impl;
 
-import org.mdconverter.api.topologystructure.model.api.FuncType;
-import org.mdconverter.api.topologystructure.model.api.ValueGS;
+
+import org.mdconverter.api.topologystructure.ModelVersion;
+import org.mdconverter.api.topologystructure.model.api.Pair;
+import org.mdconverter.api.topologystructure.model.api.ValueHolder;
 
 import java.math.BigDecimal;
 
 /**
  * Created by miso on 04.12.2015.
  */
-public class PairType extends ValueGS implements FuncType {
+public class PairImpl extends ValueHolder implements Pair {
 
     private String ai;
     private String aj;
     private Integer funcType;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c1;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c2;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c3;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c4;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c5;
 
-    public PairType() {
+    public PairImpl() {
 
     }
 
-    public PairType(String ai, String aj, Integer funcType, BigDecimal c1, BigDecimal c2) {
+    public PairImpl(String ai, String aj, Integer funcType, BigDecimal c1, BigDecimal c2) {
         this.ai = ai;
         this.aj = aj;
         this.funcType = funcType;
@@ -31,17 +48,7 @@ public class PairType extends ValueGS implements FuncType {
         this.c2 = c2;
     }
 
-    public PairType(String ai, String aj, Integer funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3, BigDecimal c4) {
-        this.ai = ai;
-        this.aj = aj;
-        this.funcType = funcType;
-        this.c1 = c1;
-        this.c2 = c2;
-        this.c3 = c3;
-        this.c4 = c4;
-    }
-
-    public PairType(String ai, String aj, Integer funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3, BigDecimal c4, BigDecimal c5) {
+    public PairImpl(String ai, String aj, Integer funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3, BigDecimal c4, BigDecimal c5) {
         this.ai = ai;
         this.aj = aj;
         this.funcType = funcType;

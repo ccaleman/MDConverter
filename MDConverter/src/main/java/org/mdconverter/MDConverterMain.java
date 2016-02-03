@@ -108,6 +108,8 @@ public class MDConverterMain {
                     consoleWriter.printInfoln("DATA COULD BE LOST!");
                 } else {
                     consoleWriter.printErrorln("ModelVersions of selected Plugins are incompatible!");
+                    consoleWriter.printErrorln(String.format("Reader model version: %s", modelVersionR));
+                    consoleWriter.printErrorln(String.format("Writer model version: %s", modelVersionW));
                     throw new RuntimeException();
                 }
             }

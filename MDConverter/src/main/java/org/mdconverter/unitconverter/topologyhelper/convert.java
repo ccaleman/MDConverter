@@ -4,9 +4,9 @@ import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.jscience.mathematics.number.Real;
 import org.mdconverter.api.plugin.type.PluginType;
+import org.mdconverter.api.topologystructure.model.api.Default;
 import org.mdconverter.api.topologystructure.model.api.FuncType;
-import org.mdconverter.api.topologystructure.model.api.ValueGS;
-import org.mdconverter.api.topologystructure.model.impl.Default;
+import org.mdconverter.api.topologystructure.model.api.ValueHolder;
 
 import javax.measure.quantity.Quantity;
 import javax.measure.unit.Unit;
@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 /**
  * Created by miso on 07.01.2016.
  */
-public abstract class Convert<T extends ValueGS> {
+public abstract class Convert<T extends ValueHolder> {
 
     private final Pattern REFL = Pattern.compile("'([\\d\\w]+?)'");
     private final double amu = 1.6605402E-27;
@@ -299,6 +299,9 @@ public abstract class Convert<T extends ValueGS> {
 
     private String getKeyForClassname(String name) {
         name = name.toLowerCase();
+        if (name.endsWith("impl")) {
+            name = name.substring(0, name.length() - 4);
+        }
         if ("atom/atomtypes".contains(name)) {
             return "atom/atomTypes";
         } else if ("bond/bondtypes".contains(name)) {

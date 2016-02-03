@@ -3,7 +3,7 @@ package org.mdconverter.unitconverter.topologyhelper;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
 import org.mdconverter.api.topologystructure.model.impl.AngleImpl;
-import org.mdconverter.api.topologystructure.model.impl.Default;
+import org.mdconverter.api.topologystructure.model.impl.DefaultImpl;
 
 import java.util.Map;
 
@@ -14,7 +14,7 @@ import static java.lang.Boolean.FALSE;
  */
 public class AngleH extends Convert<AngleImpl> {
 
-    public AngleH(Map<String, Map<String, Map<String, String>>> readerUnits, Map<String, Map<String, Map<String, String>>> writerUnits, Default def) {
+    public AngleH(Map<String, Map<String, Map<String, String>>> readerUnits, Map<String, Map<String, Map<String, String>>> writerUnits, DefaultImpl def) {
         super(readerUnits, writerUnits, def);
     }
 

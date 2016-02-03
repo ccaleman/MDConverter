@@ -45,6 +45,10 @@
             <artifactId>commons-lang3</artifactId>
         </dependency>
         <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.mdconverter</groupId>
             <artifactId>MDConverterAPI</artifactId>
             <version>${project.version}</version>

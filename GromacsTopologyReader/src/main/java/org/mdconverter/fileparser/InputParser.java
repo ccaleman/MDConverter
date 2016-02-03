@@ -8,7 +8,7 @@ import org.mdconverter.api.consolewriter.ConsoleWriter;
 import org.mdconverter.api.topologystructure.SectionType;
 import org.mdconverter.api.topologystructure.model.Section;
 import org.mdconverter.api.topologystructure.model.TopologyStructure;
-import org.mdconverter.api.topologystructure.model.api.Angle;
+import org.mdconverter.api.topologystructure.model.api.*;
 import org.mdconverter.api.topologystructure.model.impl.*;
 import org.mdconverter.api.topologystructure.model.impl.System;
 import org.mdconverter.main.GromacsTReader;
@@ -419,7 +419,7 @@ public class InputParser {
                 molecules = true;
                 if (MOLECULES_PATTERN_2.matcher(line).matches() && structure.getMolecule() == null) {
                     List<String> split = reworkLine(line);
-                    structure.setMolecule(new Molecule(split.get(0), Integer.parseInt(split.get(1))));
+                    structure.setMolecule(new MoleculeImpl(split.get(0), Integer.parseInt(split.get(1))));
                 } else if (isDataRow(line) && !MOLECULES_PATTERN_1.matcher(line).matches()) {
                     molecules = false;
                 }
@@ -431,7 +431,7 @@ public class InputParser {
                 moleculeTypes = true;
                 if (MOLECULES_PATTERN_2.matcher(line).matches() && actualSection == null) {
                     List<String> split = reworkLine(line);
-                    MoleculeType moleculeType = new MoleculeType(split.get(0), Integer.parseInt(split.get(1)));
+                    Molecule moleculeType = new MoleculeImpl(split.get(0), Integer.parseInt(split.get(1)));
                     if (previousPath == null) {
                         actualSection = new Section(SectionType.STRUCTUREDATA);
                     } else {
@@ -631,7 +631,7 @@ public class InputParser {
         if (actualSection != null) {
             List<Pair> pairs = actualSection.getPairs();
             List<String> split = reworkLine(line);
-            Pair p = new Pair();
+            PairImpl p = new PairImpl();
             int length = split.size();
             if (length >= 3) {
                 p.setAi(split.get(0));
@@ -659,7 +659,7 @@ public class InputParser {
 
     private void addPairNB(String line, Section actualSection) {
         if (actualSection != null) {
-            List<Pair> pairsNB = actualSection.getPairsNB();
+            List<PairNB> pairsNB = actualSection.getPairsNB();
             List<String> split = reworkLine(line);
             if (split.size() == 7) {
                 PairNB p = new PairNB();
@@ -679,8 +679,8 @@ public class InputParser {
 
     private void addPairType(String line) {
         List<String> split = reworkLine(line);
-        List<PairType> pairTypes = structure.getPairTypes();
-        PairType pt = new PairType();
+        List<Pair> pairTypes = structure.getPairTypes();
+        PairImpl pt = new PairImpl();
         int length = split.size();
         if (length >= 3) {
             pt.setAi(split.get(0));
@@ -708,12 +708,12 @@ public class InputParser {
     private void addDefault(String line) {
         List<String> split = reworkLine(line);
         if (split.size() == 5) {
-            Default def = new Default();
+            DefaultImpl def = new DefaultImpl();
             def.setNboudnFT(Integer.parseInt(split.get(0)));
             def.setCombRule(Integer.parseInt(split.get(1)));
             def.setGenPair(split.get(2).equals("yes"));
-            def.setFudgeLJ(new BigDecimal(split.get(3)));
-            def.setFudgeQQ(new BigDecimal(split.get(4)));
+            def.setC1(new BigDecimal(split.get(3)));
+            def.setC2(new BigDecimal(split.get(4)));
             structure.setDef(def);
         } else {
             cw.printErrorln(String.format("some DEFAULTS values are lost! --> %s", line));
@@ -733,7 +733,7 @@ public class InputParser {
         if (actualSection != null) {
             List<String> split = reworkLine(line);
             List<Atom> atoms = actualSection.getAtoms();
-            Atom a = new Atom();
+            AtomImpl a = new AtomImpl();
             int length = split.size();
             if (length >= 7) {
                 a.setNr(Integer.parseInt(split.get(0)));
@@ -771,7 +771,7 @@ public class InputParser {
         }
         if (split.size() == 7) {
             List<AtomType> atomTypes = structure.getAtomTypes();
-            AtomType at = new AtomType();
+            AtomTypeImpl at = new AtomTypeImpl();
             at.setName(split.get(0));
             at.setNum(split.get(1));
             at.setC1(new BigDecimal(split.get(2)));
@@ -790,7 +790,7 @@ public class InputParser {
             List<String> split = reworkLine(line);
             List<Bond> bonds = actualSection.getBonds();
             int length = split.size();
-            Bond b = new Bond();
+            BondImpl b = new BondImpl();
             if (length >= 3) {
                 b.setAi(split.get(0));
                 b.setAj(split.get(1));
@@ -816,9 +816,9 @@ public class InputParser {
 
     private void addBondType(String line) {
         List<String> split = reworkLine(line);
-        List<BondType> bondTypes = structure.getBondTypes();
+        List<Bond> bondTypes = structure.getBondTypes();
         int length = split.size();
-        BondType bt = new BondType();
+        BondImpl bt = new BondImpl();
         if (length >= 3) {
             bt.setAi(split.get(0));
             bt.setAj(split.get(1));
@@ -845,7 +845,7 @@ public class InputParser {
         if (actualSection != null) {
             List<String> split = reworkLine(line);
             List<Constraint> constraints = actualSection.getConstraints();
-            Constraint c = new Constraint();
+            ConstraintImpl c = new ConstraintImpl();
             int length = split.size();
             if (length >= 4) {
                 c.setAi(split.get(0));
@@ -866,8 +866,8 @@ public class InputParser {
 
     private void addConstraintType(String line) {
         List<String> split = reworkLine(line);
-        List<ConstraintType> constraintTypes = structure.getConstraintTypes();
-        ConstraintType ct = new ConstraintType();
+        List<Constraint> constraintTypes = structure.getConstraintTypes();
+        ConstraintImpl ct = new ConstraintImpl();
         int length = split.size();
         if (length >= 4) {
             ct.setAi(split.get(0));
@@ -953,7 +953,7 @@ public class InputParser {
         if (actualSection != null) {
             List<Dihedral> dihedrals = actualSection.getDihedrals();
             List<String> split = reworkLine(line);
-            Dihedral dh = new Dihedral();
+            DihedralImpl dh = new DihedralImpl();
             int length = split.size();
             if (length >= 5) {
                 dh.setAi(split.get(0));
@@ -987,9 +987,9 @@ public class InputParser {
     }
 
     private void addDihedralType(String line) {
-        List<DihedralType> dihedralTypes = structure.getDihedralTypes();
+        List<Dihedral> dihedralTypes = structure.getDihedralTypes();
         List<String> split = reworkLine(line);
-        DihedralType dt = new DihedralType();
+        DihedralImpl dt = new DihedralImpl();
         int length = split.size();
         if (length == 6) {
             dt.setAi(split.get(0));
@@ -1030,7 +1030,7 @@ public class InputParser {
         List<String> split = reworkLine(line);
         if (split.size() == 6) {
             List<ImplicitGenbornParam> genbornParams = structure.getGenbornParams();
-            ImplicitGenbornParam gp = new ImplicitGenbornParam();
+            ImplicitGenbornParamImpl gp = new ImplicitGenbornParamImpl();
             gp.setAtom(split.get(0));
             gp.setC1(new BigDecimal(split.get(1)));
             gp.setC2(new BigDecimal(split.get(2)));
@@ -1048,7 +1048,7 @@ public class InputParser {
             List<String> split = reworkLine(line);
             if (split.size() == 4) {
                 List<Settle> settles = actualSection.getSettles();
-                Settle s = new Settle();
+                SettleImpl s = new SettleImpl();
                 s.setAtom(split.get(0));
                 s.setFuncType(Integer.parseInt(split.get(1)));
                 s.setC1(new BigDecimal(split.get(2)));
@@ -1083,7 +1083,7 @@ public class InputParser {
             List<String> split = reworkLine(line);
             if (split.size() == 5) {
                 List<PositionRestraint> posres = actualSection.getPositionRestraints();
-                PositionRestraint pr = new PositionRestraint();
+                PositionRestraintImpl pr = new PositionRestraintImpl();
                 pr.setAi(split.get(0));
                 pr.setFuncType(Integer.parseInt(split.get(1)));
                 pr.setC1(new BigDecimal(split.get(2)));
@@ -1101,7 +1101,7 @@ public class InputParser {
             List<String> split = reworkLine(line);
             if (split.size() == 9) {
                 List<DistanceRestraint> distRes = actualSection.getDistanceRestraints();
-                DistanceRestraint res = new DistanceRestraint();
+                DistanceRestraintImpl res = new DistanceRestraintImpl();
                 res.setAi(split.get(0));
                 res.setAj(split.get(1));
                 res.setFuncType(Integer.parseInt(split.get(2)));
@@ -1122,7 +1122,7 @@ public class InputParser {
         List<String> split = reworkLine(line);
         List<NonBondParam> nonbondRes = structure.getNonBondParams();
         int length = split.size();
-        NonBondParam param = new NonBondParam();
+        NonBondParamImpl param = new NonBondParamImpl();
         if (length >= 5) {
             param.setAi(split.get(0));
             param.setAj(split.get(1));
@@ -1144,7 +1144,7 @@ public class InputParser {
         if (actualSection != null) {
             List<String> split = reworkLine(line);
             List<DihedralRestraint> diheRes = actualSection.getDihedralRestraints();
-            DihedralRestraint res = new DihedralRestraint();
+            DihedralRestraintImpl res = new DihedralRestraintImpl();
             if (split.size() == 7) {
                 res.setAi(split.get(0));
                 res.setAj(split.get(1));
@@ -1177,7 +1177,7 @@ public class InputParser {
             List<String> split = reworkLine(line);
             if (split.size() == 9) {
                 List<OrientationRestraint> oriRes = actualSection.getOrientationRestraints();
-                OrientationRestraint res = new OrientationRestraint();
+                OrientationRestraintImpl res = new OrientationRestraintImpl();
                 res.setAi(split.get(0));
                 res.setAj(split.get(1));
                 res.setFuncType(Integer.parseInt(split.get(2)));
@@ -1197,9 +1197,9 @@ public class InputParser {
     private void addAngleRes(String line, Section actualSection) {
         if (actualSection != null) {
             List<String> split = reworkLine(line);
-            List<AngleRestraintZ> angleRes = actualSection.getAngleRestraints();
+            List<AngleRestraintZImpl> angleRes = actualSection.getAngleRestraints();
             if (split.size() == 6) {
-                AngleRestraintZ resZ = new AngleRestraintZ();
+                AngleRestraintZImpl resZ = new AngleRestraintZImpl();
                 resZ.setAi(split.get(0));
                 resZ.setAj(split.get(1));
                 resZ.setFuncType(Integer.parseInt(split.get(2)));
@@ -1208,7 +1208,7 @@ public class InputParser {
                 resZ.setC3(new BigDecimal(split.get(5)));
                 angleRes.add(resZ);
             } else if (split.size() == 8) {
-                AngleRestraint res = new AngleRestraint();
+                AngleRestraintImpl res = new AngleRestraintImpl();
                 res.setAi(split.get(0));
                 res.setAj(split.get(1));
                 res.setAk(split.get(2));

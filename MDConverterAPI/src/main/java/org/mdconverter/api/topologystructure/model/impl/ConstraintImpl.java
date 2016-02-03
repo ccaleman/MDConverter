@@ -1,32 +1,39 @@
 package org.mdconverter.api.topologystructure.model.impl;
 
-import org.mdconverter.api.topologystructure.model.api.FuncType;
-import org.mdconverter.api.topologystructure.model.api.ValueGS;
+import org.mdconverter.api.topologystructure.ModelVersion;
+import org.mdconverter.api.topologystructure.model.api.Constraint;
+import org.mdconverter.api.topologystructure.model.api.ValueHolder;
 
 import java.math.BigDecimal;
 
 /**
  * Created by miso on 04.12.2015.
  */
-public class ConstraintType extends ValueGS implements FuncType {
+public class ConstraintImpl extends ValueHolder implements Constraint {
 
     private String ai;
     private String aj;
     private Integer funcType;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c1;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c2;
 
-    public ConstraintType() {
+    public ConstraintImpl() {
     }
 
-    public ConstraintType(String ai, String aj, Integer funcType, BigDecimal c1) {
+    public ConstraintImpl(String ai, String aj, Integer funcType, BigDecimal c1) {
         this.ai = ai;
         this.aj = aj;
         this.funcType = funcType;
         this.c1 = c1;
     }
 
-    public ConstraintType(String ai, String aj, Integer funcType, BigDecimal c1, BigDecimal c2) {
+    public ConstraintImpl(String ai, String aj, Integer funcType, BigDecimal c1, BigDecimal c2) {
         this.ai = ai;
         this.aj = aj;
         this.funcType = funcType;

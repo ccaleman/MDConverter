@@ -1,25 +1,42 @@
 package org.mdconverter.api.topologystructure.model.impl;
 
-import org.mdconverter.api.topologystructure.model.api.ValueGS;
+import org.mdconverter.api.topologystructure.ModelVersion;
+import org.mdconverter.api.topologystructure.model.api.ImplicitGenbornParam;
+import org.mdconverter.api.topologystructure.model.api.ValueHolder;
 
 import java.math.BigDecimal;
 
 /**
  * Created by miso on 04.12.2015.
  */
-public class ImplicitGenbornParam extends ValueGS {
+public class ImplicitGenbornParamImpl extends ValueHolder implements ImplicitGenbornParam {
 
     private String atom;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c1;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c2;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c3;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c4;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c5;
 
-    public ImplicitGenbornParam() {
+    public ImplicitGenbornParamImpl() {
     }
 
-    public ImplicitGenbornParam(String atom, BigDecimal c1, BigDecimal c2, BigDecimal c3, BigDecimal c4, BigDecimal c5) {
+    public ImplicitGenbornParamImpl(String atom, BigDecimal c1, BigDecimal c2, BigDecimal c3, BigDecimal c4, BigDecimal c5) {
         this.atom = atom;
         this.c1 = c1;
         this.c2 = c2;

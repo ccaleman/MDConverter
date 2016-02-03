@@ -9,7 +9,8 @@ import org.mdconverter.api.consolewriter.ConsoleWriter;
 import org.mdconverter.api.topologystructure.SectionType;
 import org.mdconverter.api.topologystructure.model.Section;
 import org.mdconverter.api.topologystructure.model.TopologyStructure;
-import org.mdconverter.api.topologystructure.model.impl.Atom;
+import org.mdconverter.api.topologystructure.model.api.Atom;
+import org.mdconverter.api.topologystructure.model.impl.AtomImpl;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -116,7 +117,7 @@ public class InputParserT {
                         checkLineReader(activeLineReader, activeAS);
                         List<BigDecimal> list = readLineB(line);
                         for (int i = 0; i < list.size(); i++) {
-                            topSection.getAtoms().get(i).setC1(list.get(i));
+                            ((AtomImpl) topSection.getAtoms().get(i)).setC1(list.get(i));
                         }
                     }
                     if (activeAS.equals(ATOMIC_NUMBER)) {
@@ -130,7 +131,7 @@ public class InputParserT {
                         checkLineReader(activeLineReader, activeAS);
                         List<BigDecimal> list = readLineB(line);
                         for (int i = 0; i < list.size(); i++) {
-                            topSection.getAtoms().get(i).setC2(list.get(i));
+                            ((AtomImpl) topSection.getAtoms().get(i)).setC2(list.get(i));
                         }
                     }
                     if (activeAS.equals(ATOMIC_TYPE_INDEX)) {
@@ -267,7 +268,7 @@ public class InputParserT {
     private void generateEmptyAtoms(List<Integer> pointers, Section topSection) {
         if (topSection.getAtoms().size() != pointers.get(0)) {
             for (Integer i = 0; i < pointers.get(0); i++) {
-                topSection.getAtoms().add(new Atom());
+                topSection.getAtoms().add(new AtomImpl());
             }
         }
     }

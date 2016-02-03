@@ -9,8 +9,14 @@ public interface FuncType {
 
     /**
      * added at {@link ModelVersion#V1}
-     *
      * @return
      */
     Integer getFuncType();
+
+    /**
+     * added at {@link ModelVersion#V1}
+     *
+     * @return
+     */
+    void setFuncType(Integer type);
 }

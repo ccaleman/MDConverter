@@ -1,13 +1,15 @@
 package org.mdconverter.api.topologystructure.model.impl;
 
-import org.mdconverter.api.topologystructure.model.api.ValueGS;
+import org.mdconverter.api.topologystructure.ModelVersion;
+import org.mdconverter.api.topologystructure.model.api.Atom;
+import org.mdconverter.api.topologystructure.model.api.ValueHolder;
 
 import java.math.BigDecimal;
 
 /**
  * Created by miso on 04.12.2015.
  */
-public class Atom extends ValueGS {
+public class AtomImpl extends ValueHolder implements Atom {
 
     private Integer nr;
     private String type;
@@ -15,16 +17,28 @@ public class Atom extends ValueGS {
     private String resName;
     private String atomName;
     private Integer chargeGroupNr;
-    private BigDecimal c1;
-    private BigDecimal c2;
     private String typeB;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
+    private BigDecimal c1;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
+    private BigDecimal c2;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c3;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c4;
 
-    public Atom() {
+    public AtomImpl() {
     }
 
-    public Atom(Integer nr, String type, Integer resNr, String resName, String atomName, Integer chargeGroupNr, BigDecimal c1, BigDecimal c2, String typeB, BigDecimal c3, BigDecimal c4) {
+    public AtomImpl(Integer nr, String type, Integer resNr, String resName, String atomName, Integer chargeGroupNr, BigDecimal c1, BigDecimal c2, String typeB, BigDecimal c3, BigDecimal c4) {
         this.nr = nr;
         this.type = type;
         this.resNr = resNr;
@@ -38,7 +52,7 @@ public class Atom extends ValueGS {
         this.c4 = c4;
     }
 
-    public Atom(Integer nr, String type, Integer resNr, String resName, String atomName, Integer chargeGroupNr, BigDecimal c1, BigDecimal c2) {
+    public AtomImpl(Integer nr, String type, Integer resNr, String resName, String atomName, Integer chargeGroupNr, BigDecimal c1, BigDecimal c2) {
         this.nr = nr;
         this.type = type;
         this.resNr = resNr;

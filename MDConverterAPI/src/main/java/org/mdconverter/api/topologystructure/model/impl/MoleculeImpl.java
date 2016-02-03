@@ -1,17 +1,19 @@
 package org.mdconverter.api.topologystructure.model.impl;
 
+import org.mdconverter.api.topologystructure.model.api.Molecule;
+
 /**
  * Created by miso on 04.12.2015.
  */
-public class Molecule {
+public class MoleculeImpl implements Molecule {
 
     private String name;
     private Integer nrMol;
 
-    public Molecule() {
+    public MoleculeImpl() {
     }
 
-    public Molecule(String compound, Integer nrMol) {
+    public MoleculeImpl(String compound, Integer nrMol) {
         this.name = compound;
         this.nrMol = nrMol;
     }

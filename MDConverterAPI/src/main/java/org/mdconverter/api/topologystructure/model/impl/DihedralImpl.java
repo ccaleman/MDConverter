@@ -1,32 +1,51 @@
 package org.mdconverter.api.topologystructure.model.impl;
 
-import org.mdconverter.api.topologystructure.model.api.FuncType;
-import org.mdconverter.api.topologystructure.model.api.ValueGS;
+import org.mdconverter.api.topologystructure.ModelVersion;
+import org.mdconverter.api.topologystructure.model.api.Dihedral;
+import org.mdconverter.api.topologystructure.model.api.ValueHolder;
 
 import java.math.BigDecimal;
 
 /**
  * Created by miso on 04.12.2015.
  */
-public class Dihedral extends ValueGS implements FuncType {
+public class DihedralImpl extends ValueHolder implements Dihedral {
 
     private String ai;
     private String aj;
     private String ak;
     private String al;
     private Integer funcType;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c1;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c2;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c3;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c4;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c5;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c6;
 
-    public Dihedral() {
+    public DihedralImpl() {
     }
 
-    public Dihedral(String ai, String aj, String ak, String al, Integer funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3,
-                    BigDecimal c4, BigDecimal c5, BigDecimal c6) {
+    public DihedralImpl(String ai, String aj, String ak, String al, Integer funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3,
+                        BigDecimal c4, BigDecimal c5, BigDecimal c6) {
         this.ai = ai;
         this.aj = aj;
         this.ak = ak;
@@ -40,7 +59,7 @@ public class Dihedral extends ValueGS implements FuncType {
         this.c6 = c6;
     }
 
-    public Dihedral(String ai, String aj, String ak, String al, Integer funcType, BigDecimal c1, BigDecimal c2) {
+    public DihedralImpl(String ai, String aj, String ak, String al, Integer funcType, BigDecimal c1, BigDecimal c2) {
         this.ai = ai;
         this.aj = aj;
         this.ak = ak;
@@ -50,7 +69,7 @@ public class Dihedral extends ValueGS implements FuncType {
         this.c2 = c2;
     }
 
-    public Dihedral(String ai, String aj, String ak, String al, Integer funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3) {
+    public DihedralImpl(String ai, String aj, String ak, String al, Integer funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3) {
         this.ai = ai;
         this.aj = aj;
         this.ak = ak;
@@ -61,8 +80,8 @@ public class Dihedral extends ValueGS implements FuncType {
         this.c3 = c3;
     }
 
-    public Dihedral(String ai, String aj, String ak, String al, Integer funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3,
-                    BigDecimal c4, BigDecimal c5) {
+    public DihedralImpl(String ai, String aj, String ak, String al, Integer funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3,
+                        BigDecimal c4, BigDecimal c5) {
         this.ai = ai;
         this.aj = aj;
         this.ak = ak;
@@ -75,8 +94,8 @@ public class Dihedral extends ValueGS implements FuncType {
         this.c5 = c5;
     }
 
-    public Dihedral(String ai, String aj, String ak, String al, Integer funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3,
-                    BigDecimal c4) {
+    public DihedralImpl(String ai, String aj, String ak, String al, Integer funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3,
+                        BigDecimal c4) {
         this.ai = ai;
         this.aj = aj;
         this.ak = ak;

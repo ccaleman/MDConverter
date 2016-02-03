@@ -6,6 +6,7 @@ import org.jscience.mathematics.number.Real;
 import org.mdconverter.api.consolewriter.ConsoleWriter;
 import org.mdconverter.api.plugin.type.FileType;
 import org.mdconverter.api.topologystructure.model.TopologyStructure;
+import org.mdconverter.api.topologystructure.model.impl.*;
 import org.mdconverter.unitconverter.topologyhelper.*;
 
 import javax.inject.Inject;
@@ -13,6 +14,7 @@ import javax.inject.Singleton;
 import javax.measure.quantity.Quantity;
 import javax.measure.unit.Unit;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 
 /**
@@ -57,26 +59,26 @@ public class UnitConverterImpl implements UnitConverter {
             return struct;
         } else {
             TopologyStructure struct = (TopologyStructure) structure;
-            new AtomTypeH(readerUnits, writerUnits, struct.getDef()).convert(struct.getAtomTypes());
-            new AngleTypeH(readerUnits, writerUnits, struct.getDef()).convert(struct.getAngleTypes());
-            new BondTypeH(readerUnits, writerUnits, struct.getDef()).convert(struct.getBondTypes());
-            new ConstraintTypeH(readerUnits, writerUnits, struct.getDef()).convert(struct.getConstraintTypes());
-            new DihedralTypeH(readerUnits, writerUnits, struct.getDef()).convert(struct.getDihedralTypes());
-            new NonBondParamH(readerUnits, writerUnits, struct.getDef()).convert(struct.getNonBondParams());
-            new PairTypeH(readerUnits, writerUnits, struct.getDef()).convert(struct.getPairTypes());
+            new AtomTypeH(readerUnits, writerUnits, struct.getDef()).convert(struct.getAtomTypes().stream().map(a -> ((AtomTypeImpl) a)).collect(Collectors.toList()));
+            new AngleH(readerUnits, writerUnits, struct.getDef()).convert(struct.getAngleTypes().stream().map(a -> ((AngleImpl) a)).collect(Collectors.toList()));
+            new BondH(readerUnits, writerUnits, struct.getDef()).convert(struct.getBondTypes().stream().map(a -> ((BondImpl) a)).collect(Collectors.toList()));
+            new ConstraintH(readerUnits, writerUnits, struct.getDef()).convert(struct.getConstraintTypes().stream().map(a -> ((ConstraintImpl) a)).collect(Collectors.toList()));
+            new DihedralH(readerUnits, writerUnits, struct.getDef()).convert(struct.getDihedralTypes().stream().map(a -> ((DihedralImpl) a)).collect(Collectors.toList()));
+            new NonBondParamH(readerUnits, writerUnits, struct.getDef()).convert(struct.getNonBondParams().stream().map(a -> ((NonBondParamImpl) a)).collect(Collectors.toList()));
+            new PairH(readerUnits, writerUnits, struct.getDef()).convert(struct.getPairTypes().stream().map(a -> ((PairImpl) a)).collect(Collectors.toList()));
             struct.getSections().forEach(section -> {
-                new AngleH(readerUnits, writerUnits, struct.getDef()).convert(section.getAngles());
+                new AngleH(readerUnits, writerUnits, struct.getDef()).convert(section.getAngles().stream().map(a -> ((AngleImpl) a)).collect(Collectors.toList()));
                 new AngleRestraintH(readerUnits, writerUnits, struct.getDef()).convert(section.getAngleRestraints());
-                new AtomH(readerUnits, writerUnits, struct.getDef()).convert(section.getAtoms());
-                new BondH(readerUnits, writerUnits, struct.getDef()).convert(section.getBonds());
-                new ConstraintH(readerUnits, writerUnits, struct.getDef()).convert(section.getConstraints());
-                new DihedralH(readerUnits, writerUnits, struct.getDef()).convert(section.getDihedrals());
-                new DihedralRestraintH(readerUnits, writerUnits, struct.getDef()).convert(section.getDihedralRestraints());
-                new OrientationRestraintH(readerUnits, writerUnits, struct.getDef()).convert(section.getOrientationRestraints());
-                new PairH(readerUnits, writerUnits, struct.getDef()).convert(section.getPairs());
-                new PairH(readerUnits, writerUnits, struct.getDef()).convert(section.getPairsNB());
-                new PositionRestraintH(readerUnits, writerUnits, struct.getDef()).convert(section.getPositionRestraints());
-                new SettleH(readerUnits, writerUnits, struct.getDef()).convert(section.getSettles());
+                new AtomH(readerUnits, writerUnits, struct.getDef()).convert(section.getAtoms().stream().map(a -> ((AtomImpl) a)).collect(Collectors.toList()));
+                new BondH(readerUnits, writerUnits, struct.getDef()).convert(section.getBonds().stream().map(a -> ((BondImpl) a)).collect(Collectors.toList()));
+                new ConstraintH(readerUnits, writerUnits, struct.getDef()).convert(section.getConstraints().stream().map(a -> ((ConstraintImpl) a)).collect(Collectors.toList()));
+                new DihedralH(readerUnits, writerUnits, struct.getDef()).convert(section.getDihedrals().stream().map(a -> ((DihedralImpl) a)).collect(Collectors.toList()));
+                new DihedralRestraintH(readerUnits, writerUnits, struct.getDef()).convert(section.getDihedralRestraints().stream().map(a -> ((DihedralRestraintImpl) a)).collect(Collectors.toList()));
+                new OrientationRestraintH(readerUnits, writerUnits, struct.getDef()).convert(section.getOrientationRestraints().stream().map(a -> ((OrientationRestraintImpl) a)).collect(Collectors.toList()));
+                new PairH(readerUnits, writerUnits, struct.getDef()).convert(section.getPairs().stream().map(a -> ((PairImpl) a)).collect(Collectors.toList()));
+                new PairH(readerUnits, writerUnits, struct.getDef()).convert(section.getPairsNB().stream().map(a -> ((PairNB) a)).collect(Collectors.toList()));
+                new PositionRestraintH(readerUnits, writerUnits, struct.getDef()).convert(section.getPositionRestraints().stream().map(a -> ((PositionRestraintImpl) a)).collect(Collectors.toList()));
+                new SettleH(readerUnits, writerUnits, struct.getDef()).convert(section.getSettles().stream().map(a -> ((SettleImpl) a)).collect(Collectors.toList()));
             });
             cw.printInfoln("Finished with unit conversion");
             return struct;

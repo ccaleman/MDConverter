@@ -6,13 +6,12 @@ import org.mdconverter.api.consolewriter.ConsoleWriter;
 import org.mdconverter.api.topologystructure.SectionType;
 import org.mdconverter.api.topologystructure.model.Section;
 import org.mdconverter.api.topologystructure.model.TopologyStructure;
-import org.mdconverter.api.topologystructure.model.api.Angle;
-import org.mdconverter.api.topologystructure.model.api.ValueGS;
+import org.mdconverter.api.topologystructure.model.api.*;
 import org.mdconverter.api.topologystructure.model.impl.*;
+import org.mdconverter.api.topologystructure.model.impl.System;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.lang.System;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +23,7 @@ import java.util.stream.Collectors;
 public class FileWriter {
 
     private ConsoleWriter cw;
-    private static String newLine = System.getProperty("line.separator");
+    private static String newLine = java.lang.System.getProperty("line.separator");
     private String output = "";
 
     @Inject
@@ -37,7 +36,7 @@ public class FileWriter {
 
         generateHeaderLines(structure.getHeaderComments());
         if (ff) {
-            Default def = structure.getDef();
+            DefaultImpl def = structure.getDef();
             if (def != null) {
                 addLine("[ defaults ]");
                 addLine("; nbfunc        comb-rule       gen-pairs       fudgeLJ fudgeQQ");
@@ -50,7 +49,7 @@ public class FileWriter {
                 atomTypes.forEach(this::addAtomType);
             }
             oldFuncType = -1;
-            for (BondType type : structure.getBondTypes()) {
+            for (Bond type : structure.getBondTypes()) {
                 if (oldFuncType.equals(-1) || !oldFuncType.equals(type.getFuncType())) {
                     addLine("[ bondtypes ]");
                     addLine("; i    j  func       c0          c1          c2          c3");
@@ -59,7 +58,7 @@ public class FileWriter {
                 addBondType(type);
             }
             oldFuncType = -1;
-            for (ConstraintType type : structure.getConstraintTypes()) {
+            for (Constraint type : structure.getConstraintTypes()) {
                 if (oldFuncType.equals(-1) || !oldFuncType.equals(type.getFuncType())) {
                     addLine("[ constrainttypes ]");
                 }
@@ -76,7 +75,7 @@ public class FileWriter {
                 addAngleType(type);
             }
             oldFuncType = -1;
-            for (DihedralType type : structure.getDihedralTypes()) {
+            for (Dihedral type : structure.getDihedralTypes()) {
                 if (oldFuncType.equals(-1) || !oldFuncType.equals(type.getFuncType())) {
                     addLine("[ dihedraltypes ]");
                     addLine(";i  j   k  l   func      phase      kd      pn");
@@ -91,7 +90,7 @@ public class FileWriter {
                 params.forEach(this::addGenBornParam);
             }
             oldFuncType = -1;
-            for (PairType type : structure.getPairTypes()) {
+            for (Pair type : structure.getPairTypes()) {
                 if (oldFuncType.equals(-1) || !oldFuncType.equals(type.getFuncType())) {
                     addLine("[ pairtypes ]");
                     addLine("; i    j     func          cs6          cs12");
@@ -144,7 +143,7 @@ public class FileWriter {
             addPair(type);
         }
         oldFuncType = -1;
-        for (Pair type : section.getPairsNB()) {
+        for (PairImpl type : section.getPairsNB()) {
             if (oldFuncType.equals(-1) || !oldFuncType.equals(type.getFuncType())) {
                 addLine("[ pairs_nb ]");
                 addLine(";  ai    aj funct            c1            c2            c3            c4");
@@ -162,7 +161,7 @@ public class FileWriter {
                 addLine("; ai     aj   funct               c1            c2");
             }
             oldFuncType = type.getFuncType();
-            addConstraint(type);
+            addConstraint((ConstraintImpl) type);
         }
         oldFuncType = -1;
         for (Dihedral type : section.getDihedrals()) {
@@ -171,7 +170,7 @@ public class FileWriter {
                 addLine(";  ai    aj    ak    ak funct            c1            c2            c3            c4            c5            c6");
             }
             oldFuncType = type.getFuncType();
-            addDihedral(type);
+            addDihedral((DihedralImpl) type);
         }
         oldFuncType = -1;
         for (PositionRestraint type : section.getPositionRestraints()) {
@@ -183,10 +182,10 @@ public class FileWriter {
             addPositionRestraint(type);
         }
         oldFuncType = -1;
-        List<AngleRestraintZ> zList = section.getAngleRestraints();
-        List<AngleRestraintZ> collect = zList.stream()
-                .filter(ar -> ar instanceof AngleRestraint).collect(Collectors.toList());
-        for (AngleRestraintZ type : collect) {
+        List<AngleRestraintZImpl> zList = section.getAngleRestraints();
+        List<AngleRestraintZImpl> collect = zList.stream()
+                .filter(ar -> ar instanceof AngleRestraintImpl).collect(Collectors.toList());
+        for (AngleRestraintZImpl type : collect) {
             if (oldFuncType.equals(-1) || !oldFuncType.equals(type.getFuncType())) {
                 addLine("[ angle_restraints ]");
                 addLine("; ai  aj   ak   al    type      c1      c2      c3");
@@ -196,7 +195,7 @@ public class FileWriter {
         }
         oldFuncType = -1;
         collect.stream().filter(zList::remove);
-        for (AngleRestraintZ type : zList) {
+        for (AngleRestraintZImpl type : zList) {
             if (oldFuncType.equals(-1) || !oldFuncType.equals(type.getFuncType())) {
                 addLine("[ angle_restraints_z ]");
                 addLine("; ai  aj   type      c1      c2      c3");
@@ -277,31 +276,31 @@ public class FileWriter {
         }
     }
 
-    private void addDefaultEntry(Default def) {
+    private void addDefaultEntry(DefaultImpl def) {
         String out = "";
         out = appendLengthDependant(out, def.getNboudnFT().toString(), 10);
         out = appendLengthDependant(out, def.getCombRule().toString(), 10);
         out = appendLengthDependant(out, def.isGenPair() ? "yes" : "no", 4);
-        out = appendLengthDependant(out, round(def.getFudgeLJ(), 4), 10);
-        out = appendLengthDependant(out, round(def.getFudgeQQ(), 4), 10);
+        out = appendLengthDependant(out, round(def.getC1(), 4), 10);
+        out = appendLengthDependant(out, round(def.getC2(), 4), 10);
         addLine(out);
     }
 
-    private void addBondType(BondType bondType) {
+    private void addBondType(Bond bondType) {
         String out = "";
         out = appendLengthDependant(out, bondType.getAi(), 10);
         out = appendLengthDependant(out, bondType.getAj(), 10);
         out = appendLengthDependant(out, bondType.getFuncType().toString(), 3);
-        out = addValueGS(bondType, out, 5, 14);
+        out = addValueGS((BondImpl) bondType, out, 5, 14);
         addLine(out);
     }
 
-    private void addConstraintType(ConstraintType constraintType) {
+    private void addConstraintType(Constraint constraintType) {
         String out = "";
         out = appendLengthDependant(out, constraintType.getAi(), 10);
         out = appendLengthDependant(out, constraintType.getAj(), 10);
         out = appendLengthDependant(out, constraintType.getFuncType().toString(), 3);
-        out = addValueGS(constraintType, out, 6, 14);
+        out = addValueGS((ConstraintImpl) constraintType, out, 6, 14);
         addLine(out);
     }
 
@@ -315,10 +314,11 @@ public class FileWriter {
         addLine(out);
     }
 
-    private void addAtomType(AtomType a) {
+    private void addAtomType(AtomType ai) {
         String out = "";
+        AtomTypeImpl a = (AtomTypeImpl) ai;
         out = appendLengthDependant(out, a.getName(), 12);
-        out = appendLengthDependant(out, a.getNum().toString(), 10);
+        out = appendLengthDependant(out, a.getNum(), 10);
         out = appendLengthDependant(out, round(a.getC1(), 2), 10);
         out = appendLengthDependant(out, round(a.getC2(), 4), 12);
         out = appendLengthDependant(out, a.getParticleType(), 14);
@@ -330,7 +330,7 @@ public class FileWriter {
     private void addGenBornParam(ImplicitGenbornParam type) {
         String out = "";
         out = appendLengthDependant(out, type.getAtom(), 10);
-        out = addValueGS(type, out, 3, 14);
+        out = addValueGS((ImplicitGenbornParamImpl) type, out, 3, 14);
         addLine(out);
     }
 
@@ -343,7 +343,7 @@ public class FileWriter {
         addLine(out);
     }
 
-    private void addDihedralType(DihedralType type) {
+    private void addDihedralType(Dihedral type) {
         String out = "";
         out = appendLengthDependant(out, type.getAi(), 10);
         out = appendLengthDependant(out, type.getAj(), 10);
@@ -352,16 +352,16 @@ public class FileWriter {
         if (type.getAl() != null)
             out = appendLengthDependant(out, type.getAl(), 10);
         out = appendLengthDependant(out, type.getFuncType().toString(), 3);
-        out = addValueGS(type, out, 5, 14);
+        out = addValueGS((DihedralImpl) type, out, 5, 14);
         addLine(out);
     }
 
-    private void addPairType(PairType type) {
+    private void addPairType(Pair type) {
         String out = "";
         out = appendLengthDependant(out, type.getAi(), 10);
         out = appendLengthDependant(out, type.getAj(), 10);
         out = appendLengthDependant(out, type.getFuncType().toString(), 3);
-        out = addValueGS(type, out, 6, 14);
+        out = addValueGS((PairImpl) type, out, 6, 14);
         addLine(out);
     }
 
@@ -370,11 +370,11 @@ public class FileWriter {
         out = appendLengthDependant(out, type.getAi(), 10);
         out = appendLengthDependant(out, type.getAj(), 10);
         out = appendLengthDependant(out, type.getFuncType().toString(), 3);
-        out = addValueGS(type, out, 6, 14);
+        out = addValueGS((NonBondParamImpl) type, out, 6, 14);
         addLine(out);
     }
 
-    private void addSystem(org.mdconverter.api.topologystructure.model.impl.System system) {
+    private void addSystem(System system) {
         addLine("[ system ]");
         addLine("; Name");
         String out = "";
@@ -390,7 +390,7 @@ public class FileWriter {
         out = appendLengthDependant(out, atom.getResName(), 10);
         out = appendLengthDependant(out, atom.getAtomName(), 10);
         out = appendLengthDependant(out, String.valueOf(atom.getChargeGroupNr()), 10);
-        out = addValueGS(atom, out, 4, 12);
+        out = addValueGS((AtomImpl) atom, out, 4, 12);
         addLine(out);
     }
 
@@ -399,7 +399,7 @@ public class FileWriter {
         out = appendLengthDependant(out, type.getAi(), 10);
         out = appendLengthDependant(out, type.getAj(), 10);
         out = appendLengthDependant(out, type.getFuncType().toString(), 3);
-        out = addValueGS(type, out, 6, 14);
+        out = addValueGS((BondImpl) type, out, 6, 14);
         addLine(out);
     }
 
@@ -408,7 +408,7 @@ public class FileWriter {
         out = appendLengthDependant(out, type.getAi(), 10);
         out = appendLengthDependant(out, type.getAj(), 10);
         out = appendLengthDependant(out, type.getFuncType().toString(), 3);
-        out = addValueGS(type, out, 4, 12);
+        out = addValueGS((PairImpl) type, out, 4, 12);
         addLine(out);
     }
 
@@ -422,7 +422,7 @@ public class FileWriter {
         addLine(out);
     }
 
-    private void addDihedral(Dihedral type) {
+    private void addDihedral(DihedralImpl type) {
         String out = "";
         out = appendLengthDependant(out, type.getAi(), 10);
         out = appendLengthDependant(out, type.getAj(), 10);
@@ -437,11 +437,11 @@ public class FileWriter {
         String out = "";
         out = appendLengthDependant(out, type.getAi(), 10);
         out = appendLengthDependant(out, type.getFuncType().toString(), 3);
-        out = addValueGS(type, out, 2, 10);
+        out = addValueGS((PositionRestraintImpl) type, out, 2, 10);
         addLine(out);
     }
 
-    private void addConstraint(Constraint type) {
+    private void addConstraint(ConstraintImpl type) {
         String out = "";
         out = appendLengthDependant(out, type.getAi(), 10);
         out = appendLengthDependant(out, type.getAj(), 10);
@@ -450,12 +450,12 @@ public class FileWriter {
         addLine(out);
     }
 
-    private void addAngleRestraint(AngleRestraintZ type) {
+    private void addAngleRestraint(AngleRestraintZImpl type) {
         String out = "";
         out = appendLengthDependant(out, type.getAi(), 10);
         out = appendLengthDependant(out, type.getAj(), 10);
-        if (type instanceof AngleRestraint) {
-            AngleRestraint angle = (AngleRestraint) type;
+        if (type instanceof AngleRestraintImpl) {
+            AngleRestraintImpl angle = (AngleRestraintImpl) type;
             out = appendLengthDependant(out, angle.getAk(), 10);
             out = appendLengthDependant(out, angle.getAl(), 10);
             out = appendLengthDependant(out, angle.getFuncType().toString(), 3);
@@ -475,7 +475,7 @@ public class FileWriter {
         out = appendLengthDependant(out, type.getAl(), 10);
         out = appendLengthDependant(out, type.getFuncType().toString(), 3);
         out = appendLengthDependant(out, type.getLabel(), 10);
-        out = addValueGS(type, out, 2, 10);
+        out = addValueGS((DihedralRestraintImpl) type, out, 2, 10);
         addLine(out);
     }
 
@@ -486,7 +486,7 @@ public class FileWriter {
         out = appendLengthDependant(out, type.getFuncType().toString(), 3);
         out = appendLengthDependant(out, type.getType(), 10);
         out = appendLengthDependant(out, type.getLabel(), 10);
-        out = addValueGS(type, out, 2, 10);
+        out = addValueGS((DistanceRestraintImpl) type, out, 2, 10);
         addLine(out);
     }
 
@@ -498,7 +498,7 @@ public class FileWriter {
         out = appendLengthDependant(out, type.getExp(), 10);
         out = appendLengthDependant(out, type.getLabel(), 10);
         out = appendLengthDependant(out, type.getAlpha(), 10);
-        out = addValueGS(type, out, 2, 10);
+        out = addValueGS((OrientationRestraintImpl) type, out, 2, 10);
         addLine(out);
     }
 
@@ -506,7 +506,7 @@ public class FileWriter {
         String out = "";
         out = appendLengthDependant(out, type.getAtom(), 10);
         out = appendLengthDependant(out, type.getFuncType().toString(), 3);
-        out = addValueGS(type, out, 2, 10);
+        out = addValueGS((SettleImpl) type, out, 2, 10);
         addLine(out);
     }
 
@@ -519,16 +519,16 @@ public class FileWriter {
         addLine(out);
     }
 
-    private void addMoleculeType(MoleculeType moleculeType) {
+    private void addMoleculeType(Molecule moleculeType) {
         addLine("[ moleculetype ]");
         addLine("; Name            nrexcl");
         String out = "";
         out = appendLengthDependant(out, moleculeType.getName(), moleculeType.getName().length());
-        out = appendLengthDependant(out, String.valueOf(moleculeType.getNrExcl()), 5);
+        out = appendLengthDependant(out, String.valueOf(moleculeType.getNrMol()), 5);
         addLine(out);
     }
 
-    private String addValueGS(ValueGS val, String out, int round, int space) {
+    private String addValueGS(ValueHolder val, String out, int round, int space) {
         try {
             out = appendLengthDependant(out, round(val.getC1(), round), space);
             out = appendLengthDependant(out, round(val.getC2(), round), space);

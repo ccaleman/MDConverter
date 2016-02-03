@@ -1,24 +1,31 @@
 package org.mdconverter.api.topologystructure.model.impl;
 
-import org.mdconverter.api.topologystructure.model.api.FuncType;
-import org.mdconverter.api.topologystructure.model.api.ValueGS;
+import org.mdconverter.api.topologystructure.ModelVersion;
+import org.mdconverter.api.topologystructure.model.api.Settle;
+import org.mdconverter.api.topologystructure.model.api.ValueHolder;
 
 import java.math.BigDecimal;
 
 /**
  * Created by miso on 04.12.2015.
  */
-public class Settle extends ValueGS implements FuncType {
+public class SettleImpl extends ValueHolder implements Settle {
 
     private String atom;
     private Integer funcType;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c1;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c2;
 
-    public Settle() {
+    public SettleImpl() {
     }
 
-    public Settle(String atom, Integer funcType, BigDecimal c1, BigDecimal c2) {
+    public SettleImpl(String atom, Integer funcType, BigDecimal c1, BigDecimal c2) {
         this.atom = atom;
         this.funcType = funcType;
         this.c1 = c1;

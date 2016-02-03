@@ -1,14 +1,15 @@
 package org.mdconverter.api.topologystructure.model.impl;
 
-import org.mdconverter.api.topologystructure.model.api.FuncType;
-import org.mdconverter.api.topologystructure.model.api.ValueGS;
+import org.mdconverter.api.topologystructure.ModelVersion;
+import org.mdconverter.api.topologystructure.model.api.OrientationRestraint;
+import org.mdconverter.api.topologystructure.model.api.ValueHolder;
 
 import java.math.BigDecimal;
 
 /**
  * Created by miso on 04.12.2015.
  */
-public class OrientationRestraint extends ValueGS implements FuncType {
+public class OrientationRestraintImpl extends ValueHolder implements OrientationRestraint {
 
     private String ai;
     private String aj;
@@ -16,15 +17,24 @@ public class OrientationRestraint extends ValueGS implements FuncType {
     private String exp;
     private String label;
     private String alpha;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c1;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c2;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c3;
 
-    public OrientationRestraint() {
+    public OrientationRestraintImpl() {
     }
 
-    public OrientationRestraint(String ai, String aj, Integer funcType, String exp, String label, String alpha,
-                                BigDecimal c1, BigDecimal c2, BigDecimal c3) {
+    public OrientationRestraintImpl(String ai, String aj, Integer funcType, String exp, String label, String alpha,
+                                    BigDecimal c1, BigDecimal c2, BigDecimal c3) {
         this.ai = ai;
         this.aj = aj;
         this.funcType = funcType;

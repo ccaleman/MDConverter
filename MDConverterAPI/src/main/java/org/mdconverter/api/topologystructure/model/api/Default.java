@@ -5,54 +5,47 @@ import org.mdconverter.api.topologystructure.ModelVersion;
 /**
  * Created by miso on 03.02.2016.
  */
-public interface Angle extends FuncType {
-
-    /**
-     * added at {@link ModelVersion#V1}
-     * @return
-     */
-    String getAi();
-
-    /**
-     * added at {@link ModelVersion#V1}
-     * @return
-     */
-    String getAj();
-
-    /**
-     * added at {@link ModelVersion#V1}
-     * @return
-     */
-    String getAk();
-
-    /**
-     * added at {@link ModelVersion#V1}
-     * @return
-     */
-    String getAl();
-
-    /**
-     * added at {@link ModelVersion#V1}
-     * @param ai
-     */
-    void setAi(String ai);
-
-    /**
-     * added at {@link ModelVersion#V1}
-     * @param aj
-     */
-    void setAj(String aj);
-
-    /**
-     * added at {@link ModelVersion#V1}
-     * @param ak
-     */
-    void setAk(String ak);
+public interface Default {
 
     /**
      * added at {@link ModelVersion#V1}
      *
-     * @param al
+     * @return
      */
-    void setAl(String al);
+    Integer getNboudnFT();
+
+    /**
+     * added at {@link ModelVersion#V1}
+     *
+     * @return
+     */
+    Integer getCombRule();
+
+    /**
+     * added at {@link ModelVersion#V1}
+     *
+     * @return
+     */
+    boolean isGenPair();
+
+    /**
+     * added at {@link ModelVersion#V1}
+     *
+     * @param nboudnFT
+     */
+    void setNboudnFT(Integer nboudnFT);
+
+    /**
+     * added at {@link ModelVersion#V1}
+     *
+     * @param combRule
+     */
+    void setCombRule(Integer combRule);
+
+    /**
+     * added at {@link ModelVersion#V1}
+     *
+     * @param genPair
+     */
+    void setGenPair(boolean genPair);
 }

@@ -1,9 +1,12 @@
 package org.mdconverter.api.topologystructure.model;
 
 import com.google.common.collect.Lists;
+import org.mdconverter.api.topologystructure.ModelVersion;
 import org.mdconverter.api.topologystructure.SectionType;
-import org.mdconverter.api.topologystructure.model.api.Angle;
-import org.mdconverter.api.topologystructure.model.impl.*;
+import org.mdconverter.api.topologystructure.model.api.*;
+import org.mdconverter.api.topologystructure.model.impl.AngleRestraintZImpl;
+import org.mdconverter.api.topologystructure.model.impl.Exclusion;
+import org.mdconverter.api.topologystructure.model.impl.PairNB;
 
 import java.util.List;
 
@@ -12,32 +15,81 @@ import java.util.List;
  */
 public class Section {
 
-    private MoleculeType moleculeType;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
+    private Molecule moleculeType;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private List<Atom> atoms = Lists.newArrayList();
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private List<Bond> bonds = Lists.newArrayList();
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private List<Pair> pairs = Lists.newArrayList();
-    private List<Pair> pairsNB = Lists.newArrayList();
+    /**
+     * added at {@link ModelVersion#V1}
+     */
+    private List<PairNB> pairsNB = Lists.newArrayList();
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private List<Angle> angles = Lists.newArrayList();
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private List<Dihedral> dihedrals = Lists.newArrayList();
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private List<Constraint> constraints = Lists.newArrayList();
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private List<PositionRestraint> positionRestraints = Lists.newArrayList();
-    private List<AngleRestraintZ> angleRestraints = Lists.newArrayList();
+    /**
+     * added at {@link ModelVersion#V1}
+     */
+    private List<AngleRestraintZImpl> angleRestraints = Lists.newArrayList();
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private List<DihedralRestraint> dihedralRestraints = Lists.newArrayList();
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private List<DistanceRestraint> distanceRestraints = Lists.newArrayList();
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private List<OrientationRestraint> orientationRestraints = Lists.newArrayList();
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private List<Settle> settles = Lists.newArrayList();
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private List<Exclusion> exclusions = Lists.newArrayList();
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private SectionType type;
+
 
     public Section(SectionType sectionType) {
         type = sectionType;
     }
 
-    public MoleculeType getMoleculeType() {
+    public Molecule getMoleculeType() {
         return moleculeType;
     }
 
-    public void setMoleculeType(MoleculeType moleculeType) {
+    public void setMoleculeType(Molecule moleculeType) {
         this.moleculeType = moleculeType;
     }
 
@@ -65,11 +117,11 @@ public class Section {
         this.pairs = pairs;
     }
 
-    public List<Pair> getPairsNB() {
+    public List<PairNB> getPairsNB() {
         return pairsNB;
     }
 
-    public void setPairsNB(List<Pair> pairsNB) {
+    public void setPairsNB(List<PairNB> pairsNB) {
         this.pairsNB = pairsNB;
     }
 
@@ -105,11 +157,11 @@ public class Section {
         this.positionRestraints = positionRestraints;
     }
 
-    public List<AngleRestraintZ> getAngleRestraints() {
+    public List<AngleRestraintZImpl> getAngleRestraints() {
         return angleRestraints;
     }
 
-    public void setAngleRestraints(List<AngleRestraintZ> angleRestraints) {
+    public void setAngleRestraints(List<AngleRestraintZImpl> angleRestraints) {
         this.angleRestraints = angleRestraints;
     }
 

@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 /**
  * Created by miso on 07.01.2016.
  */
-public abstract class ValueGS {
+public abstract class ValueHolder {
 
     /**
      * added at{@link ModelVersion#V1}

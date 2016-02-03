@@ -5,54 +5,75 @@ import org.mdconverter.api.topologystructure.ModelVersion;
 /**
  * Created by miso on 03.02.2016.
  */
-public interface Angle extends FuncType {
+public interface OrientationRestraint extends FuncType {
 
     /**
      * added at {@link ModelVersion#V1}
+     *
      * @return
      */
     String getAi();
 
     /**
      * added at {@link ModelVersion#V1}
+     *
      * @return
      */
     String getAj();
 
     /**
      * added at {@link ModelVersion#V1}
+     *
      * @return
      */
-    String getAk();
+    String getExp();
 
     /**
      * added at {@link ModelVersion#V1}
+     *
      * @return
      */
-    String getAl();
+    String getLabel();
 
     /**
      * added at {@link ModelVersion#V1}
-     * @param ai
+     *
+     * @return
      */
-    void setAi(String ai);
+    String getAlpha();
 
     /**
      * added at {@link ModelVersion#V1}
+     *
      * @param aj
      */
     void setAj(String aj);
 
     /**
      * added at {@link ModelVersion#V1}
-     * @param ak
+     *
+     * @param ai
      */
-    void setAk(String ak);
+    void setAi(String ai);
 
     /**
      * added at {@link ModelVersion#V1}
      *
-     * @param al
+     * @param exp
      */
-    void setAl(String al);
+    void setExp(String exp);
+
+    /**
+     * added at {@link ModelVersion#V1}
+     *
+     * @param label
+     */
+    void setLabel(String label);
+
+    /**
+     * added at {@link ModelVersion#V1}
+     *
+     * @param alpha
+     */
+    void setAlpha(String alpha);
 }

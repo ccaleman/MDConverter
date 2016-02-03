@@ -1,24 +1,43 @@
 package org.mdconverter.api.topologystructure.model.impl;
 
+import org.mdconverter.api.topologystructure.ModelVersion;
 import org.mdconverter.api.topologystructure.model.api.Angle;
-import org.mdconverter.api.topologystructure.model.api.ValueGS;
+import org.mdconverter.api.topologystructure.model.api.ValueHolder;
 
 import java.math.BigDecimal;
 
 /**
  * Created by miso on 04.12.2015.
  */
-public class AngleImpl extends ValueGS implements Angle {
+public class AngleImpl extends ValueHolder implements Angle {
 
     private String ai;
     private String aj;
     private String ak;
     private Integer funcType;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c1;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c2;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c3;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c4;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c5;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c6;
 
     public AngleImpl() {
@@ -91,6 +110,14 @@ public class AngleImpl extends ValueGS implements Angle {
 
     public void setAk(String ak) {
         this.ak = ak;
+    }
+
+    public String getAl() {
+        throw new UnsupportedOperationException();
+    }
+
+    public void setAl(String al) {
+        throw new UnsupportedOperationException();
     }
 
     public Integer getFuncType() {

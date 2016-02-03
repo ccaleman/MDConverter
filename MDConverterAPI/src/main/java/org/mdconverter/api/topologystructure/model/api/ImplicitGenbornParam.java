@@ -5,11 +5,19 @@ import org.mdconverter.api.topologystructure.ModelVersion;
 /**
  * Created by miso on 03.02.2016.
  */
-public interface MetaModel {
+public interface ImplicitGenbornParam {
 
     /**
      * added at {@link ModelVersion#V1}
+     *
      * @return
      */
-    ModelVersion getVersion();
+    String getAtom();
+
+    /**
+     * added at {@link ModelVersion#V1}
+     *
+     * @param atomName
+     */
+    void setAtom(String atomName);
 }

@@ -1,59 +1,50 @@
 package org.mdconverter.api.topologystructure.model.impl;
 
-import org.mdconverter.api.topologystructure.model.api.FuncType;
-import org.mdconverter.api.topologystructure.model.api.ValueGS;
+import org.mdconverter.api.topologystructure.ModelVersion;
+import org.mdconverter.api.topologystructure.model.api.NonBondParam;
+import org.mdconverter.api.topologystructure.model.api.ValueHolder;
 
 import java.math.BigDecimal;
 
 /**
  * Created by miso on 04.12.2015.
  */
-public class Bond extends ValueGS implements FuncType {
+public class NonBondParamImpl extends ValueHolder implements NonBondParam {
 
     private String ai;
     private String aj;
     private Integer funcType;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c1;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c2;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c3;
-    private BigDecimal c4;
 
-    public Bond() {
+    public NonBondParamImpl() {
     }
 
-    public Bond(String ai, String aj, Integer funcType, BigDecimal c1, BigDecimal c2) {
+    public NonBondParamImpl(String ai, String aj, BigDecimal c1, BigDecimal c2) {
         this.ai = ai;
         this.aj = aj;
-        this.funcType = funcType;
+        this.funcType = 1;
         this.c1 = c1;
         this.c2 = c2;
     }
 
-    public Bond(String ai, String aj, Integer funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3) {
+    public NonBondParamImpl(String ai, String aj, BigDecimal c1, BigDecimal c2, BigDecimal c3) {
         this.ai = ai;
         this.aj = aj;
-        this.funcType = funcType;
-        this.c1 = c1;
-        this.c2 = c2;
-        this.c3 = c3;
-    }
-
-    public Bond(String ai, String aj, Integer funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3, BigDecimal c4) {
-        this.ai = ai;
-        this.aj = aj;
-        this.funcType = funcType;
+        this.funcType = 2;
         this.c1 = c1;
         this.c2 = c2;
         this.c3 = c3;
-        this.c4 = c4;
-    }
-
-    public String getAi() {
-        return ai;
-    }
-
-    public void setAi(String ai) {
-        this.ai = ai;
     }
 
     public String getAj() {
@@ -62,6 +53,14 @@ public class Bond extends ValueGS implements FuncType {
 
     public void setAj(String aj) {
         this.aj = aj;
+    }
+
+    public String getAi() {
+        return ai;
+    }
+
+    public void setAi(String ai) {
+        this.ai = ai;
     }
 
     public Integer getFuncType() {
@@ -94,13 +93,5 @@ public class Bond extends ValueGS implements FuncType {
 
     public void setC3(BigDecimal c3) {
         this.c3 = c3;
-    }
-
-    public BigDecimal getC4() {
-        return c4;
-    }
-
-    public void setC4(BigDecimal c4) {
-        this.c4 = c4;
     }
 }

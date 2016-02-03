@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 /**
  * Created by miso on 27.12.2015.
  */
-public class PairNB extends Pair {
+public class PairNB extends PairImpl {
 
     public PairNB() {
     }

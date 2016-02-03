@@ -1,26 +1,40 @@
 package org.mdconverter.api.topologystructure.model.impl;
 
-import org.mdconverter.api.topologystructure.model.api.ValueGS;
+import org.mdconverter.api.topologystructure.ModelVersion;
+import org.mdconverter.api.topologystructure.model.api.AtomType;
+import org.mdconverter.api.topologystructure.model.api.ValueHolder;
 
 import java.math.BigDecimal;
 
 /**
  * Created by miso on 04.12.2015.
  */
-public class AtomType extends ValueGS {
+public class AtomTypeImpl extends ValueHolder implements AtomType {
 
     private String name;
     private String num;
-    private BigDecimal c1;
-    private BigDecimal c2;
     private String particleType;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
+    private BigDecimal c1;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
+    private BigDecimal c2;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c3;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c4;
 
-    public AtomType() {
+    public AtomTypeImpl() {
     }
 
-    public AtomType(String name, String num, BigDecimal c1, BigDecimal c2, String particleType, BigDecimal c3, BigDecimal c4) {
+    public AtomTypeImpl(String name, String num, BigDecimal c1, BigDecimal c2, String particleType, BigDecimal c3, BigDecimal c4) {
         this.name = name;
         this.num = num;
         this.c1 = c1;
@@ -46,6 +60,14 @@ public class AtomType extends ValueGS {
         this.num = num;
     }
 
+    public String getParticleType() {
+        return particleType;
+    }
+
+    public void setParticleType(String particleType) {
+        this.particleType = particleType;
+    }
+
     public BigDecimal getC1() {
         return c1;
     }
@@ -60,14 +82,6 @@ public class AtomType extends ValueGS {
 
     public void setC2(BigDecimal c2) {
         this.c2 = c2;
-    }
-
-    public String getParticleType() {
-        return particleType;
-    }
-
-    public void setParticleType(String particleType) {
-        this.particleType = particleType;
     }
 
     public BigDecimal getC3() {

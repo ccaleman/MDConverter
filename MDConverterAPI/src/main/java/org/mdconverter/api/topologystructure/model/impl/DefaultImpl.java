@@ -1,22 +1,33 @@
 package org.mdconverter.api.topologystructure.model.impl;
 
+import org.mdconverter.api.topologystructure.ModelVersion;
+import org.mdconverter.api.topologystructure.model.api.Default;
+import org.mdconverter.api.topologystructure.model.api.ValueHolder;
+
 import java.math.BigDecimal;
 
 /**
  * Created by miso on 04.12.2015.
  */
-public class Default {
+public class DefaultImpl extends ValueHolder implements Default {
+
 
     private Integer nboudnFT;
     private Integer combRule;
     private boolean genPair;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal fudgeLJ;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal fudgeQQ;
 
-    public Default() {
+    public DefaultImpl() {
     }
 
-    public Default(Integer nboudnFT, Integer combRule, boolean genPair, BigDecimal fudgeLJ, BigDecimal fudgeQQ) {
+    public DefaultImpl(Integer nboudnFT, Integer combRule, boolean genPair, BigDecimal fudgeLJ, BigDecimal fudgeQQ) {
         this.nboudnFT = nboudnFT;
         this.combRule = combRule;
         this.genPair = genPair;
@@ -48,19 +59,19 @@ public class Default {
         this.genPair = genPair;
     }
 
-    public BigDecimal getFudgeLJ() {
+    public BigDecimal getC1() {
         return fudgeLJ;
     }
 
-    public void setFudgeLJ(BigDecimal fudgeLJ) {
+    public void setC1(BigDecimal fudgeLJ) {
         this.fudgeLJ = fudgeLJ;
     }
 
-    public BigDecimal getFudgeQQ() {
+    public BigDecimal getC2() {
         return fudgeQQ;
     }
 
-    public void setFudgeQQ(BigDecimal fudgeQQ) {
+    public void setC2(BigDecimal fudgeQQ) {
         this.fudgeQQ = fudgeQQ;
     }
 }

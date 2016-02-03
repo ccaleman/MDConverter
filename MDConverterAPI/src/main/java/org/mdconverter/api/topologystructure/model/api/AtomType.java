@@ -5,54 +5,47 @@ import org.mdconverter.api.topologystructure.ModelVersion;
 /**
  * Created by miso on 03.02.2016.
  */
-public interface Angle extends FuncType {
-
-    /**
-     * added at {@link ModelVersion#V1}
-     * @return
-     */
-    String getAi();
-
-    /**
-     * added at {@link ModelVersion#V1}
-     * @return
-     */
-    String getAj();
-
-    /**
-     * added at {@link ModelVersion#V1}
-     * @return
-     */
-    String getAk();
-
-    /**
-     * added at {@link ModelVersion#V1}
-     * @return
-     */
-    String getAl();
-
-    /**
-     * added at {@link ModelVersion#V1}
-     * @param ai
-     */
-    void setAi(String ai);
-
-    /**
-     * added at {@link ModelVersion#V1}
-     * @param aj
-     */
-    void setAj(String aj);
-
-    /**
-     * added at {@link ModelVersion#V1}
-     * @param ak
-     */
-    void setAk(String ak);
+public interface AtomType {
 
     /**
      * added at {@link ModelVersion#V1}
      *
-     * @param al
+     * @return
      */
-    void setAl(String al);
+    String getName();
+
+    /**
+     * added at {@link ModelVersion#V1}
+     *
+     * @return
+     */
+    String getNum();
+
+    /**
+     * added at {@link ModelVersion#V1}
+     *
+     * @return
+     */
+    String getParticleType();
+
+    /**
+     * added at {@link ModelVersion#V1}
+     *
+     * @param name
+     */
+    void setName(String name);
+
+    /**
+     * added at {@link ModelVersion#V1}
+     *
+     * @param num
+     */
+    void setNum(String num);
+
+    /**
+     * added at {@link ModelVersion#V1}
+     *
+     * @param particleType
+     */
+    void setParticleType(String particleType);
 }

@@ -1,14 +1,15 @@
 package org.mdconverter.api.topologystructure.model.impl;
 
-import org.mdconverter.api.topologystructure.model.api.FuncType;
-import org.mdconverter.api.topologystructure.model.api.ValueGS;
+import org.mdconverter.api.topologystructure.ModelVersion;
+import org.mdconverter.api.topologystructure.model.api.DihedralRestraint;
+import org.mdconverter.api.topologystructure.model.api.ValueHolder;
 
 import java.math.BigDecimal;
 
 /**
  * Created by miso on 04.12.2015.
  */
-public class DihedralRestraint extends ValueGS implements FuncType {
+public class DihedralRestraintImpl extends ValueHolder implements DihedralRestraint {
 
     private String ai;
     private String aj;
@@ -16,16 +17,28 @@ public class DihedralRestraint extends ValueGS implements FuncType {
     private String al;
     private Integer funcType;
     private String label;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c1;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c2;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c3;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c4;
 
-    public DihedralRestraint() {
+    public DihedralRestraintImpl() {
     }
 
-    public DihedralRestraint(String ai, String aj, String ak, String al, Integer funcType, String label, BigDecimal c1,
-                             BigDecimal c2, BigDecimal c3, BigDecimal c4) {
+    public DihedralRestraintImpl(String ai, String aj, String ak, String al, Integer funcType, String label, BigDecimal c1,
+                                 BigDecimal c2, BigDecimal c3, BigDecimal c4) {
         this.ai = ai;
         this.aj = aj;
         this.ak = ak;
@@ -38,8 +51,8 @@ public class DihedralRestraint extends ValueGS implements FuncType {
         this.c4 = c4;
     }
 
-    public DihedralRestraint(String ai, String aj, String ak, String al, Integer funcType, BigDecimal c1,
-                             BigDecimal c2) {
+    public DihedralRestraintImpl(String ai, String aj, String ak, String al, Integer funcType, BigDecimal c1,
+                                 BigDecimal c2) {
         this.ai = ai;
         this.aj = aj;
         this.ak = ak;

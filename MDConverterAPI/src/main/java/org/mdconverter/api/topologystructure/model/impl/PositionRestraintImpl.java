@@ -1,7 +1,8 @@
 package org.mdconverter.api.topologystructure.model.impl;
 
-import org.mdconverter.api.topologystructure.model.api.FuncType;
-import org.mdconverter.api.topologystructure.model.api.ValueGS;
+import org.mdconverter.api.topologystructure.ModelVersion;
+import org.mdconverter.api.topologystructure.model.api.PositionRestraint;
+import org.mdconverter.api.topologystructure.model.api.ValueHolder;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -9,18 +10,27 @@ import java.math.BigInteger;
 /**
  * Created by miso on 04.12.2015.
  */
-public class PositionRestraint extends ValueGS implements FuncType {
+public class PositionRestraintImpl extends ValueHolder implements PositionRestraint {
 
     private String ai;
     private Integer funcType;
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c1 = new BigDecimal(BigInteger.ZERO);
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c2 = new BigDecimal(BigInteger.ZERO);
+    /**
+     * added at {@link ModelVersion#V1}
+     */
     private BigDecimal c3 = new BigDecimal(BigInteger.ZERO);
 
-    public PositionRestraint() {
+    public PositionRestraintImpl() {
     }
 
-    public PositionRestraint(String ai, Integer funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3) {
+    public PositionRestraintImpl(String ai, Integer funcType, BigDecimal c1, BigDecimal c2, BigDecimal c3) {
         this.ai = ai;
         this.funcType = funcType;
         this.c1 = c1;
