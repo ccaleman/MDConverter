@@ -5,11 +5,12 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.mdconverter.api.consolewriter.ConsoleWriter;
-import org.mdconverter.api.topologystructure.Section;
 import org.mdconverter.api.topologystructure.SectionType;
-import org.mdconverter.api.topologystructure.TopologyStructure;
-import org.mdconverter.api.topologystructure.model.*;
-import org.mdconverter.api.topologystructure.model.System;
+import org.mdconverter.api.topologystructure.model.Section;
+import org.mdconverter.api.topologystructure.model.TopologyStructure;
+import org.mdconverter.api.topologystructure.model.api.Angle;
+import org.mdconverter.api.topologystructure.model.impl.*;
+import org.mdconverter.api.topologystructure.model.impl.System;
 import org.mdconverter.main.GromacsTReader;
 import org.mdconverter.utils.IncludeHandler;
 
@@ -115,9 +116,7 @@ public class InputParser {
     private Map<String, String> defines = Maps.newHashMap();
 
     @Inject
-
     protected InputParser(ConsoleWriter cw) {
-        this.structure = new TopologyStructure();
         this.cw = cw;
     }
 
@@ -891,7 +890,7 @@ public class InputParser {
             List<Angle> angles = actualSection.getAngles();
             List<String> split = reworkLine(line);
             int length = split.size();
-            Angle a = new Angle();
+            AngleImpl a = new AngleImpl();
             if (length >= 4) {
                 a.setAi(split.get(0));
                 a.setAj(split.get(1));
@@ -921,10 +920,10 @@ public class InputParser {
     }
 
     private void addAngleType(String line) {
-        List<AngleType> angleTypes = structure.getAngleTypes();
+        List<Angle> angleTypes = structure.getAngleTypes();
         List<String> split = reworkLine(line);
         int length = split.size();
-        AngleType a = new AngleType();
+        AngleImpl a = new AngleImpl();
         if (length >= 6) {
             a.setAi(split.get(0));
             a.setAj(split.get(1));
@@ -1256,5 +1255,9 @@ public class InputParser {
 
     public TopologyStructure getStructure() {
         return structure;
+    }
+
+    public void setStructure(TopologyStructure structure) {
+        this.structure = structure;
     }
 }

@@ -6,7 +6,8 @@ import org.mdconverter.api.consolewriter.ConsoleWriter;
 import org.mdconverter.api.plugin.reader.AbstractReader;
 import org.mdconverter.api.plugin.type.FileType;
 import org.mdconverter.api.plugin.writer.AbstractWriter;
-import org.mdconverter.api.topologystructure.TopologyStructure;
+import org.mdconverter.api.topologystructure.ModelVersion;
+import org.mdconverter.api.topologystructure.model.TopologyStructure;
 import org.mdconverter.argumentparser.ArgumentParser;
 import org.mdconverter.argumentparser.argumentdefinition.MainArguments;
 import org.mdconverter.classloader.PluginLoader;
@@ -44,11 +45,12 @@ public class MDConverterMain {
 
     public void init(String[] args) {
         argumentParser.parseArguments(args);
+        checkSupportedModelVersion();
         AbstractReader reader = setupReader();
         if (reader.getPluginManifest().getFileType().equals(FileType.STRUCTURE)) {
             reader.setStructure(new StructureImpl());
         } else {
-            reader.setStructure(new TopologyStructure());
+            reader.setStructure(new TopologyStructure(reader.getPluginManifest().getModelVersion()));
         }
         Object structure = null;
         try {
@@ -93,6 +95,22 @@ public class MDConverterMain {
             //TODO remove or better output
             consoleWriter.println(ConsoleWriter.LinePrefix.ERROR, Arrays.toString(e.getStackTrace()));
             throw new RuntimeException();
+        }
+    }
+
+    private void checkSupportedModelVersion() {
+        if (pluginLoader.getWriter().getPluginManifest().getFileType().equals(FileType.TOPOLOGY)) {
+            ModelVersion modelVersionR = pluginLoader.getReader().getPluginManifest().getModelVersion();
+            ModelVersion modelVersionW = pluginLoader.getWriter().getPluginManifest().getModelVersion();
+            if (!modelVersionR.equals(modelVersionW)) {
+                if (ModelVersion.getVersionNumber(modelVersionR) > ModelVersion.getVersionNumber(modelVersionW)) {
+                    consoleWriter.printInfoln("The ModelVersion of Reader is higher than the writer's one");
+                    consoleWriter.printInfoln("DATA COULD BE LOST!");
+                } else {
+                    consoleWriter.printErrorln("ModelVersions of selected Plugins are incompatible!");
+                    throw new RuntimeException();
+                }
+            }
         }
     }
 

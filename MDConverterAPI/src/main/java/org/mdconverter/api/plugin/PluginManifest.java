@@ -3,6 +3,8 @@ package org.mdconverter.api.plugin;
 import org.mdconverter.api.plugin.type.FileType;
 import org.mdconverter.api.plugin.type.PluginType;
 import org.mdconverter.api.plugin.type.ScriptType;
+import org.mdconverter.api.topologystructure.ModelVersion;
+import org.mdconverter.api.topologystructure.model.TopologyStructure;
 
 import java.util.Map;
 
@@ -64,6 +66,12 @@ public class PluginManifest {
      */
     private Map<String, Map<String, Map<String, String>>> measurementUnits;
 
+    /**
+     * Holds the supported {@link ModelVersion} for the plugin (only used for {@link TopologyStructure} model)
+     * will be checked before conversion process to ensure compatibility between topology reader- and writer-plugins
+     */
+    private ModelVersion modelVersion;
+
     public String getVersion() {
         return version;
     }
@@ -102,5 +110,9 @@ public class PluginManifest {
 
     public Map<String, Map<String, String>> unitsForType(Class clazz) {
         return measurementUnits.getOrDefault(clazz.getName(), measurementUnits.get("global"));
+    }
+
+    public ModelVersion getModelVersion() {
+        return modelVersion;
     }
 }

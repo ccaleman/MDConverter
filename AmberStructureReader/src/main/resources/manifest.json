@@ -7,6 +7,7 @@
   "pluginType": "reader",
   "script": true,
   "scriptType": "jython",
+  "modelVersion": "V1",
   "measurementUnits": {
     "global": {
       "standard": {

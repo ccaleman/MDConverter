@@ -2,8 +2,8 @@ package org.mdconverter.unitconverter.topologyhelper;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import org.mdconverter.api.topologystructure.model.AtomType;
-import org.mdconverter.api.topologystructure.model.Default;
+import org.mdconverter.api.topologystructure.model.impl.AtomType;
+import org.mdconverter.api.topologystructure.model.impl.Default;
 
 import java.util.Map;
 

@@ -4,7 +4,7 @@ import org.biojava.nbio.structure.Structure;
 import org.mdconverter.api.plugin.InvalidInputException;
 import org.mdconverter.api.plugin.InvalidParameterException;
 import org.mdconverter.api.plugin.context.Context;
-import org.mdconverter.api.topologystructure.TopologyStructure;
+import org.mdconverter.api.topologystructure.model.TopologyStructure;
 
 import java.nio.file.Path;
 

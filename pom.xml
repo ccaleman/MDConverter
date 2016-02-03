@@ -16,6 +16,7 @@
         <module>PDBStructureWriter</module>
         <module>AmberStructureReader</module>
         <module>GromacsTopologyWriter</module>
+        <module>AmberTopologyReader</module>
     </modules>
 
     <properties>
@@ -32,6 +33,7 @@
         <mockito-all.version>1.10.19</mockito-all.version>
         <jansi.version>1.11</jansi.version>
         <commonslang.version>3.4</commonslang.version>
+        <commonsio.version>2.4</commonsio.version>
         <!-- DIRECTORY DEFINITIONS-->
         <build.dir>${project.basedir}/../build</build.dir>
         <plugin.output.reader.structure>${build.dir}/StructureReader</plugin.output.reader.structure>
@@ -93,6 +95,11 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>${commonslang.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>commons-io</groupId>
+                <artifactId>commons-io</artifactId>
+                <version>${commonsio.version}</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>

@@ -7,6 +7,7 @@
   "pluginType": "reader",
   "script": false,
   "scriptType": "none",
+  "modelVersion": "V1",
   "measurementUnits": {
     "global": {
       "standard": {

@@ -5,7 +5,7 @@ import org.biojava.nbio.structure.xtal.CrystalCell;
 import org.jscience.mathematics.number.Real;
 import org.mdconverter.api.consolewriter.ConsoleWriter;
 import org.mdconverter.api.plugin.type.FileType;
-import org.mdconverter.api.topologystructure.TopologyStructure;
+import org.mdconverter.api.topologystructure.model.TopologyStructure;
 import org.mdconverter.unitconverter.topologyhelper.*;
 
 import javax.inject.Inject;

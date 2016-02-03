@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import org.mdconverter.api.plugin.InvalidInputException;
 import org.mdconverter.api.plugin.InvalidParameterException;
 import org.mdconverter.api.plugin.reader.AbstractReader;
+import org.mdconverter.api.topologystructure.model.TopologyStructure;
 import org.mdconverter.fileparser.InputParser;
 
 import java.io.IOException;
@@ -25,9 +26,9 @@ public class GromacsTReader extends AbstractReader {
     public Object getMetaModel() throws InvalidParameterException, InvalidInputException, NumberFormatException {
         try {
             Path path = setDefaultArgs();
+            inputParser.setStructure(new TopologyStructure(getPluginManifest().getModelVersion()));
             inputParser.parseInput(Files.readAllBytes(getInputFile()), path, true, null, getArguments());
-            setStructure(inputParser.getStructure());
-            return getStructure();
+            return inputParser.getStructure();
         } catch (IOException | URISyntaxException | NumberFormatException e) {
             throw new RuntimeException(e.getMessage());
         }

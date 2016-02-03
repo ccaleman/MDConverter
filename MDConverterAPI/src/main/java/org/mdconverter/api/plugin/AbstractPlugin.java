@@ -6,7 +6,7 @@ import org.mdconverter.api.jython.JythonObjectFactory;
 import org.mdconverter.api.plugin.context.Context;
 import org.mdconverter.api.plugin.type.PluginType;
 import org.mdconverter.api.plugin.type.ScriptType;
-import org.mdconverter.api.topologystructure.TopologyStructure;
+import org.mdconverter.api.topologystructure.model.TopologyStructure;
 
 import javax.inject.Inject;
 import java.net.URISyntaxException;

@@ -1,6 +1,6 @@
 package org.mdconverter.utils;
 
-import org.python.apache.commons.compress.utils.IOUtils;
+import org.apache.commons.io.IOUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

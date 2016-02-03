@@ -4,9 +4,9 @@ import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;
 import org.jscience.mathematics.number.Real;
 import org.mdconverter.api.plugin.type.PluginType;
-import org.mdconverter.api.topologystructure.model.Default;
-import org.mdconverter.api.topologystructure.model.FuncType;
-import org.mdconverter.api.topologystructure.model.ValueGS;
+import org.mdconverter.api.topologystructure.model.api.FuncType;
+import org.mdconverter.api.topologystructure.model.api.ValueGS;
+import org.mdconverter.api.topologystructure.model.impl.Default;
 
 import javax.measure.quantity.Quantity;
 import javax.measure.unit.Unit;

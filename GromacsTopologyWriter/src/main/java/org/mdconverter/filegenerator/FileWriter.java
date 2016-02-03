@@ -3,10 +3,12 @@ package org.mdconverter.filegenerator;
 
 import org.apache.commons.lang3.StringUtils;
 import org.mdconverter.api.consolewriter.ConsoleWriter;
-import org.mdconverter.api.topologystructure.Section;
 import org.mdconverter.api.topologystructure.SectionType;
-import org.mdconverter.api.topologystructure.TopologyStructure;
-import org.mdconverter.api.topologystructure.model.*;
+import org.mdconverter.api.topologystructure.model.Section;
+import org.mdconverter.api.topologystructure.model.TopologyStructure;
+import org.mdconverter.api.topologystructure.model.api.Angle;
+import org.mdconverter.api.topologystructure.model.api.ValueGS;
+import org.mdconverter.api.topologystructure.model.impl.*;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -65,7 +67,7 @@ public class FileWriter {
                 addConstraintType(type);
             }
             oldFuncType = -1;
-            for (AngleType type : structure.getAngleTypes()) {
+            for (Angle type : structure.getAngleTypes()) {
                 if (oldFuncType.equals(-1) || !oldFuncType.equals(type.getFuncType())) {
                     addLine("[ angletypes ]");
                     addLine(";  i    j    k  func       th0       cth");
@@ -303,13 +305,13 @@ public class FileWriter {
         addLine(out);
     }
 
-    private void addAngleType(AngleType angleType) {
+    private void addAngleType(Angle angleType) {
         String out = "";
         out = appendLengthDependant(out, angleType.getAi(), 10);
         out = appendLengthDependant(out, angleType.getAj(), 10);
         out = appendLengthDependant(out, angleType.getAk(), 10);
         out = appendLengthDependant(out, angleType.getFuncType().toString(), 3);
-        out = addValueGS(angleType, out, 3, 14);
+        out = addValueGS((AngleImpl) angleType, out, 3, 14);
         addLine(out);
     }
 
@@ -372,7 +374,7 @@ public class FileWriter {
         addLine(out);
     }
 
-    private void addSystem(org.mdconverter.api.topologystructure.model.System system) {
+    private void addSystem(org.mdconverter.api.topologystructure.model.impl.System system) {
         addLine("[ system ]");
         addLine("; Name");
         String out = "";
@@ -416,7 +418,7 @@ public class FileWriter {
         out = appendLengthDependant(out, type.getAj(), 10);
         out = appendLengthDependant(out, type.getAk(), 10);
         out = appendLengthDependant(out, type.getFuncType().toString(), 3);
-        out = addValueGS(type, out, 4, 12);
+        out = addValueGS((AngleImpl) type, out, 4, 12);
         addLine(out);
     }
 

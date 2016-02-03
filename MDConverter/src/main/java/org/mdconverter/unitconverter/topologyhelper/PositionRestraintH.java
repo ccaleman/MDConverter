@@ -2,8 +2,8 @@ package org.mdconverter.unitconverter.topologyhelper;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
-import org.mdconverter.api.topologystructure.model.Default;
-import org.mdconverter.api.topologystructure.model.PositionRestraint;
+import org.mdconverter.api.topologystructure.model.impl.Default;
+import org.mdconverter.api.topologystructure.model.impl.PositionRestraint;
 
 import java.util.Map;
 
