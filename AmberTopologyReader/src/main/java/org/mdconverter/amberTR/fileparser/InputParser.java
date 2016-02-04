@@ -1,4 +1,4 @@
-package org.mdconverter.fileparser;
+package org.mdconverter.ambertr.fileparser;
 
 
 import com.google.common.base.Splitter;
@@ -24,13 +24,13 @@ import java.util.Map;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
-import static org.mdconverter.fileparser.AmberSection.*;
+import static org.mdconverter.ambertr.fileparser.AmberSection.*;
 
 /**
  * Created by miso on 20.01.2016.
  */
 @Singleton
-public class InputParserT {
+public class InputParser {
 
     private static final Pattern LOGICAL_PATTERN = Pattern.compile("^%.*");
     private static final Pattern VERSION_PATTERN = Pattern.compile("^%VERSION .+");
@@ -45,7 +45,7 @@ public class InputParserT {
     private Map<String, String> args = Maps.newHashMap();
 
     @Inject
-    protected InputParserT(ConsoleWriter cw) {
+    protected InputParser(ConsoleWriter cw) {
         this.cw = cw;
     }
 

@@ -1,6 +1,6 @@
 {
   "pluginName": "gromacs",
-  "className": "org.mdconverter.main.GromacsTWriter",
+  "className": "org.mdconverter.gromacstw.main.GromacsTWriter",
   "version": "1.0",
   "fileExtension": "top",
   "fileType": "topology",

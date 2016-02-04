@@ -1,4 +1,4 @@
-package org.mdconverter.fileparser;
+package org.mdconverter.gromacstr.fileparser;
 
 
 import com.google.common.collect.Lists;
@@ -11,8 +11,8 @@ import org.mdconverter.api.topologystructure.model.TopologyStructure;
 import org.mdconverter.api.topologystructure.model.api.*;
 import org.mdconverter.api.topologystructure.model.impl.*;
 import org.mdconverter.api.topologystructure.model.impl.System;
-import org.mdconverter.main.GromacsTReader;
-import org.mdconverter.utils.IncludeHandler;
+import org.mdconverter.gromacstr.main.GromacsTReader;
+import org.mdconverter.gromacstr.utils.IncludeHandler;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

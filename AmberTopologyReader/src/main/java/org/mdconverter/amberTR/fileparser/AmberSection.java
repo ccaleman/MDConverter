@@ -1,4 +1,4 @@
-package org.mdconverter.fileparser;
+package org.mdconverter.ambertr.fileparser;
 
 /**
  * Created by miso on 21.01.2016.

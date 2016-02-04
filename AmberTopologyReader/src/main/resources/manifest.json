@@ -1,6 +1,6 @@
 {
   "pluginName": "amber",
-  "className": "org.mdconverter.main.AmberTReader",
+  "className": "org.mdconverter.ambertr.main.AmberTReader",
   "version": "1.0",
   "fileExtension": "prmtop",
   "fileType": "topology",

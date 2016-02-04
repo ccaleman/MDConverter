@@ -1,4 +1,4 @@
-package org.mdconverter.main;
+package org.mdconverter.pdbsw.main;
 
 
 import com.google.common.collect.Lists;

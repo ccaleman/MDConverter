@@ -1,4 +1,4 @@
-package org.mdconverter.fileparser;
+package org.mdconverter.gromacssr.fileparser;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;

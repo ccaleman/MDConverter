@@ -1,6 +1,6 @@
 {
     "pluginName": "PDB",
-    "className": "org.mdconverter.main.PDBWriter",
+    "className": "org.mdconverter.pdbsw.main.PDBWriter",
     "version": "1.0",
     "fileExtension": "pdb",
     "fileType": "structure",

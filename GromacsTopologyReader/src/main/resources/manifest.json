@@ -1,6 +1,6 @@
 {
   "pluginName": "gromacs",
-  "className": "org.mdconverter.main.GromacsTReader",
+  "className": "org.mdconverter.gromacstr.main.GromacsTReader",
   "version": "1.0",
   "fileExtension": "top",
   "fileType": "topology",

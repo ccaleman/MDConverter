@@ -1,4 +1,4 @@
-package org.mdconverter.main;
+package org.mdconverter.gromacssr.main;
 
 
 import com.google.inject.Inject;
@@ -12,7 +12,7 @@ import org.biojava.nbio.structure.xtal.SpaceGroup;
 import org.mdconverter.api.plugin.InvalidInputException;
 import org.mdconverter.api.plugin.InvalidParameterException;
 import org.mdconverter.api.plugin.reader.AbstractReader;
-import org.mdconverter.fileparser.ParseInputFile;
+import org.mdconverter.gromacssr.fileparser.ParseInputFile;
 
 import javax.inject.Singleton;
 import java.io.IOException;

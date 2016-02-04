@@ -1,10 +1,10 @@
-package org.mdconverter.main;
+package org.mdconverter.gromacstw.main;
 
 import org.mdconverter.api.plugin.InvalidInputException;
 import org.mdconverter.api.plugin.InvalidParameterException;
 import org.mdconverter.api.plugin.writer.AbstractWriter;
 import org.mdconverter.api.topologystructure.model.TopologyStructure;
-import org.mdconverter.filegenerator.FileWriter;
+import org.mdconverter.gromacstw.filegenerator.FileWriter;
 
 import javax.inject.Inject;
 import java.util.Map;

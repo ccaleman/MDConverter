@@ -1,4 +1,4 @@
-package org.mdconverter.utils;
+package org.mdconverter.gromacstr.utils;
 
 import org.apache.commons.io.IOUtils;
 

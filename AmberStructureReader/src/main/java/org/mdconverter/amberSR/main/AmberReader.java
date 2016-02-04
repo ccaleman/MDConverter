@@ -1,7 +1,7 @@
-package org.mdconverter.main;
+package org.mdconverter.ambersr.main;
 
 import org.biojava.nbio.structure.Structure;
-import org.mdconverter.api.ReadStructure;
+import org.mdconverter.ambersr.api.ReadStructure;
 import org.mdconverter.api.jython.JythonObjectFactory;
 import org.mdconverter.api.plugin.InvalidInputException;
 import org.mdconverter.api.plugin.InvalidParameterException;

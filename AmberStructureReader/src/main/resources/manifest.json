@@ -1,6 +1,6 @@
 {
   "pluginName": "amber",
-  "className": "org.mdconverter.main.AmberReader",
+  "className": "org.mdconverter.ambersr.main.AmberReader",
   "version": "1.0",
   "fileExtension": "mol2",
   "fileType": "structure",

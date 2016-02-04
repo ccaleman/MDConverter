@@ -1,4 +1,4 @@
-package org.mdconverter.api;
+package org.mdconverter.ambersr.api;
 
 import org.biojava.nbio.structure.Structure;
 

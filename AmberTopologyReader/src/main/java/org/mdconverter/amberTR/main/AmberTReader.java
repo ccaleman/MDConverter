@@ -1,11 +1,11 @@
-package org.mdconverter.main;
+package org.mdconverter.ambertr.main;
 
 import com.google.inject.Inject;
+import org.mdconverter.ambertr.fileparser.InputParser;
 import org.mdconverter.api.plugin.InvalidInputException;
 import org.mdconverter.api.plugin.InvalidParameterException;
 import org.mdconverter.api.plugin.reader.AbstractReader;
 import org.mdconverter.api.topologystructure.model.TopologyStructure;
-import org.mdconverter.fileparser.InputParser;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -15,15 +15,16 @@ import java.nio.file.Paths;
 import java.util.Map;
 
 /**
- * Created by miso on 07.12.2015.
+ * Created by miso on 20.01.2016.
  */
-public class GromacsTReader extends AbstractReader {
+public class AmberTReader extends AbstractReader {
+
 
     @Inject
     private InputParser inputParser;
 
     @Override
-    public Object getMetaModel() throws InvalidParameterException, InvalidInputException, NumberFormatException {
+    public Object getMetaModel() throws InvalidParameterException, InvalidInputException {
         try {
             Path path = setDefaultArgs();
             inputParser.setStructure(new TopologyStructure(getPluginManifest().getModelVersion()));
@@ -36,14 +37,15 @@ public class GromacsTReader extends AbstractReader {
 
     @Override
     public String getDescription() {
-        return "GromacsTR is able to read *.top files.";
+        return "AmberTR is able to read *.prmtop files.";
     }
 
     @Override
     public String getUsage() {
-        return "GromacsTR:\n" +
-                "\tFor position restraint definition file:\n" +
-                "\t\tposres:<path/to/file>\n" +
+        //TODO: adopt to amber
+        return "AmberTR:\n" +
+                "\tFor atom coordinates definition file:\n" +
+                "\t\tinpcrd:<path/to/file>\n" +
                 "\t\tdefault = null\n" +
                 "\tFor position restraint water definition:\n" +
                 "\t\tposreswat:true\n" +
@@ -60,21 +62,9 @@ public class GromacsTReader extends AbstractReader {
     private Path setDefaultArgs() {
         Map<String, String> arguments = getArguments();
         if (arguments != null && !arguments.isEmpty()) {
-            String orDefault = arguments.getOrDefault("posreswat", String.valueOf(false));
-            if (orDefault.equals(String.valueOf(false))) {
-                arguments.put("posreswat", orDefault);
-            }
-            orDefault = arguments.getOrDefault("heavyW", String.valueOf(false));
-            if (orDefault.equals(String.valueOf(false))) {
-                arguments.put("heavyW", orDefault);
-            }
-            orDefault = arguments.getOrDefault("flex", String.valueOf(false));
-            if (orDefault.equals(String.valueOf(false))) {
-                arguments.put("flex", orDefault);
-            }
-            String posres = arguments.getOrDefault("posres", String.valueOf(false));
-            if (!posres.contains("false") && Files.exists(Paths.get(posres))) {
-                return Paths.get(posres);
+            String inpcrd = arguments.getOrDefault("inpcrd", String.valueOf(false));
+            if (!inpcrd.contains("false") && Files.exists(Paths.get(inpcrd))) {
+                return Paths.get(inpcrd);
             }
         }
         return null;

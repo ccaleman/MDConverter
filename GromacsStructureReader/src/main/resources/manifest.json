@@ -1,6 +1,6 @@
 {
   "pluginName": "gromacs",
-  "className": "org.mdconverter.main.GromacsReader",
+  "className": "org.mdconverter.gromacssr.main.GromacsReader",
   "version": "1.0",
   "fileExtension": "gro",
   "fileType": "structure",

@@ -1,4 +1,4 @@
-package org.mdconverter.filegenerator;
+package org.mdconverter.gromacstw.filegenerator;
 
 
 import org.apache.commons.lang3.StringUtils;
