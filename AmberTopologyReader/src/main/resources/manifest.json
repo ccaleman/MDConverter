@@ -12,220 +12,220 @@
     "global": {
       "standard": {
         "length": "Å",
-        "mass": "kg",
+        "mass": "u",
         "time": "s",
-        "charge": "C",
+        "charge": "efact",
         "energy": "kcal/mol"
       }
     },
     "atom/atomTypes": {
       "none": {
-        "c1": "amu",
-        "c2": "C",
-        "c3_1": "kJ/mol·nm^6",
-        "c4_1": "kJ/mol·nm^12",
-        "c3": "nm",
-        "c4": "kJ/mol"
+        "c1": "efact",
+        "c2": "u",
+        "c3_1": "kcal·Å^6/mol",
+        "c4_1": "kcal·Å^12/mol",
+        "c3": "Å",
+        "c4": "kcal/mol"
       }
     },
     "bond/bondTypes": {
       "1": {
-        "c1": "nm",
-        "c2": "kJ/mol/nm^2"
+        "c1": "Å",
+        "c2": "kcal·Å^-2/mol"
       },
       "2": {
-        "c1": "nm",
-        "c2": "kJ/mol/nm^4"
+        "c1": "Å",
+        "c2": "kcal·Å^-2/mol"
       },
       "3": {
-        "c1": "nm",
-        "c2": "kJ/mol",
-        "c3": "1/nm"
+        "c1": "Å",
+        "c2": "kcal·Å^-2/mol",
+        "c3": ""
       },
       "4": {
-        "c1": "nm",
-        "c2": "kJ/mol/nm^2",
-        "c3": "kJ/mol/nm^3"
+        "c1": "Å",
+        "c2": "kcal·Å^-2/mol",
+        "c3": ""
       },
       "6": {
-        "c1": "nm",
-        "c2": "kJ/mol/nm^2"
+        "c1": "Å",
+        "c2": "kcal·Å^-2/mol"
       },
       "7": {
-        "c1": "nm",
-        "c2": "kJ/mol/nm^2"
+        "c1": "Å",
+        "c2": "kcal·Å^-2/mol"
       },
       "8": {
-        "c2": "kJ/mol"
+        "c2": "kcal·Å^-2/mol"
       },
       "9": {
-        "c2": "kJ/mol"
+        "c2": "kcal·Å^-2/mol"
       },
       "10": {
-        "c1": "nm",
-        "c2": "nm",
-        "c3": "nm",
-        "c4": "kJ/mol/nm^2"
+        "c1": "Å",
+        "c2": "kcal/mol/Å^2",
+        "c3": "",
+        "c4": ""
       }
     },
     "pair/pairTypes": {
       "1": {
-        "c1_1": "kJ/mol·nm^6",
-        "c2_1": "kJ/mol·nm^12",
-        "c1": "nm",
-        "c2": "kJ/mol"
+        "c1_1": "kcal·nm^6/mol",
+        "c2_1": "kcal·nm^12/mol",
+        "c1": "Å",
+        "c2": "kcal/mol"
       },
       "2": {
-        "c2": "C",
-        "c3": "C",
-        "c4_1": "kJ/mol·nm^6",
-        "c5_1": "kJ/mol·nm^12",
-        "c4": "nm",
-        "c5": "kJ/mol"
+        "c2": "efact",
+        "c3": "efact",
+        "c4_1": "kcal·nm^6/mol",
+        "c5_1": "kcal·nm^12/mol",
+        "c4": "Å",
+        "c5": "kcal/mol"
       }
     },
     "pairNB": {
       "1": {
-        "c1": "C",
-        "c2": "C",
-        "c3_1": "kJ/mol·nm^6",
-        "c4_1": "kJ/mol·nm^12",
-        "c3": "nm",
-        "c4": "kJ/mol"
+        "c1": "efact",
+        "c2": "efact",
+        "c3_1": "kcal·nm^6/mol",
+        "c4_1": "kcal·nm^12/mol",
+        "c3": "Å",
+        "c4": "kcal/mol"
       }
     },
     "angle/angleTypes": {
       "1": {
-        "c1": "°",
-        "c2": "kJ/mol·rad^2"
+        "c1": "rad",
+        "c2": "kcal·rad^2/mol"
       },
       "2": {
-        "c1": "°",
-        "c2": "kJ/mol"
+        "c1": "rad",
+        "c2": "kcal·rad^2/mol"
       },
       "3": {
-        "c1": "nm",
-        "c2": "nm",
-        "c3": "kJ/mol·nm^2"
+        "c1": "rad",
+        "c2": "kcal·rad^2/mol",
+        "c3": ""
       },
       "4": {
-        "c1": "nm",
-        "c2": "nm",
-        "c3": "nm",
-        "c4": "kJ/mol·nm^2"
+        "c1": "rad",
+        "c2": "kcal·rad^2/mol",
+        "c3": "",
+        "c4": ""
       },
       "5": {
-        "c1": "°",
-        "c2": "kJ/mol·rad^2",
-        "c3": "nm",
-        "c4": "kJ/mol·nm^2"
+        "c1": "rad",
+        "c2": "kcal·rad^2/mol",
+        "c3": "",
+        "c4": ""
       },
       "6": {
-        "c1": "°",
-        "c2": "kJ/mol·rad^0",
-        "c3": "kJ/mol·rad^1",
-        "c4": "kJ/mol·rad^2",
-        "c5": "kJ/mol·rad^3",
-        "c6": "kJ/mol·rad^4"
+        "c1": "rad",
+        "c2": "kcal·rad^2/mol",
+        "c3": "",
+        "c4": "",
+        "c5": "",
+        "c6": ""
       },
       "8": {
-        "c2": "kJ/mol"
+        "c2": "kcal·rad^2/mol"
       },
       "10": {
-        "c1": "°",
-        "c2": "kJ/mol"
+        "c1": "rad",
+        "c2": "kcal·rad^2/mol"
       }
     },
     "dihedral/dihedralTypes": {
       "1": {
-        "c1": "°",
-        "c2": "kJ/mol"
+        "c1": "kcal/mol",
+        "c2": "kcal/mol"
       },
       "2": {
-        "c1": "°",
-        "c2": "kJ/mol·rad^2"
+        "c1": "kcal/mol",
+        "c2": "kcal/mol"
       },
       "3": {
-        "c1": "kJ/mol",
-        "c2": "kJ/mol",
-        "c3": "kJ/mol",
-        "c4": "kJ/mol",
-        "c5": "kJ/mol",
-        "c6": "kJ/mol"
+        "c1": "kcal/mol",
+        "c2": "kcal/mol",
+        "c3": "kcal/mol",
+        "c4": "rad",
+        "c5": "kcal/mol",
+        "c6": "kcal/mol"
       },
       "4": {
-        "c1": "°",
-        "c2": "kJ/mol"
+        "c1": "kcal/mol",
+        "c2": "kcal/mol"
       },
       "5": {
-        "c1": "kJ/mol",
-        "c2": "kJ/mol",
-        "c3": "kJ/mol",
-        "c4": "kJ/mol"
+        "c1": "kcal/mol",
+        "c2": "kcal/mol",
+        "c3": "kcal/mol",
+        "c4": "rad"
       },
       "8": {
-        "c2": "kJ/mol"
+        "c2": "kcal/mol"
       },
       "9": {
-        "c1": "°",
-        "c2": "kJ/mol"
+        "c1": "kcal/mol",
+        "c2": "kcal/mol"
       },
       "10": {
-        "c1": "°",
-        "c2": "kJ/mol"
+        "c1": "kcal/mol",
+        "c2": "kcal/mol"
       },
       "11": {
-        "c1": "kJ/mol",
-        "c2": "kJ/mol",
-        "c3": "kJ/mol",
-        "c4": "kJ/mol",
-        "c5": "kJ/mol"
+        "c1": "kcal/mol",
+        "c2": "kcal/mol",
+        "c3": "kcal/mol",
+        "c4": "rad",
+        "c5": "kcal/mol"
       }
     },
     "constraint/constraintTypes": {
       "1": {
-        "c1": "nm"
+        "c1": "Å"
       },
       "2": {
-        "c1": "nm"
+        "c1": "Å"
       }
     },
     "nonbond_params": {
       "1": {
-        "c1_1": "kJ/mol·nm^6",
-        "c2_1": "kJ/mol·nm^12",
-        "c1": "nm",
-        "c2": "kJ/mol"
+        "c1_1": "kcal·nm^6/mol",
+        "c2_1": "kcal·nm^12/mol",
+        "c1": "Å",
+        "c2": "kcal/mol"
       },
       "2": {
-        "c1": "kJ/mol",
-        "c2": "1/nm",
-        "c3": "kJ·nm^6/mol"
+        "c1": "kcal/mol",
+        "c2": "1/Å",
+        "c3": "kcal·nm^6/mol"
       }
     },
     "settle": {
       "1": {
-        "c1": "nm",
-        "c2": "nm"
+        "c1": "Å",
+        "c2": "Å"
       }
     },
     "positionRestraint": {
       "1": {
-        "c1": "kJ/mol·nm^2",
-        "c2": "kJ/mol·nm^2",
-        "c3": "kJ/mol·nm^2"
+        "c1": "kcal·nm^-2/mol",
+        "c2": "kcal·nm^-2/mol",
+        "c3": "kcal·nm^-2/mol"
       },
       "2": {
-        "c1": "nm",
-        "c2": "nm",
-        "c3": "kJ/mol·nm^2"
+        "c1": "Å",
+        "c2": "Å",
+        "c3": "kcal·nm^-2/mol"
       }
     },
     "distanceRestraint": {
       "1": {
-        "c1": "kJ/mol·nm^2",
-        "c2": "kJ/mol·nm^2",
-        "c3": "kJ/mol·nm^2"
+        "c1": "Å",
+        "c2": "Å",
+        "c3": "Å"
       }
     },
     "dihedralRestraint": {
@@ -236,7 +236,7 @@
     },
     "orientationRestraint": {
       "1": {
-        "c1": "U·nm^'getAlpha'",
+        "c1": "U·Å^'getAlpha'",
         "c2": "U",
         "c3": "1/U"
       }
@@ -244,13 +244,13 @@
     "angleRestraint": {
       "1": {
         "c1": "°",
-        "c2": "kJ/mol"
+        "c2": "kcal/mol"
       }
     },
     "angleRestraintZ": {
       "1": {
         "c1": "°",
-        "c2": "kJ/mol"
+        "c2": "kcal/mol"
       }
     }
   }

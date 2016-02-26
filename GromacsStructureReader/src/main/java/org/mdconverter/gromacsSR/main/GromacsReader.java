@@ -59,7 +59,7 @@ public class GromacsReader extends AbstractReader {
 
     @Override
     public String getUsage() {
-        return "GromacsSR do not need any special arguments aberrant from normal usage.";
+        return "GromacsSR do not need any special arguments differing from normal usage.";
     }
 
 }

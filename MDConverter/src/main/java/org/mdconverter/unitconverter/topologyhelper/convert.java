@@ -9,12 +9,17 @@ import org.mdconverter.api.topologystructure.model.api.FuncType;
 import org.mdconverter.api.topologystructure.model.api.ValueHolder;
 
 import javax.measure.quantity.Quantity;
+import javax.measure.unit.NonSI;
 import javax.measure.unit.Unit;
+import javax.measure.unit.UnitFormat;
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
+
+import static javax.measure.unit.SI.JOULE;
+import static javax.measure.unit.SI.KILO;
 
 /**
  * Created by miso on 07.01.2016.
@@ -30,6 +35,10 @@ public abstract class Convert<T extends ValueHolder> {
 
     public Convert(Map<String, Map<String, Map<String, String>>> readerUnits,
                    Map<String, Map<String, Map<String, String>>> writerUnits, Default def) {
+        //TODO generate custom units from manifest automatically
+        UnitFormat.getInstance().label(NonSI.E.divide(18.222615), "efact");
+        UnitFormat.getInstance().label(KILO(JOULE.times(cal)), "kcal");
+        UnitFormat.getInstance().label(JOULE.times(cal), "cal");
         this.readerUnits = readerUnits;
         this.writerUnits = writerUnits;
         this.def = def;
@@ -279,13 +288,11 @@ public abstract class Convert<T extends ValueHolder> {
     }
 
     private Object checkSpecialUnits(String s2) {
-        if (s2.equals("amu")) {
+        /*if (s2.equals("amu")) {
             return Unit.valueOf("kg").times(amu);
-        } else if (REFL.matcher(s2).find()) {
+        } else*/
+        if (REFL.matcher(s2).find()) {
             return s2;
-        } else if (s2.contains("cal")) {
-            String replace = s2.replace("cal", "J");
-            return Unit.valueOf(replace).times(cal);
         } else {
             return Unit.valueOf(s2);
         }

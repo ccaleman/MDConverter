@@ -12,9 +12,9 @@
     "global": {
       "standard": {
         "length": "Å",
-        "mass": "kg",
+        "mass": "amu",
         "time": "s",
-        "charge": "C",
+        "charge": "C*18.222615",
         "energy": "kcal/mol"
       }
     }

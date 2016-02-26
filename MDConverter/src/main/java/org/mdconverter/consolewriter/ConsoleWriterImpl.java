@@ -19,28 +19,30 @@ import java.util.Scanner;
 public class ConsoleWriterImpl extends PrintStream implements ConsoleWriter {
 
     private final OutputStream errorStream;
-    private OutputStream infoStram;
+    private OutputStream infoStream;
     private Scanner sc = new Scanner(System.in);
 
     @Inject
     public ConsoleWriterImpl(@Named("INFO") OutputStream out, @Named("ERROR") OutputStream err) {
         super(out, true);
         this.errorStream = err;
-        this.infoStram = out;
+        this.infoStream = out;
     }
 
     @Override
     public void println(LinePrefix prfx, String... lines) {
         for (String line : lines) {
-            switch (prfx) {
-                case INFO:
-                    printInfoln(line);
-                    break;
-                case ERROR:
-                    printErrorln(line);
-                    break;
-                default:
-                    print(line);
+            if (line != null && !line.isEmpty()) {
+                switch (prfx) {
+                    case INFO:
+                        printInfoln(line);
+                        break;
+                    case ERROR:
+                        printErrorln(line);
+                        break;
+                    default:
+                        print(line);
+                }
             }
         }
     }
@@ -58,7 +60,7 @@ public class ConsoleWriterImpl extends PrintStream implements ConsoleWriter {
 
     @Override
     public void println(String output) {
-        this.println(output, infoStram);
+        this.println(output, infoStream);
     }
 
     @Override
@@ -70,7 +72,7 @@ public class ConsoleWriterImpl extends PrintStream implements ConsoleWriter {
     @Override
     public void printInfoln(String output) {
         output = "INFO: " + output;
-        this.println(output, infoStram);
+        this.println(output, infoStream);
     }
 
     public int getIntInput() {
@@ -103,6 +105,17 @@ public class ConsoleWriterImpl extends PrintStream implements ConsoleWriter {
         }
         while(!inputOk);
         return stringInput;
+    }
+
+    public OutputStream getStream(LinePrefix type) {
+        switch (type) {
+            case ERROR:
+                return errorStream;
+            case INFO:
+            case NONE:
+            default:
+                return infoStream;
+        }
     }
 
     private void resetScanner() {

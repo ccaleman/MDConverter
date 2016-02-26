@@ -16,10 +16,7 @@ import org.mdconverter.unitconverter.UnitConverterImpl;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.nio.file.Path;
 import java.util.Arrays;
 
@@ -45,56 +42,59 @@ public class MDConverterMain {
 
     public void init(String[] args) {
         argumentParser.parseArguments(args);
-        checkSupportedModelVersion();
-        AbstractReader reader = setupReader();
-        if (reader.getPluginManifest().getFileType().equals(FileType.STRUCTURE)) {
-            reader.setStructure(new StructureImpl());
-        } else {
-            reader.setStructure(new TopologyStructure(reader.getPluginManifest().getModelVersion()));
-        }
-        Object structure = null;
-        try {
-            structure = reader.getMetaModel();
-        } catch (Exception e) {
-            consoleWriter.printErrorln(e.getMessage());
-            consoleWriter.printInfoln(reader.getUsage());
-            //TODO remove or better output
-            throw new RuntimeException();
-        }
-        AbstractWriter writer = setupWriter();
-        FileType fileType = reader.getPluginManifest().getFileType();
-        try {
-            unitConverter.convertStructure(structure, fileType);
-        } catch (Exception e) {
-            consoleWriter.printErrorln(e.getMessage());
-            throw new RuntimeException();
-        }
-        writer.setStructure(structure);
-        try {
-            String output = writer.getOutput();
-            Path file = argumentParser.getMainArguments().getOutputFile();
-            if (file != null) {
-                try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
-                        new FileOutputStream(file.toString()), Charsets.UTF_8))) {
-                    out.write(output);
-                    consoleWriter.printInfoln("Output was written into " + file.toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        if (!argumentParser.getMainArguments().isHelp()) {
+            checkSupportedModelVersion();
+            AbstractReader reader = setupReader();
+            if (reader.getPluginManifest().getFileType().equals(FileType.STRUCTURE)) {
+                reader.setStructure(new StructureImpl());
             } else {
-                consoleWriter.printErrorln("\n" + output);
+                reader.setStructure(new TopologyStructure(reader.getPluginManifest().getModelVersion()));
             }
-        } catch (Exception e) {
-            String methodName = e.getStackTrace()[0].getMethodName();
-            if (methodName.contains("add")) {
-                String replace = methodName.replace("add", "");
-                consoleWriter.printErrorln(String.format("Type: %s is", methodName));
+            Object structure = null;
+            try {
+                structure = reader.getMetaModel();
+            } catch (Exception e) {
+                e.printStackTrace(new PrintStream(consoleWriter.getStream(ConsoleWriter.LinePrefix.ERROR)));
+                consoleWriter.printInfoln(reader.getUsage());
+                //TODO remove or better output
+                throw new RuntimeException();
             }
-            consoleWriter.printErrorln(e.getMessage());
-            consoleWriter.printInfoln(writer.getUsage());
-            //TODO remove or better output
-            consoleWriter.println(ConsoleWriter.LinePrefix.ERROR, Arrays.toString(e.getStackTrace()));
-            throw new RuntimeException();
+            AbstractWriter writer = setupWriter();
+            FileType fileType = reader.getPluginManifest().getFileType();
+            try {
+                unitConverter.convertStructure(structure, fileType);
+            } catch (Exception e) {
+                consoleWriter.printErrorln(e.getMessage());
+                e.printStackTrace();
+                throw new RuntimeException();
+            }
+            writer.setStructure(structure);
+            try {
+                String output = writer.getOutput();
+                Path file = argumentParser.getMainArguments().getOutputFile();
+                if (file != null) {
+                    try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
+                            new FileOutputStream(file.toString()), Charsets.UTF_8))) {
+                        out.write(output);
+                        consoleWriter.printInfoln("Output was written into " + file.toString());
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    consoleWriter.printErrorln("\n" + output);
+                }
+            } catch (Exception e) {
+                String methodName = e.getStackTrace()[0].getMethodName();
+                if (methodName.contains("add")) {
+                    String replace = methodName.replace("add", "");
+                    consoleWriter.printErrorln(String.format("Type: %s is", methodName));
+                }
+                consoleWriter.printErrorln(e.getMessage());
+                consoleWriter.printInfoln(writer.getUsage());
+                //TODO remove or better output
+                consoleWriter.println(ConsoleWriter.LinePrefix.ERROR, Arrays.toString(e.getStackTrace()));
+                throw new RuntimeException();
+            }
         }
     }
 

@@ -53,6 +53,8 @@ public class InputErrorHandler {
                         throw new RuntimeException("User aborted task.");
                     }
                     break;
+                case NO_INPUT:
+                    throw new RuntimeException("No input file defined!");
                 default:
                     cw.printErrorln("Such an error is not defined in InputErrorHandler!");
             }

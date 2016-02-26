@@ -35,7 +35,7 @@ public class ArgumentParser {
 
     @Inject
     public ArgumentParser(@Named("project.version") String version, ConsoleWriter consoleWriter,
-                              InputErrorHandler errorHandler, PluginLoader pluginLoader) {
+                          InputErrorHandler errorHandler, PluginLoader pluginLoader) {
         mainArguments = new MainArguments();
         this.consoleWriter = consoleWriter;
         this.errorHandler = errorHandler;
@@ -48,33 +48,35 @@ public class ArgumentParser {
         // parse the arguments.
         try {
             jc.parse(args);
-            if (mainArguments.isHelp()) {
+            if (mainArguments.isHelp() || mainArguments.getInputFile() == null) {
                 printUsage();
-            } else {
-                LoaderInput reader = isReaderDefined();
-                LoaderInput writer = isWriterDefined();
-                if (!argumentsErrors.isEmpty()) {
-                    List<LoaderInput> loaderInputs = errorHandler.handleErrors(argumentsErrors, reader, writer);
-                    reader = loaderInputs.get(0);
-                    writer = loaderInputs.get(1);
+                if (mainArguments.getInputFile() == null) {
+                    argumentsErrors.add(0, InputError.NO_INPUT);
                 }
-                do {
-                    pluginLoader.loadPlugin(reader);
-                    pluginLoader.loadPlugin(writer);
-                    if (!pluginLoader.getInputErrors().isEmpty()) {
-                        errorHandler.handleErrors(pluginLoader.getInputErrors(), reader, writer);
-                    }
-                    pluginLoader.getInputErrors().clear();
-                } while ((pluginLoader.getReader() == null && pluginLoader.getWriter() == null));
-
-                checkFileExtensions();
-
-                consoleWriter.println(ConsoleWriter.LinePrefix.INFO,
-                        String.format("Defined reader: %s", reader.getPluginName()),
-                        pluginLoader.getReader().getDescription(),
-                        String.format("Defined writer: %s", writer.getPluginName()),
-                        pluginLoader.getWriter().getDescription());
             }
+            LoaderInput reader = isReaderDefined();
+            LoaderInput writer = isWriterDefined();
+            if (!argumentsErrors.isEmpty()) {
+                List<LoaderInput> loaderInputs = errorHandler.handleErrors(argumentsErrors, reader, writer);
+                reader = loaderInputs.get(0);
+                writer = loaderInputs.get(1);
+
+            }
+            do {
+                pluginLoader.loadPlugin(reader);
+                pluginLoader.loadPlugin(writer);
+                if (!pluginLoader.getInputErrors().isEmpty()) {
+                    errorHandler.handleErrors(pluginLoader.getInputErrors(), reader, writer);
+                }
+                pluginLoader.getInputErrors().clear();
+            } while ((pluginLoader.getReader() == null && pluginLoader.getWriter() == null));
+
+            checkFileExtensions();
+            consoleWriter.println(ConsoleWriter.LinePrefix.INFO,
+                    String.format("Defined reader: %s", reader.getPluginName()),
+                    pluginLoader.getReader().getDescription(), mainArguments.isHelp() ? pluginLoader.getReader().getUsage() : "",
+                    String.format("Defined writer: %s", writer.getPluginName()),
+                    pluginLoader.getWriter().getDescription(), mainArguments.isHelp() ? pluginLoader.getWriter().getUsage() : "");
         } catch (ParameterException e) {
             printUsage();
             consoleWriter.printErrorln(e.getMessage() + "\n");

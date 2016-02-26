@@ -24,7 +24,7 @@ public class Application {
             instance.init(args);
         } catch (Exception e) {
             //TODO: remove from release
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 }

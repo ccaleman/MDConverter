@@ -59,7 +59,7 @@ public class GromacsTReader extends AbstractReader {
 
     private Path setDefaultArgs() {
         Map<String, String> arguments = getArguments();
-        if (arguments != null && !arguments.isEmpty()) {
+        if (arguments != null) {
             String orDefault = arguments.getOrDefault("posreswat", String.valueOf(false));
             if (orDefault.equals(String.valueOf(false))) {
                 arguments.put("posreswat", orDefault);
@@ -74,8 +74,10 @@ public class GromacsTReader extends AbstractReader {
             }
             String posres = arguments.getOrDefault("posres", String.valueOf(false));
             if (!posres.contains("false") && Files.exists(Paths.get(posres))) {
+                arguments.put("posres", posres);
                 return Paths.get(posres);
             }
+            arguments.put("posres", "false");
         }
         return null;
     }

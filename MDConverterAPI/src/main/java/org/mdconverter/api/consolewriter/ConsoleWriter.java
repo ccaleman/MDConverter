@@ -52,4 +52,6 @@ public interface ConsoleWriter {
      * @return the user input as {@link String}
      */
     String getStringInput();
+
+
 }

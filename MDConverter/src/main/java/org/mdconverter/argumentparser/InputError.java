@@ -6,5 +6,6 @@ package org.mdconverter.argumentparser;
 public enum InputError {
     NO_WRITER,
     NO_READER,
-    NO_FILETYPE
+    NO_FILETYPE,
+    NO_INPUT
 }

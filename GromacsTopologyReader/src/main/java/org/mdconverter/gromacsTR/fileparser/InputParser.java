@@ -222,6 +222,9 @@ public class InputParser {
                     if (previousPath != null) {
                         file = previousPath + "/" + file;
                     }
+                    if (posres == null || args.get("posres").equals("false")) {
+                        continue;
+                    }
                     byte[] byName = IncludeHandler.getFileByName(GromacsTReader.class, file);
                     if (byName == null) {
                         throw new RuntimeException(String.format("File: %s could not be found!", file));
