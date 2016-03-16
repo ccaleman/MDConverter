@@ -1,4 +1,4 @@
-package org.mdconverter.unitconverter;
+package org.mdconverter.unitconverter.topologyhelper;
 
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.StringUtils;

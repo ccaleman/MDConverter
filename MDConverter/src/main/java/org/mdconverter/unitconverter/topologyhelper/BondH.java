@@ -6,7 +6,6 @@ import org.mdconverter.api.topologystructure.model.api.Default;
 import org.mdconverter.api.topologystructure.model.api.FuncType;
 import org.mdconverter.api.topologystructure.model.impl.BondImpl;
 import org.mdconverter.api.topologystructure.model.impl.DefaultImpl;
-import org.mdconverter.unitconverter.Convert;
 
 import java.util.Map;
 
