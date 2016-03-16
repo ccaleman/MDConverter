@@ -24,8 +24,13 @@ import java.util.List;
 @Singleton
 public class GromacsReader extends AbstractReader {
 
-    @Inject
+    //Injects
     private ParseInputFile inputParser;
+
+    @Inject
+    public GromacsReader(ParseInputFile inputParser) {
+        this.inputParser = inputParser;
+    }
 
     @Override
     public String getDescription() {
@@ -59,7 +64,7 @@ public class GromacsReader extends AbstractReader {
 
     @Override
     public String getUsage() {
-        return "GromacsSR do not need any special arguments differing from normal usage.";
+        return "GromacsSR do not need any special options differing from normal usage.";
     }
 
 }

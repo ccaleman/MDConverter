@@ -12,15 +12,16 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Created by miso on 23.10.2015.
+ * Created by miso on 23.10.2015. <br>
+ * Defines the possible arguments for the MDConverter framework
  */
-@Parameters(commandDescription = "Application arguments")
+@Parameters(commandDescription = "Application options")
 public class MainArguments {
 
     @Parameter(names = {"--help", "-h", "-?"}, description = "Show usage", help = true)
     private boolean help = false;
 
-    @Parameter(description = "unspecified arguments (will be forwarded unhandled to reader and writer)")
+    @Parameter(description = "usage of unspecified options will stop the application")
     private List<String> unknown = Lists.newArrayList();
 
     @Parameter(names = "-R", arity = 1, description = "FileReader you want to use")

@@ -23,9 +23,11 @@ import java.util.stream.Collectors;
 @Singleton
 public class UnitConverterImpl implements UnitConverter {
 
+    //Fields
     private Map<String, Map<String, Map<String, String>>> readerUnits;
     private Map<String, Map<String, Map<String, String>>> writerUnits;
 
+    //Injects
     private ConsoleWriter cw;
 
     @Inject
@@ -33,9 +35,11 @@ public class UnitConverterImpl implements UnitConverter {
         this.cw = cw;
     }
 
+    @Override
     public Object convertStructure(Object structure, FileType fileType) {
         cw.printInfoln("Started with unit conversion");
         if (fileType.equals(FileType.STRUCTURE)) {
+            //converts a Structure
             Unit<? extends Quantity> lengthX = Unit.valueOf(readerUnits.get("global").get("standard").get("length"));
             Unit<? extends Quantity> lengthY = Unit.valueOf(writerUnits.get("global").get("standard").get("length"));
             Structure struct = (Structure) structure;
@@ -58,6 +62,7 @@ public class UnitConverterImpl implements UnitConverter {
             cw.printInfoln("Finished with unit conversion");
             return struct;
         } else {
+            //converts a TopologyStructure
             TopologyStructure struct = (TopologyStructure) structure;
             new AtomTypeH(readerUnits, writerUnits, struct.getDef()).convert(struct.getAtomTypes().stream().map(a -> ((AtomTypeImpl) a)).collect(Collectors.toList()));
             new AngleH(readerUnits, writerUnits, struct.getDef()).convert(struct.getAngleTypes().stream().map(a -> ((AngleImpl) a)).collect(Collectors.toList()));
@@ -85,10 +90,19 @@ public class UnitConverterImpl implements UnitConverter {
         }
     }
 
+    /**
+     * sets the units from the ReaderPlugin
+     *
+     * @param readerUnits defined in manifest.json file
+     */
     public void setReaderUnits(Map<String, Map<String, Map<String, String>>> readerUnits) {
         this.readerUnits = readerUnits;
     }
 
+    /**
+     * sets the units from the WriterPlugin
+     * @param writerUnits defined in manifest.json file
+     */
     public void setWriterUnits(Map<String, Map<String, Map<String, String>>> writerUnits) {
         this.writerUnits = writerUnits;
     }

@@ -13,7 +13,7 @@ public abstract class AbstractWriter<T> extends AbstractPlugin<T> implements Wri
 
     /**
      * @see Writer#getOutput()
-     * @throws InvalidParameterException, InvalidInputException
+     * @throws InvalidParameterException | InvalidInputException
      */
     @Override
     public String getOutput() throws InvalidParameterException, InvalidInputException {

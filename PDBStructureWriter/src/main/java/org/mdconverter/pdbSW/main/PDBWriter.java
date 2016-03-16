@@ -19,11 +19,17 @@ import java.util.List;
 public class PDBWriter extends AbstractWriter {
 
     @Override
+    /**
+     * returns the default usage from AbstractWriter
+     */
     public String getUsage() {
         return super.getUsage();
     }
 
     @Override
+    /**
+     * returns a String formatted in pdb-format
+     */
     public String getOutput() throws InvalidParameterException, InvalidInputException {
         try {
             Structure structure = (Structure) getStructure();
@@ -68,10 +74,19 @@ public class PDBWriter extends AbstractWriter {
     }
 
     @Override
+    /**
+     * returns the description for the plugin
+     */
     public String getDescription() {
         return "This plugin provides a given structure in pdb-format.";
     }
 
+    /**
+     * generates the CRYST1 entry for Gromacs structure files
+     *
+     * @param info input data
+     * @return a CRYST1 entry
+     */
     private String generateCrystEntry(PDBCrystallographicInfo info) {
         String entry = "CRYST1";
         entry = appendLengthDependant(entry, String.valueOf(info.getA()), 10);
@@ -85,6 +100,13 @@ public class PDBWriter extends AbstractWriter {
         return entry;
     }
 
+    /**
+     * Adds a String to another String to reach a defined length for the appended String
+     * @param entry existing String
+     * @param value String to add
+     * @param len minimum length of value (filled up spaces leftside)
+     * @return entry + value
+     */
     private String appendLengthDependant(String entry, String value, int len) {
         int diff = len - value.length();
         if (diff < 1) {

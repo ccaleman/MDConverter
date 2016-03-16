@@ -110,18 +110,22 @@ public class InputParser {
     private static final String elsse = "#else";
     private static final String endif = "#endif";
 
+    //Fields
     private TopologyStructure structure;
-    private ConsoleWriter cw;
     private Map<String, String> args = Maps.newHashMap();
     private Map<String, String> defines = Maps.newHashMap();
+
+    //Injects
+    private ConsoleWriter cw;
 
     @Inject
     protected InputParser(ConsoleWriter cw) {
         this.cw = cw;
     }
 
+    //Recursive function able to run posres and ff files too
     public void parseInput(byte[] input, Path posres, boolean header, String previousPath, Map<String, String> arguments) throws IOException, URISyntaxException, NumberFormatException {
-        //TODO: exclude unnecessary data
+        //TODO: exclude unnecessary data from ff include
         if (input == null) return;
         if (arguments != null) {
             args = arguments;

@@ -42,12 +42,15 @@ public class InputParser {
     private static final Pattern INT_FORMAT_PATTERN = Pattern.compile("^%FORMAT\\((10I8)\\)");
     private static final Pattern BIG_FORMAT_PATTERN = Pattern.compile("^%FORMAT\\((5E16.8)\\)");
 
+    //Fields
     private TopologyStructure structure;
-    private ConsoleWriter cw;
     private Map<String, String> args = Maps.newHashMap();
     Section topSection = new Section(SectionType.STRUCTUREDATA);
     //Pointers
     Map<AmberPointer, Integer> pointers = Maps.newHashMap();
+
+    //Injects
+    private ConsoleWriter cw;
 
     @Inject
     protected InputParser(ConsoleWriter cw) {
@@ -147,7 +150,6 @@ public class InputParser {
                     continue;
                 }
                 if (activeAS.equals(POINTERS)) {
-                    //checkLineReader(activeLineReader, activeAS);
                     if (counters == null) {
                         counters = Lists.newArrayList();
                     }
@@ -160,7 +162,6 @@ public class InputParser {
                 }
                 if (!pointers.isEmpty()) {
                     if (activeAS.equals(ATOM_NAME)) {
-                        //checkLineReader(activeLineReader, activeAS);
                         atomNames.addAll(readLineS(line));
                         if (atomNames.size() == pointers.get(NATOM)) {
                             for (int i = 0; i < atomNames.size(); i++) {
@@ -172,7 +173,6 @@ public class InputParser {
                         }
                     }
                     if (activeAS.equals(CHARGE)) {
-                        //checkLineReader(activeLineReader, activeAS);
                         charges.addAll(readLineB(line));
                         if (charges.size() == pointers.get(NATOM)) {
                             for (int i = 0; i < charges.size(); i++) {
@@ -183,7 +183,6 @@ public class InputParser {
                     if (activeAS.equals(ATOMIC_NUMBER)) {
                         //TODO since amber 12 before ??????
                         //build switch in arguments?????
-                        //checkLineReader(activeLineReader, activeAS);
                         atomicNrs.addAll(readLineI(line));
                         if (atomicNrs.size() == pointers.get(NATOM)) {
                             for (int i = 0; i < atomicNrs.size(); i++) {
@@ -192,7 +191,6 @@ public class InputParser {
                         }
                     }
                     if (activeAS.equals(MASS)) {
-                        //checkLineReader(activeLineReader, activeAS);
                         aMass.addAll(readLineB(line));
                         if (aMass.size() == pointers.get(NATOM)) {
                             for (int i = 0; i < aMass.size(); i++) {
@@ -201,56 +199,48 @@ public class InputParser {
                         }
                     }
                     if (activeAS.equals(NUMBER_EXCLUDED_ATOMS)) {
-                        //checkLineReader(activeLineReader, activeAS);
                         nea.addAll(readLineI(line));
                         if (nea.size() == pointers.get(NATOM)) {
                             generateExclusions(nea, eal);
                         }
                     }
                     if (activeAS.equals(EXCLUDED_ATOMS_LIST)) {
-                        //checkLineReader(activeLineReader, activeAS);
                         eal.addAll(readLineI(line));
                         if (eal.size() == pointers.get(NNB)) {
                             generateExclusions(nea, eal);
                         }
                     }
                     if (activeAS.equals(ATOM_TYPE_INDEX)) {
-                        //checkLineReader(activeLineReader, activeAS);
                         ati.addAll(readLineI(line));
                         if (ati.size() == pointers.get(NATOM)) {
                             generatePotentials(ati, npi, ljA, ljB, hbA, hbB, atomTypes);
                         }
                     }
                     if (activeAS.equals(NONBONDED_PARM_INDEX)) {
-                        //checkLineReader(activeLineReader, activeAS);
                         npi.addAll(readLineI(line));
                         if (npi.size() == (int) Math.sqrt(pointers.get(NTYPES))) {
                             generatePotentials(ati, npi, ljA, ljB, hbA, hbB, atomTypes);
                         }
                     }
                     if (activeAS.equals(LENNARD_JONES_ACOEF)) {
-                        //checkLineReader(activeLineReader, activeAS);
                         ljA.addAll(readLineB(line));
                         if (ljA.size() == (pointers.get(NTYPES) * (pointers.get(NTYPES) + 1)) / 2) {
                             generatePotentials(ati, npi, ljA, ljB, hbA, hbB, atomTypes);
                         }
                     }
                     if (activeAS.equals(LENNARD_JONES_BCOEF)) {
-                        //checkLineReader(activeLineReader, activeAS);
                         ljB.addAll(readLineB(line));
                         if (ljB.size() == (pointers.get(NTYPES) * (pointers.get(NTYPES) + 1)) / 2) {
                             generatePotentials(ati, npi, ljA, ljB, hbA, hbB, atomTypes);
                         }
                     }
                     if (activeAS.equals(HBOND_ACOEF)) {
-                        //checkLineReader(activeLineReader, activeAS);
                         hbA.addAll(readLineB(line));
                         if (hbA.size() == pointers.get(NPHB)) {
                             generatePotentials(ati, npi, ljA, ljB, hbA, hbB, atomTypes);
                         }
                     }
                     if (activeAS.equals(HBOND_BCOEF)) {
-                        //checkLineReader(activeLineReader, activeAS);
                         hbB.addAll(readLineB(line));
                         if (hbB.size() == pointers.get(NPHB)) {
                             generatePotentials(ati, npi, ljA, ljB, hbA, hbB, atomTypes);
@@ -497,14 +487,14 @@ public class InputParser {
                 Integer aj = angleInclHydro.get(i + 1) / 3 + 1;
                 Integer ak = angleInclHydro.get(i + 2) / 3 + 1;
                 Integer idx = angleInclHydro.get(i + 3) - 1;
-                topSection.getAngles().add(new AngleImpl(ai.toString(), aj.toString(), ak.toString(), 1, angleEquil.get(idx), angleForce.get(idx)));
+                topSection.getAngles().add(new AngleImpl(ai.toString(), aj.toString(), ak.toString(), 1, angleEquil.get(idx), angleForce.get(idx).multiply(new BigDecimal(2))));
             }
             for (int i = 0; i < angleWoHydro.size(); i += 4) {
                 Integer ai = angleWoHydro.get(i) / 3 + 1;
                 Integer aj = angleWoHydro.get(i + 1) / 3 + 1;
                 Integer ak = angleWoHydro.get(i + 2) / 3 + 1;
                 Integer idx = angleWoHydro.get(i + 3) - 1;
-                topSection.getAngles().add(new AngleImpl(ai.toString(), aj.toString(), ak.toString(), 1, angleEquil.get(idx), angleForce.get(idx)));
+                topSection.getAngles().add(new AngleImpl(ai.toString(), aj.toString(), ak.toString(), 1, angleEquil.get(idx), angleForce.get(idx).multiply(new BigDecimal(2))));
             }
         }
     }
@@ -516,13 +506,13 @@ public class InputParser {
                 Integer ai = bondInclHydro.get(i) / 3 + 1;
                 Integer aj = bondInclHydro.get(i + 1) / 3 + 1;
                 Integer idx = bondInclHydro.get(i + 2) - 1;
-                topSection.getBonds().add(new BondImpl(ai.toString(), aj.toString(), 1, bondEquil.get(idx), bondForce.get(idx)));
+                topSection.getBonds().add(new BondImpl(ai.toString(), aj.toString(), 1, bondEquil.get(idx), bondForce.get(idx).multiply(new BigDecimal(2))));
             }
             for (int i = 0; i < bondWoHydro.size(); i += 3) {
                 Integer ai = bondWoHydro.get(i) / 3 + 1;
                 Integer aj = bondWoHydro.get(i + 1) / 3 + 1;
                 Integer idx = bondWoHydro.get(i + 2) - 1;
-                topSection.getBonds().add(new BondImpl(ai.toString(), aj.toString(), 1, bondEquil.get(idx), bondForce.get(idx)));
+                topSection.getBonds().add(new BondImpl(ai.toString(), aj.toString(), 1, bondEquil.get(idx), bondForce.get(idx).multiply(new BigDecimal(2))));
             }
         }
     }
@@ -555,7 +545,13 @@ public class InputParser {
                 && atomTypes.size() == pointers.get(NATOM)) {
             for (Integer i = 0; i < pointers.get(NTYPES); i++) {
                 Integer j = npi.get(i * (pointers.get(NTYPES) + 1)) - 1;
-                structure.getAtomTypes().add(new AtomTypeImpl(atomTypes.get(i), atomTypes.get(i), BigDecimal.ZERO, BigDecimal.ZERO, "A", ljA.get(j), ljB.get(j)));
+                BigDecimal sigma = BigDecimal.ZERO;
+                BigDecimal epsilon = BigDecimal.ZERO;
+                if (ljB.get(j).compareTo(BigDecimal.ZERO) != 0 && ljA.get(j).compareTo(BigDecimal.ZERO) != 0) {
+                    epsilon = ((ljB.get(j).pow(2)).divide(ljA.get(j), BigDecimal.ROUND_HALF_EVEN)).multiply(new BigDecimal(0.25));
+                    sigma = new BigDecimal(Math.pow(ljA.get(j).divide(ljB.get(j), BigDecimal.ROUND_HALF_EVEN).doubleValue(), (1 / 6D)));
+                }
+                structure.getAtomTypes().add(new AtomTypeImpl(atomTypes.get(i), atomTypes.get(i), BigDecimal.ZERO, BigDecimal.ZERO, "A", sigma, epsilon));
                 //TODO page 7 nonbond_param_index --> Eq. 1 negative???????
                 //hbA && hbB would be used instead of ljA && ljB
                 //throw new RuntimeException("Calculation for pairs gone wrong!");

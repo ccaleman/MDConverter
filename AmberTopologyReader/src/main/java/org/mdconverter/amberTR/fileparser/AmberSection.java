@@ -1,7 +1,9 @@
 package org.mdconverter.ambertr.fileparser;
 
 /**
- * Created by miso on 21.01.2016.
+ * Created by miso on 21.01.2016.  <br>
+ *     Amber specific definitions
+ *     available sections for an amber input file
  */
 public enum AmberSection {
 

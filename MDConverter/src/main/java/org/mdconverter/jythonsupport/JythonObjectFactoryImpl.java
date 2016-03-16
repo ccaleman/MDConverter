@@ -15,12 +15,19 @@ import javax.inject.Singleton;
 @Singleton
 public class JythonObjectFactoryImpl implements JythonObjectFactory {
 
+    //Injects
     private PythonInterpreter interpreter;
 
     @Inject
     public JythonObjectFactoryImpl(PythonInterpreter interpreter) {
         this.interpreter = interpreter;
     }
+
+    /**
+     * Loads the given jar-File to the Jython interpreter
+     *
+     * @param pluginJarPath path to the Python plugin
+     */
     public void addPluginToInterpreter(String pluginJarPath) {
         PySystemState sys = interpreter.getSystemState();
         sys.path.insert(0, new PyString(pluginJarPath));

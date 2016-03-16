@@ -12,6 +12,12 @@ import java.util.Properties;
  */
 public class Application {
 
+    /**
+     * Starts to read the config and initializes the Guice injector <br>
+     * initializes the MDConverterMain
+     *
+     * @param args the arguments given by the user on startup
+     */
     public static void main(String[] args) {
         try {
             ClassLoader classloader = Thread.currentThread().getContextClassLoader();

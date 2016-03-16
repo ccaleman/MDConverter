@@ -8,44 +8,38 @@ import org.mdconverter.api.topologystructure.ModelVersion;
 public interface Default {
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return an Integer
+     * @since {@link ModelVersion#V1}
      */
     Integer getNboudnFT();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return an Integer
+     * @since {@link ModelVersion#V1}
      */
     Integer getCombRule();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return a boolean
+     * @since {@link ModelVersion#V1}
      */
     boolean isGenPair();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param nboudnFT
+     * @param nboudnFT an Integer
+     * @since {@link ModelVersion#V1}
      */
     void setNboudnFT(Integer nboudnFT);
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param combRule
+     * @param combRule an Integer
+     * @since {@link ModelVersion#V1}
      */
     void setCombRule(Integer combRule);
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param genPair
+     * @param genPair a boolean
+     * @since {@link ModelVersion#V1}
      */
     void setGenPair(boolean genPair);
 }

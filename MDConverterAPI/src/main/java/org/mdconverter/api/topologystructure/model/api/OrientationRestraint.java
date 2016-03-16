@@ -8,72 +8,62 @@ import org.mdconverter.api.topologystructure.ModelVersion;
 public interface OrientationRestraint extends FuncType {
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return a String
+     * @since {@link ModelVersion#V1}
      */
     String getAi();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return a String
+     * @since {@link ModelVersion#V1}
      */
     String getAj();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return a String
+     * @since {@link ModelVersion#V1}
      */
     String getExp();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return a String
+     * @since {@link ModelVersion#V1}
      */
     String getLabel();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return a String
+     * @since {@link ModelVersion#V1}
      */
     String getAlpha();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param aj
+     * @param aj a String
+     * @since {@link ModelVersion#V1}
      */
     void setAj(String aj);
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param ai
+     * @param ai a String
+     * @since {@link ModelVersion#V1}
      */
     void setAi(String ai);
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param exp
+     * @param exp a String
+     * @since {@link ModelVersion#V1}
      */
     void setExp(String exp);
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param label
+     * @param label a String
+     * @since {@link ModelVersion#V1}
      */
     void setLabel(String label);
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param alpha
+     * @param alpha a String
+     * @since {@link ModelVersion#V1}
      */
     void setAlpha(String alpha);
 }

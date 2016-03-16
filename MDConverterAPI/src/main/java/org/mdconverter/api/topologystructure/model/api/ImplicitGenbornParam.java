@@ -8,16 +8,14 @@ import org.mdconverter.api.topologystructure.ModelVersion;
 public interface ImplicitGenbornParam {
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return a String
+     * @since {@link ModelVersion#V1}
      */
     String getAtom();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param atomName
+     * @param atomName a String
+     * @since {@link ModelVersion#V1}
      */
     void setAtom(String atomName);
 }

@@ -8,16 +8,14 @@ import org.mdconverter.api.topologystructure.ModelVersion;
 public interface PositionRestraint extends FuncType {
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return a String
+     * @since {@link ModelVersion#V1}
      */
     String getAi();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param ai
+     * @param ai a String
+     * @since {@link ModelVersion#V1}
      */
     void setAi(String ai);
 }

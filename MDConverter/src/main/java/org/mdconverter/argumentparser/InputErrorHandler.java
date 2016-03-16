@@ -19,6 +19,7 @@ import java.util.List;
  */
 public class InputErrorHandler {
 
+    //Injects
     private final ConsoleWriter cw;
     private final PluginLoader pl;
 
@@ -28,6 +29,15 @@ public class InputErrorHandler {
         this.pl = pl;
     }
 
+    /**
+     * Checks the given List of {@link InputError} and handle them if known (defined in {@link InputError})
+     *
+     * @param errors a List of found {@link InputError} (unfortunately the list needs a predefined order, see ArgumentParser)
+     * @param reader the {@link LoaderInput} for the readerPlugin
+     * @param writer the {@link LoaderInput} for the writerPlugin
+     * @return two well configured {@link LoaderInput} or aborts the MDConverter
+     * @throws PluginMisconfigurationException | IOException | URISyntaxException
+     */
     public List<LoaderInput> handleErrors(List<InputError> errors, LoaderInput reader, LoaderInput writer) throws PluginMisconfigurationException, IOException, URISyntaxException {
         for (InputError error : errors) {
             switch (error) {
@@ -59,12 +69,19 @@ public class InputErrorHandler {
                     cw.printErrorln("Such an error is not defined in InputErrorHandler!");
             }
         }
-        if (checkLoderInput(reader) && checkLoderInput(writer)) {
+        if (checkLoaderInput(reader) && checkLoaderInput(writer)) {
+            errors.clear();
             return Lists.newArrayList(reader, writer);
         }
         throw new RuntimeException("System was not able to complete user inputs!");
     }
 
+    /**
+     * Generates the select options depending on the available Plugins for the given {@link PluginType}
+     * @param input a configured LoaderInput
+     * @param pluginType the Type of the LoaderInput plugin
+     * @throws IOException | PluginMisconfigurationException | URISyntaxException
+     */
     private void setPluginForLoaderInput(LoaderInput input, PluginType pluginType) throws IOException, PluginMisconfigurationException, URISyntaxException {
         input.setPluginType(pluginType);
         cw.println(String.format("Following %s can be choosen:",input.getPluginType().getValue()));
@@ -83,7 +100,13 @@ public class InputErrorHandler {
         }
     }
 
-    private boolean checkLoderInput(LoaderInput input) {
+    /**
+     * checks if the given LoaderInput is well configured or if something is missing
+     *
+     * @param input a configered {@link LoaderInput}
+     * @return a boolean
+     */
+    private boolean checkLoaderInput(LoaderInput input) {
         if (input.getFileType() == null || input.getPluginName() == null || input.getPluginType() == null) {
             return false;
         }

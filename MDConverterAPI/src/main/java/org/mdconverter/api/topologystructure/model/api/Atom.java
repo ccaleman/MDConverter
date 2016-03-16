@@ -8,100 +8,86 @@ import org.mdconverter.api.topologystructure.ModelVersion;
 public interface Atom {
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return an Integer
+     * @since {@link ModelVersion#V1}
      */
     Integer getNr();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return a String
+     * @since {@link ModelVersion#V1}
      */
     String getType();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return an Integer
+     * @since {@link ModelVersion#V1}
      */
     Integer getResNr();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return a String
+     * @since {@link ModelVersion#V1}
      */
     String getResName();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return a String
+     * @since {@link ModelVersion#V1}
      */
     String getAtomName();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return an Integer
+     * @since {@link ModelVersion#V1}
      */
     Integer getChargeGroupNr();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return a String
+     * @since {@link ModelVersion#V1}
      */
     String getTypeB();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param nr
+     * @param nr an Integer
+     * @since {@link ModelVersion#V1}
      */
     void setNr(Integer nr);
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param type
+     * @param type a String
+     * @since {@link ModelVersion#V1}
      */
     void setType(String type);
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param resNr
+     * @param resNr an Integer
+     * @since {@link ModelVersion#V1}
      */
     void setResNr(Integer resNr);
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param resName
+     * @param resName a String
+     * @since {@link ModelVersion#V1}
      */
     void setResName(String resName);
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param atomName
+     * @param atomName a String
+     * @since {@link ModelVersion#V1}
      */
     void setAtomName(String atomName);
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param chargeGroupNr
+     * @param chargeGroupNr an Integer
+     * @since {@link ModelVersion#V1}
      */
     void setChargeGroupNr(Integer chargeGroupNr);
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param typeB
+     * @param typeB a String
+     * @since {@link ModelVersion#V1}
      */
     void setTypeB(String typeB);
 }

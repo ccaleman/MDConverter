@@ -1,7 +1,8 @@
 package org.mdconverter.api.topologystructure;
 
 /**
- * Created by miso on 03.02.2016.
+ * Created by miso on 03.02.2016. <br>
+ * Defines the Version of the Topology Structure
  */
 public enum ModelVersion {
 

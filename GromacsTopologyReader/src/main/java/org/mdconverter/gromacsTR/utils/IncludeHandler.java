@@ -18,6 +18,14 @@ import java.util.jar.JarFile;
  */
 public class IncludeHandler {
 
+    /**
+     * Loads ForceField files from Gromacs
+     *
+     * @param clazz class method getting called from
+     * @param name  the name of the file
+     * @return a byte Array containing the requested file
+     * @throws URISyntaxException | IOException
+     */
     public static byte[] getFileByName(Class clazz, String name) throws URISyntaxException, IOException {
         //name = name.replace("\\", File.separator);
         String path = "top/" + name;

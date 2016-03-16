@@ -13,11 +13,13 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 /**
- * Created by miso on 23.10.2015.
+ * Created by miso on 23.10.2015. <br>
+ *     is used by the Framework and all plugins
  */
 @Singleton
 public class ConsoleWriterImpl extends PrintStream implements ConsoleWriter {
 
+    //Fields
     private final OutputStream errorStream;
     private OutputStream infoStream;
     private Scanner sc = new Scanner(System.in);
@@ -47,6 +49,12 @@ public class ConsoleWriterImpl extends PrintStream implements ConsoleWriter {
         }
     }
 
+    /**
+     * guarantees a linebreak for each print call
+     *
+     * @param output
+     * @param stream
+     */
     private void println(String output, OutputStream stream) {
         byte[] bytes = output.getBytes();
         try {
@@ -75,6 +83,12 @@ public class ConsoleWriterImpl extends PrintStream implements ConsoleWriter {
         this.println(output, infoStream);
     }
 
+    /**
+     * waits for a user input and requires a Integer value
+     *
+     * @return the given int value
+     */
+    @Override
     public int getIntInput() {
         boolean inputOk = false;
         Integer intInput = null;
@@ -91,6 +105,12 @@ public class ConsoleWriterImpl extends PrintStream implements ConsoleWriter {
         return intInput;
     }
 
+    /**
+     * waits for a user input and requires a String value
+     *
+     * @return the given String value
+     */
+    @Override
     public String getStringInput() {
         boolean inputOk = false;
         String stringInput = null;
@@ -107,6 +127,11 @@ public class ConsoleWriterImpl extends PrintStream implements ConsoleWriter {
         return stringInput;
     }
 
+    /**
+     * only accessible in the MDConverter framework
+     * @param type the OutputStream type
+     * @return the OutputStream according to the given {@link ConsoleWriter.LinePrefix}
+     */
     public OutputStream getStream(LinePrefix type) {
         switch (type) {
             case ERROR:
@@ -117,6 +142,7 @@ public class ConsoleWriterImpl extends PrintStream implements ConsoleWriter {
                 return infoStream;
         }
     }
+
 
     private void resetScanner() {
         sc.reset();

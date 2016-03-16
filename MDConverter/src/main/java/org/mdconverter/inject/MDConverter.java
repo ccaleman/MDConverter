@@ -16,7 +16,8 @@ import java.io.OutputStream;
 import java.util.Properties;
 
 /**
- * Created by miso on 28.10.2015.
+ * Created by miso on 28.10.2015. <br>
+ * Guice module for MDConverter framework
  */
 public class MDConverter extends AbstractModule{
 

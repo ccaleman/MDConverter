@@ -8,30 +8,26 @@ import org.mdconverter.api.topologystructure.ModelVersion;
 public interface Molecule {
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return a String
+     * @since {@link ModelVersion#V1}
      */
     String getName();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return a String
+     * @since {@link ModelVersion#V1}
      */
     Integer getNrMol();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param name
+     * @param name a String
+     * @since {@link ModelVersion#V1}
      */
     void setName(String name);
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param nrMol
+     * @param nrMol a String
+     * @since {@link ModelVersion#V1}
      */
     void setNrMol(Integer nrMol);
 }

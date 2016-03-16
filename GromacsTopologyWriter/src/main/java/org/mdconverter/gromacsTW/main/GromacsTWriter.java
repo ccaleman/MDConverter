@@ -41,6 +41,9 @@ public class GromacsTWriter extends AbstractWriter {
                 "\t\tdefault = false";
     }
 
+    /**
+     * @return checks if the required arguments are given by the user and returns the value or false if not
+     */
     private boolean checkForParams() {
         Map<String, String> arguments = getArguments();
         if (arguments != null && !arguments.isEmpty()) {

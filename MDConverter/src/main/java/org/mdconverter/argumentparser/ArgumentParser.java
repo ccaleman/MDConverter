@@ -25,12 +25,14 @@ import java.util.List;
 @Singleton
 public class ArgumentParser {
 
-    private JCommander jc;
-    private MainArguments mainArguments;
+    //Injects
     private final ConsoleWriter consoleWriter;
     private final InputErrorHandler errorHandler;
     private final PluginLoader pluginLoader;
 
+    //Fields
+    private JCommander jc;
+    private MainArguments mainArguments;
     private List<InputError> argumentsErrors = Lists.newArrayList();
 
     @Inject
@@ -44,15 +46,20 @@ public class ArgumentParser {
         jc.setProgramName("MDConverter-" + version + ".jar");
     }
 
+    /**
+     * checks the arguments according to the {@link MainArguments} and sets the values <br>
+     * checks if plugins are well defined. If not the input errors will be handled <br>
+     * the framework tries to load the defined plugins and handles occurring errors <br>
+     * checks the file extensions in the end
+     *
+     * @param args the given arguments from the user
+     */
     public void parseArguments(String[] args) {
         // parse the arguments.
         try {
             jc.parse(args);
-            if (mainArguments.isHelp() || mainArguments.getInputFile() == null) {
+            if (mainArguments.isHelp()) {
                 printUsage();
-                if (mainArguments.getInputFile() == null) {
-                    argumentsErrors.add(0, InputError.NO_INPUT);
-                }
             }
             LoaderInput reader = isReaderDefined();
             LoaderInput writer = isWriterDefined();
@@ -71,16 +78,19 @@ public class ArgumentParser {
                 pluginLoader.getInputErrors().clear();
             } while ((pluginLoader.getReader() == null && pluginLoader.getWriter() == null));
 
-            checkFileExtensions();
             consoleWriter.println(ConsoleWriter.LinePrefix.INFO,
                     String.format("Defined reader: %s", reader.getPluginName()),
                     pluginLoader.getReader().getDescription(), mainArguments.isHelp() ? pluginLoader.getReader().getUsage() : "",
                     String.format("Defined writer: %s", writer.getPluginName()),
                     pluginLoader.getWriter().getDescription(), mainArguments.isHelp() ? pluginLoader.getWriter().getUsage() : "");
+            checkFileExtensions();
+            errorHandler.handleErrors(argumentsErrors, reader, writer);
         } catch (ParameterException e) {
-            printUsage();
+            if (!mainArguments.isHelp()) {
+                printUsage();
+            }
             consoleWriter.printErrorln(e.getMessage() + "\n");
-            throw new IllegalArgumentException("Given arguments are wrong!");
+            throw new IllegalArgumentException("Given options are wrong!");
         } catch (IOException | RuntimeException e) {
             consoleWriter.printErrorln(e.getMessage() != null ? e.getMessage() : "Error not defined.");
             throw new RuntimeException();
@@ -93,7 +103,16 @@ public class ArgumentParser {
         }
     }
 
+    /**
+     * small security check for the requested plugins <br>
+     * checks the file extension of given input/output filename and if the according plugins are able to process (defined in manifest.json)
+     * @throws ParameterException
+     */
     private void checkFileExtensions() throws ParameterException {
+        if (mainArguments.getInputFile() == null) {
+            argumentsErrors.add(0, InputError.NO_INPUT);
+            return;
+        }
         String fileExtension = Files.getFileExtension(mainArguments.getInputFile().toString());
         String extension = pluginLoader.getReader().getPluginManifest().getFileExtension();
         if (!extension.equalsIgnoreCase(fileExtension)) {
@@ -108,28 +127,26 @@ public class ArgumentParser {
         }
     }
 
+    /**
+     * @return the argumentParser
+     */
     public JCommander getJc() {
         return jc;
     }
 
+    /**
+     * @return the parsed {@link MainArguments}
+     */
     public MainArguments getMainArguments() {
         return mainArguments;
     }
 
-    private LoaderInput isWriterDefined() {
-        String fileWriter = getMainArguments().getFileWriter();
-        LoaderInput loaderInput = new LoaderInput();
-        if (fileWriter != null) {
-            loaderInput.setPluginName(fileWriter);
-            loaderInput.setPluginType(PluginType.WRITER);
-        } else {
-            consoleWriter.printErrorln("No Writer defined!");
-            argumentsErrors.add(InputError.NO_WRITER);
-        }
-        loaderInput = checkForFileType(loaderInput);
-        return loaderInput;
-    }
-
+    /**
+     * checks the given {@link LoaderInput} for the {@link FileType} if not defined adds an {@link InputError} to the argumentsErrors
+     * !!!!!!!!!!!!!!always on index 0 of the list because of the double checked LoaderInput for Reader & Writer!!!!!!!!!!!!
+     * @param loaderInput
+     * @return
+     */
     private LoaderInput checkForFileType(LoaderInput loaderInput) {
         if (getMainArguments().isStructure() && !getMainArguments().isTopology()) {
             loaderInput.setFileType(FileType.STRUCTURE);
@@ -148,6 +165,10 @@ public class ArgumentParser {
         return loaderInput;
     }
 
+    /**
+     * checks if the {@link LoaderInput} for the readerPlugin is well defined and adds {@link InputError} to the argumentsErrors if not
+     * @return the checked {@link LoaderInput} for the readerPlugin
+     */
     private LoaderInput isReaderDefined() {
         String fileReader = getMainArguments().getFileReader();
         LoaderInput loaderInput = new LoaderInput();
@@ -162,6 +183,28 @@ public class ArgumentParser {
         return loaderInput;
     }
 
+    /**
+     * checks if the {@link LoaderInput} for the writerPlugin is well defined and adds {@link InputError} to the argumentsErrors if not
+     *
+     * @return the checked {@link LoaderInput} for the writerPlugin
+     */
+    private LoaderInput isWriterDefined() {
+        String fileWriter = getMainArguments().getFileWriter();
+        LoaderInput loaderInput = new LoaderInput();
+        if (fileWriter != null) {
+            loaderInput.setPluginName(fileWriter);
+            loaderInput.setPluginType(PluginType.WRITER);
+        } else {
+            consoleWriter.printErrorln("No Writer defined!");
+            argumentsErrors.add(InputError.NO_WRITER);
+        }
+        loaderInput = checkForFileType(loaderInput);
+        return loaderInput;
+    }
+
+    /**
+     * prints the usage for the MDConverter framework
+     */
     private void printUsage() {
         StringBuilder stringBuilder = new StringBuilder();
         getJc().usage(stringBuilder);

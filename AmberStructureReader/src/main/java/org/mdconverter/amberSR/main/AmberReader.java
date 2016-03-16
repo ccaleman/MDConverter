@@ -27,11 +27,19 @@ public class AmberReader extends AbstractReader {
         return super.getUsage();
     }
 
+    /**
+     * @return a Strcuture read in by a Python script
+     * @throws InvalidInputException
+     */
     private Structure LoadJythonScripts() throws InvalidInputException {
+        //get the object factory from the framework
         JythonObjectFactory jof = getJythonObjectFactory();
+        //generate a Java implementation out of the Python script which implements the defined interface ReadStructure.class
         ReadStructure readFile = (ReadStructure) jof.createObject(ReadStructure.class, "ReadFile", "Lib.processfile.");
+        //get the Structure from the Java implementation
         Structure structure = readFile.readFileToStructure(getInputFile().toString(), (Structure) getStructure());
-        getConsoleWriter().printErrorln(structure.getName());
+        //inform the user about progress
+        getConsoleWriter().printInfoln(structure.getName() + " successfully read in");
         return structure;
     }
 }

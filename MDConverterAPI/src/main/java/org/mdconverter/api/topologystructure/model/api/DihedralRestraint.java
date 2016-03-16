@@ -8,72 +8,62 @@ import org.mdconverter.api.topologystructure.ModelVersion;
 public interface DihedralRestraint extends FuncType {
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return a String
+     * @since {@link ModelVersion#V1}
      */
     String getAi();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return a String
+     * @since {@link ModelVersion#V1}
      */
     String getAj();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return a String
+     * @since {@link ModelVersion#V1}
      */
     String getAk();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return a String
+     * @since {@link ModelVersion#V1}
      */
     String getAl();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return a String
+     * @since {@link ModelVersion#V1}
      */
     String getLabel();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param ai
+     * @param ai a String
+     * @since {@link ModelVersion#V1}
      */
     void setAi(String ai);
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param aj
+     * @param aj a String
+     * @since {@link ModelVersion#V1}
      */
     void setAj(String aj);
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param ak
+     * @param ak a String
+     * @since {@link ModelVersion#V1}
      */
     void setAk(String ak);
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param al
+     * @param al a String
+     * @since {@link ModelVersion#V1}
      */
     void setAl(String al);
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param label
+     * @param label a String
+     * @since {@link ModelVersion#V1}
      */
     void setLabel(String label);
 }

@@ -2,6 +2,8 @@ package org.mdconverter.unitconverter.topologyhelper;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import org.mdconverter.api.topologystructure.model.api.Default;
+import org.mdconverter.api.topologystructure.model.api.FuncType;
 import org.mdconverter.api.topologystructure.model.impl.ConstraintImpl;
 import org.mdconverter.api.topologystructure.model.impl.DefaultImpl;
 
@@ -18,6 +20,11 @@ public class ConstraintH extends Convert<ConstraintImpl> {
         super(readerUnits, writerUnits, def);
     }
 
+    /**
+     * generate a map for all existing {@link FuncType} for this class and <br>
+     * defines if a alternative unit can be defined (true or false) if comb_Rule in {@link Default} is 1 <br>
+     * eg. funcType 1 only has one value and no alternative unit will be considered
+     */
     private final Map<Integer, Map<String, MapContainer<ConstraintImpl>>> funcMap = ImmutableMap.<Integer, Map<String, MapContainer<ConstraintImpl>>>builder()
             .put(1, generateMap(Lists.newArrayList(FALSE), "c1"))
             .put(2, generateMap(Lists.newArrayList(FALSE), "c1")).build();

@@ -8,51 +8,50 @@ import org.mdconverter.api.topologystructure.ModelVersion;
 public interface Angle extends FuncType {
 
     /**
-     * added at {@link ModelVersion#V1}
-     * @return
+     * @return a String
+     * @since {@link ModelVersion#V1}
      */
     String getAi();
 
     /**
-     * added at {@link ModelVersion#V1}
-     * @return
+     * @return a String
+     * @since {@link ModelVersion#V1}
      */
     String getAj();
 
     /**
-     * added at {@link ModelVersion#V1}
-     * @return
+     * @return a String
+     * @since {@link ModelVersion#V1}
      */
     String getAk();
 
     /**
-     * added at {@link ModelVersion#V1}
-     * @return
+     * @return a String
+     * @since {@link ModelVersion#V1}
      */
     String getAl();
 
     /**
-     * added at {@link ModelVersion#V1}
      * @param ai
+     * @since {@link ModelVersion#V1}
      */
     void setAi(String ai);
 
     /**
-     * added at {@link ModelVersion#V1}
      * @param aj
+     * @since {@link ModelVersion#V1}
      */
     void setAj(String aj);
 
     /**
-     * added at {@link ModelVersion#V1}
      * @param ak
+     * @since {@link ModelVersion#V1}
      */
     void setAk(String ak);
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
      * @param al
+     * @since {@link ModelVersion#V1}
      */
     void setAl(String al);
 }

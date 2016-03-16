@@ -7,6 +7,7 @@ import com.google.gson.Gson;
 import com.google.inject.Injector;
 import org.mdconverter.Application;
 import org.mdconverter.api.consolewriter.ConsoleWriter;
+import org.mdconverter.api.plugin.AbstractPlugin;
 import org.mdconverter.api.plugin.PluginManifest;
 import org.mdconverter.api.plugin.reader.AbstractReader;
 import org.mdconverter.api.plugin.type.FileType;
@@ -45,30 +46,34 @@ import java.util.jar.JarFile;
 @Singleton
 public class PluginLoader {
 
-    private final ConsoleWriter consoleWriter;
+    @Inject
+    private Injector parentInjector;
 
+    //Injects
     /**
      * Impl because of method {@link JythonObjectFactoryImpl#addPluginToInterpreter(String)} which only should be accessed internal and not by plugins
      */
     private final JythonObjectFactoryImpl jof;
+    private final ConsoleWriter consoleWriter;
+
+    //Fields
     private final Path structureReaderPath;
     private final Path structureWriterPath;
     private final Path topReaderPath;
     private final Path topWriterPath;
     private PluginType actual;
-    private List<PluginManifest> pluginManifests = Lists.newArrayList();
-
     private AbstractReader reader;
     private AbstractWriter writer;
+    private List<PluginManifest> pluginManifests = Lists.newArrayList();
     private List<InputError> inputErrors = Lists.newArrayList();
-
-    @Inject
-    private Injector parentInjector;
     private PluginManifest pluginManifest;
     private PluginManifest readerPluginManifest;
     private PluginManifest writerPluginManifest;
 
     @Inject
+    /**
+     * ensure the right paths are set for the plugin folders
+     */
     public PluginLoader(ConsoleWriter consoleWriter, JythonObjectFactoryImpl jof,
                         @Named("location.reader.structure") String structureReaderPath,
                         @Named("location.writer.structure") String structureWriterPath,
@@ -97,6 +102,13 @@ public class PluginLoader {
         consoleWriter.printInfoln(this.topWriterPath.toAbsolutePath().toString());
     }
 
+    /**
+     * searches for the requested {@link PluginType} and {@link FileType} and returns a List of matching {@link PluginManifest}
+     *
+     * @param input defines the requested {@link PluginType} and {@link FileType}
+     * @return List of {@link PluginManifest}
+     * @throws IOException |PluginMisconfigurationException | URISyntaxException
+     */
     public List<PluginManifest> getPluginManifestsByLoaderInput(LoaderInput input) throws IOException, PluginMisconfigurationException, URISyntaxException {
         pluginManifests.clear();
         if (input.getPluginType().equals(PluginType.READER))
@@ -106,6 +118,11 @@ public class PluginLoader {
         return pluginManifests;
     }
 
+    /**
+     * Tries to load the requested plugin, if not found a {@link InputError} will be added
+     * @param loaderInput defines which plugin should be loaded
+     * @throws IOException | PluginMisconfigurationException | URISyntaxException
+     */
     public void loadPlugin(LoaderInput loaderInput) throws IOException, PluginMisconfigurationException, URISyntaxException {
         List<URI> jarFiles = getJarFilePaths(loaderInput);
         if (actual.equals(PluginType.READER)) {
@@ -129,25 +146,38 @@ public class PluginLoader {
                 inputErrors.add(InputError.NO_WRITER);
             }
         }
-
         /*else if (script) {
             consoleWriter.printErrorln("Script aren't supported yet!");
             //TODO: implement script loader (differ between script languages?)
         }*/
     }
 
+    /**
+     * @return the requested ReaderPlugin
+     */
     public AbstractReader getReader() {
         return reader;
     }
 
+    /**
+     * @return the requested WriterPlugin
+     */
     public AbstractWriter getWriter() {
         return writer;
     }
 
+    /**
+     * @return a List of {@link InputError} occurred during plugin loading
+     */
     public List<InputError> getInputErrors() {
         return inputErrors;
     }
 
+
+    /**
+     * checks if all plugin folders exists and creates them if necessary
+     * @return false if everything was fine
+     */
     private boolean ensureDirectories() {
         boolean error = false;
         if (Files.notExists(this.structureReaderPath)) {
@@ -165,6 +195,12 @@ public class PluginLoader {
         return error;
     }
 
+    /**
+     * loads all jar-Files for the defined {@link PluginType} and {@link FileType}
+     * @param input defines the {@link PluginType} and {@link FileType}
+     * @return a List of jar-Files
+     * @throws IOException
+     */
     private List<URI> getJarFilePaths(LoaderInput input) throws IOException {
         Path dir;
         dir = getPathFromLoaderInput(input);
@@ -177,6 +213,15 @@ public class PluginLoader {
         return jarFiles;
     }
 
+    /**
+     * Search for a plugin defined in the {@link LoaderInput}
+     * @param loaderInput the LoaderInput for the requested plugin
+     * @param jarFiles a List of URIs to plugins
+     * @param clazz specific {@link AbstractPlugin} implementation
+     * @param <T> the Class which should be returned
+     * @return either a {@link AbstractReader} or a {@link AbstractWriter} or null if not found
+     * @throws IOException | PluginMisconfigurationException | URISyntaxException
+     */
     private <T> T searchForPlugin(LoaderInput loaderInput, List<URI> jarFiles, Class<T> clazz) throws IOException, PluginMisconfigurationException, URISyntaxException {
         Class<T> abstractPlugin = null;
         Injector injector = parentInjector.createChildInjector(new PluginModule());
@@ -205,6 +250,10 @@ public class PluginLoader {
         return null;
     }
 
+    /**
+     * @param loaderInput a {@link LoaderInput}
+     * @return a path to the plugin folder depending on the {@link LoaderInput} configuration
+     */
     private Path getPathFromLoaderInput(LoaderInput loaderInput) {
         Path dir;
         if (loaderInput.getFileType().equals(FileType.STRUCTURE) && loaderInput.getPluginType().equals(PluginType.READER)) {
@@ -223,12 +272,21 @@ public class PluginLoader {
         return dir;
     }
 
+    /**
+     * @param uriToJarFile
+     * @return a {@link PluginManifest} if found or null
+     * @throws IOException
+     */
     private PluginManifest scanJarFile(URI uriToJarFile) throws IOException {
         JarFile jarFile = new JarFile(new File(uriToJarFile));
         loadClassLoader(uriToJarFile.toURL());
         return scanContent(jarFile);
     }
 
+    /**
+     * loads jarFile into the ClassPath to allow access to the jarFile
+     * @param pluginPath path to jarFile
+     */
     private void loadClassLoader(URL pluginPath) {
         try {
             final Class[] parameters = new Class[]{URL.class};
@@ -242,6 +300,11 @@ public class PluginLoader {
         }
     }
 
+    /**
+     * checks the given jarFile for a file named "manifest.json" to ensure its a MDConverter plugin
+     * @param jarFile
+     * @return a {@link PluginManifest} if found or null
+     */
     private PluginManifest scanContent(JarFile jarFile) {
         Enumeration<JarEntry> entries = jarFile.entries();
         PluginManifest pluginManifest = null;
@@ -260,6 +323,38 @@ public class PluginLoader {
         return pluginManifest;
     }
 
+    /**
+     * casts the loaded plugin either to a {@link AbstractReader} or a {@link AbstractWriter}
+     * @param pluginManifest
+     * @param <T> either a {@link AbstractReader} or a {@link AbstractWriter}
+     * @return either a {@link AbstractReader} or a {@link AbstractWriter}
+     * @throws PluginMisconfigurationException
+     */
+    private <T> Class<T> extractPluginClass(PluginManifest pluginManifest) throws PluginMisconfigurationException {
+        return (Class<T>) extractClass(pluginManifest);
+    }
+
+    /**
+     * get the main class of the requested plugin
+     * @param pluginManifest
+     * @return the main class of the plugin (implements the {@link AbstractPlugin})
+     * @throws PluginMisconfigurationException
+     */
+    private Class<?> extractClass(PluginManifest pluginManifest) throws PluginMisconfigurationException {
+        try {
+            return ClassLoader.getSystemClassLoader().loadClass(pluginManifest.getClassName());
+        } catch (ClassNotFoundException e) {
+            throw new PluginMisconfigurationException(pluginManifest, e);
+        }
+    }
+
+    /**
+     * UNUSED
+     *
+     * @param <T>
+     * @return
+     * @throws PluginMisconfigurationException
+     */
     private <T> T extractPlugin() throws PluginMisconfigurationException {
         try {
             String className = pluginManifest.getClassName();
@@ -271,15 +366,4 @@ public class PluginLoader {
         }
     }
 
-    private <T> Class<T> extractPluginClass(PluginManifest pluginManifest) throws PluginMisconfigurationException {
-        return (Class<T>) extractClass(pluginManifest);
-    }
-
-    private Class<?> extractClass(PluginManifest pluginManifest) throws PluginMisconfigurationException {
-        try {
-            return ClassLoader.getSystemClassLoader().loadClass(pluginManifest.getClassName());
-        } catch (ClassNotFoundException e) {
-            throw new PluginMisconfigurationException(pluginManifest, e);
-        }
-    }
 }

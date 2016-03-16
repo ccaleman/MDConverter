@@ -8,58 +8,50 @@ import org.mdconverter.api.topologystructure.ModelVersion;
 public interface DistanceRestraint extends FuncType {
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return a String
+     * @since {@link ModelVersion#V1}
      */
     String getAi();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return a String
+     * @since {@link ModelVersion#V1}
      */
     String getAj();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return a String
+     * @since {@link ModelVersion#V1}
      */
     String getType();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return a String
+     * @since {@link ModelVersion#V1}
      */
     String getLabel();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param ai
+     * @param ai a String
+     * @since {@link ModelVersion#V1}
      */
     void setAi(String ai);
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param aj
+     * @param aj a String
+     * @since {@link ModelVersion#V1}
      */
     void setAj(String aj);
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param type
+     * @param type a String
+     * @since {@link ModelVersion#V1}
      */
     void setType(String type);
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param label
+     * @param label a String
+     * @since {@link ModelVersion#V1}
      */
     void setLabel(String label);
 }

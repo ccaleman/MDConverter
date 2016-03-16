@@ -20,8 +20,13 @@ import java.util.Map;
 public class AmberTReader extends AbstractReader {
 
 
-    @Inject
+    //Injects
     private InputParser inputParser;
+
+    @Inject
+    public AmberTReader(InputParser inputParser) {
+        this.inputParser = inputParser;
+    }
 
     @Override
     public Object getMetaModel() throws InvalidParameterException, InvalidInputException {
@@ -59,6 +64,11 @@ public class AmberTReader extends AbstractReader {
                 "Actual ff resource file version from gromacs: 5.0.5\n";
     }
 
+    /**
+     * checks given arguments and sets default values
+     *
+     * @return the path to the additional file inprcd if defined
+     */
     private Path setDefaultArgs() {
         Map<String, String> arguments = getArguments();
         if (arguments != null && !arguments.isEmpty()) {

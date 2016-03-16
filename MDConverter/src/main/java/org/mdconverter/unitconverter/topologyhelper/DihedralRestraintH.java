@@ -2,6 +2,8 @@ package org.mdconverter.unitconverter.topologyhelper;
 
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Lists;
+import org.mdconverter.api.topologystructure.model.api.Default;
+import org.mdconverter.api.topologystructure.model.api.FuncType;
 import org.mdconverter.api.topologystructure.model.impl.DefaultImpl;
 import org.mdconverter.api.topologystructure.model.impl.DihedralRestraintImpl;
 
@@ -18,6 +20,11 @@ public class DihedralRestraintH extends Convert<DihedralRestraintImpl> {
         super(readerUnits, writerUnits, def);
     }
 
+    /**
+     * generate a map for all existing {@link FuncType} for this class and <br>
+     * defines if a alternative unit can be defined if comb_Rule in {@link Default} is 1 <br>
+     * eg. funcType 1 only has two values and no alternative unit will be considered
+     */
     private final Map<Integer, Map<String, MapContainer<DihedralRestraintImpl>>> funcMap = ImmutableMap.<Integer, Map<String, MapContainer<DihedralRestraintImpl>>>builder()
             .put(1, generateMap(Lists.newArrayList(FALSE, FALSE), "c1", "c2")).build();
 

@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 
 public class ParseInputFile {
 
+    //Fields
     private static Pattern ATOM_PATTERN = Pattern.compile("^[ \\t]*[0-9]+[A-Z]{3}.*");
     private static Pattern NUM_PATTERN = Pattern.compile("^[1-9][0-9]*");
     private static Pattern TITLE_PATTERN = Pattern.compile("^[a-zA-z0-9`\\-=\\[\\];',./~!@#$%^&*()_+{}|:\"<>? ]*");
@@ -33,6 +34,7 @@ public class ParseInputFile {
     private double lowestY;
     private double lowestZ;
 
+    //Injects
     private ConsoleWriter cw;
 
     @Inject

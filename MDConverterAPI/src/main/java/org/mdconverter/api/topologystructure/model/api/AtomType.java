@@ -8,44 +8,38 @@ import org.mdconverter.api.topologystructure.ModelVersion;
 public interface AtomType {
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return a String
+     * @since {@link ModelVersion#V1}
      */
     String getName();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return a String
+     * @since {@link ModelVersion#V1}
      */
     String getNum();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @return
+     * @return a String
+     * @since {@link ModelVersion#V1}
      */
     String getParticleType();
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param name
+     * @param name a String
+     * @since {@link ModelVersion#V1}
      */
     void setName(String name);
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param num
+     * @param num a String
+     * @since {@link ModelVersion#V1}
      */
     void setNum(String num);
 
     /**
-     * added at {@link ModelVersion#V1}
-     *
-     * @param particleType
+     * @param particleType a String
+     * @since {@link ModelVersion#V1}
      */
     void setParticleType(String particleType);
 }

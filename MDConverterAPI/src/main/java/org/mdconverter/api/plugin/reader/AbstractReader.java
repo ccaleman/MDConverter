@@ -21,7 +21,7 @@ public abstract class AbstractReader<T> extends AbstractPlugin<T> implements Rea
 
     /**
      * @see Reader#getMetaModel()
-     * @throws InvalidParameterException, InvalidInputException
+     * @throws InvalidParameterException | InvalidInputException
      */
     @Override
     public T getMetaModel() throws InvalidParameterException, InvalidInputException {

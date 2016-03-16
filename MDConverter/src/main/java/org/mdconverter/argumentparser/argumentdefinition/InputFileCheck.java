@@ -12,6 +12,10 @@ import java.nio.file.Path;
 public class InputFileCheck implements IValueValidator<Path> {
 
     @Override
+    /**
+     * validates if the given file exists
+     * @throws ParameterException if not
+     */
     public void validate(String s, Path path) throws ParameterException {
         if (Files.notExists(path)) {
             throw new ParameterException("Given path for parameter " + s + " is not valid. (found " + path +")");

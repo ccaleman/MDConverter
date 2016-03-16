@@ -26,6 +26,7 @@ import java.util.Arrays;
 @Singleton
 public class MDConverterMain {
 
+    //Injects
     private final ConsoleWriterImpl consoleWriter;
     private final ArgumentParser argumentParser;
     private final PluginLoader pluginLoader;
@@ -40,6 +41,16 @@ public class MDConverterMain {
         this.unitConverter = unitConverter;
     }
 
+    /**
+     * checks the arguments given by the user <br>
+     * differ between {@link FileType} and sets the according Meta Model<br>
+     * runs the readerPlugin to get the Meta Model from input file <br>
+     * starts the unit conversion process on the Meta Model <br>
+     * here some other things should be done in future like atom translation dictionary
+     * deliver Meta Model to the writerPlugin and write the output to console or into a file
+     *
+     * @param args
+     */
     public void init(String[] args) {
         argumentParser.parseArguments(args);
         if (!argumentParser.getMainArguments().isHelp()) {
@@ -98,6 +109,11 @@ public class MDConverterMain {
         }
     }
 
+    /**
+     * checks the supported {@link ModelVersion} of the plugins <br>
+     * cancel if the ModelVersion of the reader is lower than the one of the writer <br>
+     * inform the user about possible data loss if not
+     */
     private void checkSupportedModelVersion() {
         if (pluginLoader.getWriter().getPluginManifest().getFileType().equals(FileType.TOPOLOGY)) {
             ModelVersion modelVersionR = pluginLoader.getReader().getPluginManifest().getModelVersion();
@@ -116,6 +132,11 @@ public class MDConverterMain {
         }
     }
 
+    /**
+     * initializes the requested readerPlugin
+     * unspecified arguments are always null
+     * @return a configured readerPlugin
+     */
     private AbstractReader setupReader() {
         AbstractReader reader = pluginLoader.getReader();
         MainArguments mainArguments = argumentParser.getMainArguments();
@@ -126,6 +147,11 @@ public class MDConverterMain {
         return reader;
     }
 
+    /**
+     * initializes the requested writerPlugin
+     * unspecified arguments are always null
+     * @return a configured writerPlugin
+     */
     private AbstractWriter setupWriter() {
         AbstractWriter writer = pluginLoader.getWriter();
         MainArguments mainArguments = argumentParser.getMainArguments();
