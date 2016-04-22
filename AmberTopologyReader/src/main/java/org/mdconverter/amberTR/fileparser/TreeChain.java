@@ -9,5 +9,18 @@ public enum TreeChain {
     S,
     E,
     BLA,
-    THREE
+    THREE;
+
+    public static TreeChain fromString(String x) {
+        try {
+            return TreeChain.valueOf(x);
+        } catch (Exception ignored) {
+            switch (x) {
+                case "3":
+                    return TreeChain.THREE;
+                default:
+                    return null;
+            }
+        }
+    }
 }

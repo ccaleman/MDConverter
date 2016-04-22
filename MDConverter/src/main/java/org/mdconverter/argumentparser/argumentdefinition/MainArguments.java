@@ -21,7 +21,7 @@ public class MainArguments {
     @Parameter(names = {"--help", "-h", "-?"}, description = "Show usage", help = true)
     private boolean help = false;
 
-    @Parameter(description = "usage of unspecified options will stop the application")
+    @Parameter(description = "(usage of unspecified options will stop the application)")
     private List<String> unknown = Lists.newArrayList();
 
     @Parameter(names = "-R", arity = 1, description = "FileReader you want to use")

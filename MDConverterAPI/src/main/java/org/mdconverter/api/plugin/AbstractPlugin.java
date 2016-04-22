@@ -1,7 +1,7 @@
 package org.mdconverter.api.plugin;
 
 import org.biojava.nbio.structure.Structure;
-import org.mdconverter.api.consolewriter.ConsoleWriter;
+import org.mdconverter.api.consolehandler.ConsoleHandler;
 import org.mdconverter.api.jython.JythonObjectFactory;
 import org.mdconverter.api.plugin.context.Context;
 import org.mdconverter.api.plugin.type.PluginType;
@@ -26,7 +26,7 @@ public abstract class AbstractPlugin<T> implements Context {
      * Injected by framework to provide access to console
      */
     @Inject
-    private ConsoleWriter consoleWriter;
+    private ConsoleHandler consoleHandler;
     /**
      * Injected by framework to allow access to Python modules
      * only be used if plugin has own Python scripts and is defined as {@link ScriptType#JYTHON}
@@ -145,10 +145,10 @@ public abstract class AbstractPlugin<T> implements Context {
     }
 
     /**
-     * @return the {@link ConsoleWriter}
+     * @return the {@link ConsoleHandler}
      */
-    protected final ConsoleWriter getConsoleWriter() {
-        return consoleWriter;
+    protected final ConsoleHandler getConsoleHandler() {
+        return consoleHandler;
     }
 
     /**

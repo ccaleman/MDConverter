@@ -1,15 +1,15 @@
-package org.mdconverter.api.consolewriter;
+package org.mdconverter.api.consolehandler;
 
 /**
  * This interface defines the in- and output controls from and to the console to interact with the user
  * Created by miso on 28.10.2015.
  */
-public interface ConsoleWriter {
+public interface ConsoleHandler {
 
     /**
      * This enum defines the output stream to be used and the Prefix for each line.
      */
-    public enum LinePrefix{
+    enum LinePrefix {
         NONE,
         ERROR,
         INFO
@@ -24,21 +24,21 @@ public interface ConsoleWriter {
 
     /**
      * Method prints one line to console without a prefix
-     * @see ConsoleWriter.LinePrefix
+     * @see org.mdconverter.api.consolehandler.ConsoleHandler.LinePrefix
      * @param output String printed to console
      */
     void println(String output);
 
     /**
      * Method prints one line to console with a Error prefix
-     * @see ConsoleWriter.LinePrefix
+     * @see org.mdconverter.api.consolehandler.ConsoleHandler.LinePrefix
      * @param output String printed to console
      */
     void printErrorln(String output);
 
     /**
      * Method prints one line to console with a Info prefix
-     * @see ConsoleWriter.LinePrefix
+     * @see org.mdconverter.api.consolehandler.ConsoleHandler.LinePrefix
      * @param output String printed to console
      */
     void printInfoln(String output);

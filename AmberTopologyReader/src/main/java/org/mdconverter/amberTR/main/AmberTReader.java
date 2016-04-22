@@ -47,21 +47,10 @@ public class AmberTReader extends AbstractReader {
 
     @Override
     public String getUsage() {
-        //TODO: adopt to amber
         return "AmberTR:\n" +
                 "\tFor atom coordinates definition file:\n" +
                 "\t\tinpcrd:<path/to/file>\n" +
-                "\t\tdefault = null\n" +
-                "\tFor position restraint water definition:\n" +
-                "\t\tposreswat:true\n" +
-                "\t\tdefault = false\n" +
-                "\tFor use of heavy water definition:\n" +
-                "\t\theavyW:\n" +
-                "\t\tdefault = false\n" +
-                "\tFor use flexible definition:\n" +
-                "\t\tflex:true\n" +
-                "\t\tdefault = false\n" +
-                "Actual ff resource file version from gromacs: 5.0.5\n";
+                "\t\tdefault = null\n";
     }
 
     /**

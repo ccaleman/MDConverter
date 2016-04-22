@@ -3,14 +3,14 @@ package org.mdconverter.argumentparser;
 import com.beust.jcommander.internal.Lists;
 import org.junit.Before;
 import org.junit.Test;
-import org.mdconverter.api.consolewriter.ConsoleWriter;
+import org.mdconverter.api.consolehandler.ConsoleHandler;
 import org.mdconverter.api.plugin.PluginManifest;
 import org.mdconverter.api.plugin.type.FileType;
 import org.mdconverter.api.plugin.type.PluginType;
-import org.mdconverter.classloader.LoaderInput;
-import org.mdconverter.classloader.PluginLoader;
-import org.mdconverter.classloader.PluginMisconfigurationException;
-import org.mdconverter.consolewriter.ConsoleWriterImpl;
+import org.mdconverter.consolehandler.ConsoleHandlerImpl;
+import org.mdconverter.pluginloader.LoaderInput;
+import org.mdconverter.pluginloader.PluginLoader;
+import org.mdconverter.pluginloader.PluginMisconfigurationException;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -28,23 +28,23 @@ public class InputErrorHandlerTest {
     private InputErrorHandler errorHandler;
     private LoaderInput reader;
     private LoaderInput writer;
-    private ConsoleWriter mockedCW;
+    private ConsoleHandler mockedCH;
     private PluginLoader mockPL;
 
     @Before
     public void setUp() throws Exception {
         generateLIReader();
         generateLIWriter();
-        mockedCW = mock(ConsoleWriterImpl.class);
+        mockedCH = mock(ConsoleHandlerImpl.class);
         mockCW();
         mockPL = mock(PluginLoader.class);
         mockPL();
-        errorHandler = new InputErrorHandler(mockedCW, mockPL);
+        errorHandler = new InputErrorHandler(mockedCH, mockPL);
     }
 
     @Test(expected = RuntimeException.class)
     public void testHandleErrorsWrongInputErrorSequence() throws Exception {
-        when(mockedCW.getIntInput()).thenReturn(0);
+        when(mockedCH.getIntInput()).thenReturn(0);
         errorHandler.handleErrors(Lists.newArrayList(InputError.NO_READER, InputError.NO_FILETYPE), reader, writer);
     }
 
@@ -77,7 +77,7 @@ public class InputErrorHandlerTest {
     }
 
     private void mockCW() {
-        when(mockedCW.getIntInput()).thenReturn(1);
+        when(mockedCH.getIntInput()).thenReturn(1);
     }
 
     private void mockPL() throws IOException, PluginMisconfigurationException, URISyntaxException {

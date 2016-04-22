@@ -5,11 +5,12 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import org.apache.commons.lang3.NotImplementedException;
 import org.apache.commons.lang3.StringUtils;
-import org.mdconverter.api.consolewriter.ConsoleWriter;
+import org.mdconverter.api.consolehandler.ConsoleHandler;
 import org.mdconverter.api.topologystructure.SectionType;
 import org.mdconverter.api.topologystructure.model.Section;
 import org.mdconverter.api.topologystructure.model.TopologyStructure;
 import org.mdconverter.api.topologystructure.model.api.Atom;
+import org.mdconverter.api.topologystructure.model.api.Pair;
 import org.mdconverter.api.topologystructure.model.impl.*;
 import org.mdconverter.api.topologystructure.model.impl.System;
 
@@ -50,15 +51,14 @@ public class InputParser {
     Map<AmberPointer, Integer> pointers = Maps.newHashMap();
 
     //Injects
-    private ConsoleWriter cw;
+    private ConsoleHandler ch;
 
     @Inject
-    protected InputParser(ConsoleWriter cw) {
-        this.cw = cw;
+    protected InputParser(ConsoleHandler ch) {
+        this.ch = ch;
     }
 
     public void parseInput(byte[] input, Path path, boolean header, String previousPath, Map<String, String> arguments) throws IOException, URISyntaxException, NumberFormatException {
-
         if (input == null) return;
         if (arguments != null) {
             args = arguments;
@@ -201,13 +201,13 @@ public class InputParser {
                     if (activeAS.equals(NUMBER_EXCLUDED_ATOMS)) {
                         nea.addAll(readLineI(line));
                         if (nea.size() == pointers.get(NATOM)) {
-                            generateExclusions(nea, eal);
+                            //generateExclusions(nea, eal);
                         }
                     }
                     if (activeAS.equals(EXCLUDED_ATOMS_LIST)) {
                         eal.addAll(readLineI(line));
                         if (eal.size() == pointers.get(NNB)) {
-                            generateExclusions(nea, eal);
+                            //generateExclusions(nea, eal);
                         }
                     }
                     if (activeAS.equals(ATOM_TYPE_INDEX)) {
@@ -366,7 +366,7 @@ public class InputParser {
                         //outdated --> not longer used
                     }
                     if (activeAS.equals(TREE_CHAIN_CLASSIFICATION)) {
-                        treeChain.addAll(readLineS(line).stream().map(TreeChain::valueOf).collect(Collectors.toList()));
+                        treeChain.addAll(readLineS(line).stream().map(TreeChain::fromString).collect(Collectors.toList()));
                         if (treeChain.size() == pointers.get(NATOM)) {
                             //nothing to do at the moment
                         }
@@ -439,7 +439,7 @@ public class InputParser {
                 }
             }
         }
-        topSection.setMoleculeType(new MoleculeImpl(structure.getSystem().getName(), pointers.get(NATOM)));
+        topSection.setMoleculeType(new MoleculeImpl(structure.getSystem().getName(), 3)); //always 3 for amber????
         structure.setMolecule(new MoleculeImpl(structure.getSystem().getName(), pointers.get(NRES)));
         structure.setDef(new DefaultImpl(1, 2, true, new BigDecimal(0.5), new BigDecimal(0.8333)));
     }
@@ -455,27 +455,150 @@ public class InputParser {
     }
 
     private void generateDihedrals(List<BigDecimal> dihedralForce, List<BigDecimal> dihedralPeriod, List<BigDecimal> dihedralPhase, List<Integer> dihedralInclHydro, List<Integer> dihedralWoHydro, List<BigDecimal> sceeFactor, List<BigDecimal> scnbFactor) {
-        if (dihedralForce.size() == pointers.get(NPTRA) && dihedralPeriod.size() == pointers.get(NPTRA)
+        if ((dihedralForce.size() == pointers.get(NPTRA) && dihedralPeriod.size() == pointers.get(NPTRA)
                 && dihedralPhase.size() == pointers.get(NPTRA) && dihedralInclHydro.size() == 5 * pointers.get(NPHIH)
                 && dihedralWoHydro.size() == 5 * pointers.get(NPHIA) && sceeFactor.size() == pointers.get(NPTRA)
-                && scnbFactor.size() == pointers.get(NPTRA)) {
-            //check for negative ak and al??????? page 12
-            for (int i = 0; i < dihedralInclHydro.size(); i += 5) {
-                Integer ai = dihedralInclHydro.get(i) / 3 + 1;
-                Integer aj = dihedralInclHydro.get(i + 1) / 3 + 1;
-                Integer ak = dihedralInclHydro.get(i + 2) / 3 + 1;
-                Integer al = dihedralInclHydro.get(i + 3) / 3 + 1;
-                Integer idx = dihedralInclHydro.get(i + 4) - 1;
-                topSection.getDihedrals().add(new DihedralImpl(ai.toString(), aj.toString(), ak.toString(), al.toString(), 3, dihedralPeriod.get(idx), dihedralForce.get(idx), BigDecimal.ZERO, dihedralPhase.get(idx), BigDecimal.ZERO, BigDecimal.ZERO));
+                && scnbFactor.size() == pointers.get(NPTRA)) || (dihedralForce.size() == pointers.get(NPTRA) && dihedralPeriod.size() == pointers.get(NPTRA)
+                && dihedralPhase.size() == pointers.get(NPTRA) && dihedralInclHydro.size() == 5 * pointers.get(NPHIH)
+                && dihedralWoHydro.size() == 5 * pointers.get(NPHIA) && (sceeFactor.size() == 0
+                && scnbFactor.size() == 0))) {
+
+            List<Integer> sum = Lists.newArrayList(dihedralInclHydro);
+            sum.addAll(dihedralWoHydro);
+            List<Pair> pairs = Lists.newArrayList();
+            List<DihedralImpl> properDih = Lists.newArrayList();
+            List<DihedralImpl> improperDih = Lists.newArrayList();
+            Map<String, List<DihedralImpl>> condProperDih = Maps.newLinkedHashMap();
+            List<String> identifier = Lists.newArrayList();
+
+            String last = null;
+            for (int i = 0; i < sum.size(); i += 5) {
+                Integer ai = sum.get(i) / 3;
+                Integer aj = sum.get(i + 1) / 3;
+                Integer ak = sum.get(i + 2) / 3;
+                Integer al = sum.get(i + 3) / 3;
+                Integer akAbs = Math.abs(ak);
+                Integer alAbs = Math.abs(al);
+
+                Integer idx = sum.get(i + 4) - 1;
+                BigDecimal kPhi = BigDecimal.ZERO;
+                BigDecimal period = BigDecimal.ZERO;
+                BigDecimal phase = BigDecimal.ZERO;
+                if (idx < dihedralForce.size()) {
+                    kPhi = dihedralForce.get(idx);
+                }
+                if (idx < dihedralPeriod.size()) {
+                    period = dihedralPeriod.get(idx);
+                    if (period.compareTo(BigDecimal.valueOf(4)) == 1) {
+                        throw new NumberFormatException("Likely trying to convert ILDN to RB --> not possible");
+                    }
+                }
+                if (idx < dihedralPhase.size()) {
+                    phase = dihedralPhase.get(idx);
+                }
+                if (phase.equals(kPhi) && phase.equals(BigDecimal.ZERO)) {
+                    period = BigDecimal.ZERO;
+                }
+
+                String atomNr1 = topSection.getAtoms().get(ai).getNr().toString();
+                String atomNr2 = topSection.getAtoms().get(aj).getNr().toString();
+                String atomNr3 = topSection.getAtoms().get(akAbs).getNr().toString();
+                String atomNr4 = topSection.getAtoms().get(alAbs).getNr().toString();
+                String identify = atomNr1 + atomNr2 + atomNr3 + atomNr4;
+
+
+                DihedralImpl dihedral = new DihedralImpl(atomNr1, atomNr2, atomNr3, atomNr4, 3, phase, kPhi, period, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
+                if (al > 0) {
+                    try {
+                        last = identifier.get(identifier.size() - 1);
+                    } catch (Exception e) {
+                        last = null;
+                    }
+                    properDih.add(dihedral);
+                    if (ak < 0 && last != null && last.equals(identify)) {
+                        condProperDih.get(last).add(dihedral);
+                    } else {
+                        condProperDih.put(identify, Lists.newArrayList(dihedral));
+                    }
+                    if (ak > 0) {
+                        PairImpl pair = new PairImpl();
+                        pair.setAi(atomNr1);
+                        pair.setAj(atomNr4);
+                        pair.setFuncType(1);
+                        pairs.add(pair);
+                    }
+                } else {
+                    dihedral.setFuncType(1);
+                    dihedral.setC4(null);
+                    dihedral.setC5(null);
+                    dihedral.setC6(null);
+                    improperDih.add(dihedral);
+                    //hack to get all dihedral trough calculation
+                    //condProperDih.put(identify, Lists.newArrayList(dihedral));
+                }
+                identifier.add(identify);
             }
-            for (int i = 0; i < dihedralWoHydro.size(); i += 5) {
-                Integer ai = dihedralWoHydro.get(i) / 3 + 1;
-                Integer aj = dihedralWoHydro.get(i + 1) / 3 + 1;
-                Integer ak = dihedralWoHydro.get(i + 2) / 3 + 1;
-                Integer al = dihedralWoHydro.get(i + 3) / 3 + 1;
-                Integer idx = dihedralWoHydro.get(i + 4) - 1;
-                topSection.getDihedrals().add(new DihedralImpl(ai.toString(), aj.toString(), ak.toString(), al.toString(), 3, dihedralPeriod.get(idx), dihedralForce.get(idx), BigDecimal.ZERO, dihedralPhase.get(idx), BigDecimal.ZERO, BigDecimal.ZERO));
-            }
+
+            condProperDih.forEach((key, dihedrals) -> {
+                List<BigDecimal> cValues = Lists.newArrayList(BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
+                List<BigDecimal> vValues = Lists.newArrayList(BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO);
+                dihedrals.forEach(dihedral -> {
+                    BigDecimal phase = dihedral.getC1();
+                    phase = BigDecimal.valueOf(phase.multiply(BigDecimal.valueOf(180 / Math.PI)).intValue());
+                    BigDecimal kPhi = dihedral.getC2();
+                    BigDecimal period = dihedral.getC3();
+                    if (phase.compareTo(BigDecimal.valueOf(180)) <= 0) {
+                        if (kPhi.compareTo(BigDecimal.ZERO) > 0) {
+                            vValues.set(period.intValue(), kPhi.multiply(BigDecimal.valueOf(2)));
+                        }
+                        if (period.compareTo(BigDecimal.ONE) == 0) {
+                            cValues.set(0, cValues.get(0).add(vValues.get(period.intValue()).multiply(BigDecimal.valueOf(0.5))));
+                            if (phase.compareTo(BigDecimal.ZERO) == 0) {
+                                cValues.set(1, cValues.get(1).subtract(vValues.get(period.intValue()).multiply(BigDecimal.valueOf(0.5))));
+                            } else {
+                                cValues.set(1, cValues.get(1).add(vValues.get(period.intValue()).multiply(BigDecimal.valueOf(0.5))));
+                            }
+                        } else if (period.compareTo(BigDecimal.valueOf(2)) == 0) {
+                            if (phase.compareTo(BigDecimal.valueOf(180)) == 0) {
+                                cValues.set(0, cValues.get(0).add(vValues.get(period.intValue())));
+                                cValues.set(2, cValues.get(2).subtract(vValues.get(period.intValue())));
+                            } else {
+                                cValues.set(2, cValues.get(2).add(vValues.get(period.intValue())));
+                            }
+                        } else if (period.compareTo(BigDecimal.valueOf(3)) == 0) {
+                            cValues.set(0, cValues.get(0).add(vValues.get(period.intValue()).multiply(BigDecimal.valueOf(0.5))));
+                            if (phase.compareTo(BigDecimal.ZERO) == 0) {
+                                cValues.set(1, cValues.get(1).add(vValues.get(period.intValue()).multiply(BigDecimal.valueOf(1.5))));
+                                cValues.set(3, cValues.get(3).subtract(vValues.get(period.intValue()).multiply(BigDecimal.valueOf(2))));
+                            } else {
+                                cValues.set(1, cValues.get(1).subtract(vValues.get(period.intValue()).multiply(BigDecimal.valueOf(1.5))));
+                                cValues.set(3, cValues.get(3).add(vValues.get(period.intValue()).multiply(BigDecimal.valueOf(2))));
+                            }
+                        } else if (period.compareTo(BigDecimal.valueOf(4)) == 0) {
+                            if (phase.compareTo(BigDecimal.valueOf(180)) == 0) {
+                                cValues.set(2, cValues.get(2).add(vValues.get(period.intValue()).multiply(BigDecimal.valueOf(4))));
+                                cValues.set(4, cValues.get(4).subtract(vValues.get(period.intValue()).multiply(BigDecimal.valueOf(4))));
+                            } else {
+                                cValues.set(0, cValues.get(0).add(vValues.get(period.intValue())));
+                                cValues.set(2, cValues.get(2).subtract(vValues.get(period.intValue()).multiply(BigDecimal.valueOf(4))));
+                                cValues.set(4, cValues.get(4).add(vValues.get(period.intValue()).multiply(BigDecimal.valueOf(4))));
+                            }
+                        }
+                        dihedrals.get(0).setC1(cValues.get(0));
+                        dihedrals.get(0).setC2(cValues.get(1));
+                        dihedrals.get(0).setC3(cValues.get(2));
+                        dihedrals.get(0).setC4(cValues.get(3));
+                        dihedrals.get(0).setC5(cValues.get(4));
+                        dihedrals.get(0).setC6(cValues.get(5));
+                    } else {
+                        //alpha gamma dihedrals
+                    }
+                });
+                topSection.getDihedrals().add(dihedrals.get(0));
+            });
+            topSection.getDihedrals().addAll(improperDih);
+            topSection.getDihedrals().sort((o1, o2) -> o2.getFuncType().compareTo(o1.getFuncType()));
+            topSection.setPairs(pairs);
         }
     }
 
@@ -532,7 +655,7 @@ public class InputParser {
                 for (int a = pointer - 1; a < counter; a++) {
                     Atom atom = atoms.get(a);
                     atom.setResName(name);
-                    atom.setResNr(i);
+                    atom.setResNr(i + 1);
                 }
             }
     }
@@ -543,15 +666,21 @@ public class InputParser {
                 && ljA.size() == (pointers.get(NTYPES) * (pointers.get(NTYPES) + 1)) / 2
                 && ljB.size() == (pointers.get(NTYPES) * (pointers.get(NTYPES) + 1)) / 2
                 && atomTypes.size() == pointers.get(NATOM)) {
-            for (Integer i = 0; i < pointers.get(NTYPES); i++) {
-                Integer j = npi.get(i * (pointers.get(NTYPES) + 1)) - 1;
+            List<String> atNames = Lists.newArrayList();
+            for (Integer i = 0; i < atomTypes.size(); i++) {
+                Integer atiId = ati.get(i);
+                Integer index = pointers.get(NTYPES) * (atiId - 1) + atiId;
+                Integer npiId = npi.get(index - 1) - 1;
                 BigDecimal sigma = BigDecimal.ZERO;
                 BigDecimal epsilon = BigDecimal.ZERO;
-                if (ljB.get(j).compareTo(BigDecimal.ZERO) != 0 && ljA.get(j).compareTo(BigDecimal.ZERO) != 0) {
-                    epsilon = ((ljB.get(j).pow(2)).divide(ljA.get(j), BigDecimal.ROUND_HALF_EVEN)).multiply(new BigDecimal(0.25));
-                    sigma = new BigDecimal(Math.pow(ljA.get(j).divide(ljB.get(j), BigDecimal.ROUND_HALF_EVEN).doubleValue(), (1 / 6D)));
+                if (ljB.get(npiId).compareTo(BigDecimal.ZERO) != 0 && ljA.get(npiId).compareTo(BigDecimal.ZERO) != 0) {
+                    epsilon = ((ljB.get(npiId).pow(2)).divide(ljA.get(npiId), BigDecimal.ROUND_HALF_EVEN)).multiply(new BigDecimal(0.25));
+                    sigma = new BigDecimal(Math.pow(ljA.get(npiId).divide(ljB.get(npiId), BigDecimal.ROUND_HALF_EVEN).doubleValue(), (1 / 6D)));
                 }
-                structure.getAtomTypes().add(new AtomTypeImpl(atomTypes.get(i), atomTypes.get(i), BigDecimal.ZERO, BigDecimal.ZERO, "A", sigma, epsilon));
+                if (!atNames.contains(atomTypes.get(i))) {
+                    atNames.add(atomTypes.get(i));
+                    structure.getAtomTypes().add(new AtomTypeImpl(atomTypes.get(i), atomTypes.get(i), BigDecimal.ZERO, BigDecimal.ZERO, "A", sigma, epsilon));
+                }
                 //TODO page 7 nonbond_param_index --> Eq. 1 negative???????
                 //hbA && hbB would be used instead of ljA && ljB
                 //throw new RuntimeException("Calculation for pairs gone wrong!");

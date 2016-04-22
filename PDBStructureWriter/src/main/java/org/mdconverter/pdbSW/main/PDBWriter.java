@@ -53,7 +53,7 @@ public class PDBWriter extends AbstractWriter {
                 }
             }
             if (structure.nrModels() > 1) {
-                getConsoleWriter().printErrorln("Error happened according to number of containing models.\n" +
+                getConsoleHandler().printErrorln("Error happened according to number of containing models.\n" +
                         "This is an known issue and will be fixed in future release");
             }
             //TODO check number of models --> generate entries

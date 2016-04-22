@@ -3,7 +3,7 @@ package org.mdconverter.unitconverter;
 import org.biojava.nbio.structure.Structure;
 import org.biojava.nbio.structure.xtal.CrystalCell;
 import org.jscience.mathematics.number.Real;
-import org.mdconverter.api.consolewriter.ConsoleWriter;
+import org.mdconverter.api.consolehandler.ConsoleHandler;
 import org.mdconverter.api.plugin.type.FileType;
 import org.mdconverter.api.topologystructure.model.TopologyStructure;
 import org.mdconverter.api.topologystructure.model.impl.*;
@@ -28,16 +28,16 @@ public class UnitConverterImpl implements UnitConverter {
     private Map<String, Map<String, Map<String, String>>> writerUnits;
 
     //Injects
-    private ConsoleWriter cw;
+    private ConsoleHandler ch;
 
     @Inject
-    public UnitConverterImpl(ConsoleWriter cw) {
-        this.cw = cw;
+    public UnitConverterImpl(ConsoleHandler ch) {
+        this.ch = ch;
     }
 
     @Override
     public Object convertStructure(Object structure, FileType fileType) {
-        cw.printInfoln("Started with unit conversion");
+        ch.printInfoln("Started with unit conversion");
         if (fileType.equals(FileType.STRUCTURE)) {
             //converts a Structure
             Unit<? extends Quantity> lengthX = Unit.valueOf(readerUnits.get("global").get("standard").get("length"));
@@ -59,7 +59,7 @@ public class UnitConverterImpl implements UnitConverter {
                 crystalCell.setB(Convert.convertFromXInY(Real.valueOf(crystalCell.getB()), lengthX, lengthY).doubleValue());
                 crystalCell.setC(Convert.convertFromXInY(Real.valueOf(crystalCell.getC()), lengthX, lengthY).doubleValue());
             }
-            cw.printInfoln("Finished with unit conversion");
+            ch.printInfoln("Finished with unit conversion");
             return struct;
         } else {
             //converts a TopologyStructure
@@ -79,13 +79,14 @@ public class UnitConverterImpl implements UnitConverter {
                 new ConstraintH(readerUnits, writerUnits, struct.getDef()).convert(section.getConstraints().stream().map(a -> ((ConstraintImpl) a)).collect(Collectors.toList()));
                 new DihedralH(readerUnits, writerUnits, struct.getDef()).convert(section.getDihedrals().stream().map(a -> ((DihedralImpl) a)).collect(Collectors.toList()));
                 new DihedralRestraintH(readerUnits, writerUnits, struct.getDef()).convert(section.getDihedralRestraints().stream().map(a -> ((DihedralRestraintImpl) a)).collect(Collectors.toList()));
+                new DistanceRestraintH(readerUnits, writerUnits, struct.getDef()).convert(section.getDistanceRestraints().stream().map(a -> ((DistanceRestraintImpl) a)).collect(Collectors.toList()));
                 new OrientationRestraintH(readerUnits, writerUnits, struct.getDef()).convert(section.getOrientationRestraints().stream().map(a -> ((OrientationRestraintImpl) a)).collect(Collectors.toList()));
                 new PairH(readerUnits, writerUnits, struct.getDef()).convert(section.getPairs().stream().map(a -> ((PairImpl) a)).collect(Collectors.toList()));
                 new PairH(readerUnits, writerUnits, struct.getDef()).convert(section.getPairsNB().stream().map(a -> ((PairNB) a)).collect(Collectors.toList()));
                 new PositionRestraintH(readerUnits, writerUnits, struct.getDef()).convert(section.getPositionRestraints().stream().map(a -> ((PositionRestraintImpl) a)).collect(Collectors.toList()));
                 new SettleH(readerUnits, writerUnits, struct.getDef()).convert(section.getSettles().stream().map(a -> ((SettleImpl) a)).collect(Collectors.toList()));
             });
-            cw.printInfoln("Finished with unit conversion");
+            ch.printInfoln("Finished with unit conversion");
             return struct;
         }
     }

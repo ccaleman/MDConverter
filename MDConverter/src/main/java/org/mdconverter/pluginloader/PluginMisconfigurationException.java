@@ -1,4 +1,4 @@
-package org.mdconverter.classloader;
+package org.mdconverter.pluginloader;
 
 import org.mdconverter.api.plugin.PluginManifest;
 

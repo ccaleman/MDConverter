@@ -6,8 +6,7 @@ package org.mdconverter.api.topologystructure;
  */
 public enum ModelVersion {
 
-    V1(1),
-    V2(2);
+    V1(1);
 
     int modelVersion;
 

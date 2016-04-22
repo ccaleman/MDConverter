@@ -1,8 +1,11 @@
 package org.mdconverter;
 
 import com.google.common.base.Charsets;
+import org.biojava.nbio.structure.Structure;
 import org.biojava.nbio.structure.StructureImpl;
-import org.mdconverter.api.consolewriter.ConsoleWriter;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.mdconverter.api.consolehandler.ConsoleHandler;
 import org.mdconverter.api.plugin.reader.AbstractReader;
 import org.mdconverter.api.plugin.type.FileType;
 import org.mdconverter.api.plugin.writer.AbstractWriter;
@@ -10,8 +13,8 @@ import org.mdconverter.api.topologystructure.ModelVersion;
 import org.mdconverter.api.topologystructure.model.TopologyStructure;
 import org.mdconverter.argumentparser.ArgumentParser;
 import org.mdconverter.argumentparser.argumentdefinition.MainArguments;
-import org.mdconverter.classloader.PluginLoader;
-import org.mdconverter.consolewriter.ConsoleWriterImpl;
+import org.mdconverter.consolehandler.ConsoleHandlerImpl;
+import org.mdconverter.pluginloader.PluginLoader;
 import org.mdconverter.unitconverter.UnitConverterImpl;
 
 import javax.inject.Inject;
@@ -27,15 +30,15 @@ import java.util.Arrays;
 public class MDConverterMain {
 
     //Injects
-    private final ConsoleWriterImpl consoleWriter;
+    private final ConsoleHandlerImpl consoleHandler;
     private final ArgumentParser argumentParser;
     private final PluginLoader pluginLoader;
     private final UnitConverterImpl unitConverter;
 
     @Inject
-    public MDConverterMain(ArgumentParser argumentParser, ConsoleWriterImpl consoleWriter,
+    public MDConverterMain(ArgumentParser argumentParser, ConsoleHandlerImpl consoleHandler,
                            PluginLoader pluginLoader, UnitConverterImpl unitConverter) {
-        this.consoleWriter = consoleWriter;
+        this.consoleHandler = consoleHandler;
         this.argumentParser = argumentParser;
         this.pluginLoader = pluginLoader;
         this.unitConverter = unitConverter;
@@ -65,8 +68,8 @@ public class MDConverterMain {
             try {
                 structure = reader.getMetaModel();
             } catch (Exception e) {
-                e.printStackTrace(new PrintStream(consoleWriter.getStream(ConsoleWriter.LinePrefix.ERROR)));
-                consoleWriter.printInfoln(reader.getUsage());
+                e.printStackTrace(new PrintStream(consoleHandler.getStream(ConsoleHandler.LinePrefix.ERROR)));
+                consoleHandler.printInfoln(reader.getUsage());
                 //TODO remove or better output
                 throw new RuntimeException();
             }
@@ -75,10 +78,11 @@ public class MDConverterMain {
             try {
                 unitConverter.convertStructure(structure, fileType);
             } catch (Exception e) {
-                consoleWriter.printErrorln(e.getMessage());
+                consoleHandler.printErrorln(e.getMessage());
                 e.printStackTrace();
                 throw new RuntimeException();
             }
+            tagOutput(structure);
             writer.setStructure(structure);
             try {
                 String output = writer.getOutput();
@@ -87,25 +91,34 @@ public class MDConverterMain {
                     try (BufferedWriter out = new BufferedWriter(new OutputStreamWriter(
                             new FileOutputStream(file.toString()), Charsets.UTF_8))) {
                         out.write(output);
-                        consoleWriter.printInfoln("Output was written into " + file.toString());
+                        consoleHandler.printInfoln("Output was written into " + file.toString());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 } else {
-                    consoleWriter.printErrorln("\n" + output);
+                    consoleHandler.printErrorln("\n" + output);
                 }
             } catch (Exception e) {
                 String methodName = e.getStackTrace()[0].getMethodName();
                 if (methodName.contains("add")) {
                     String replace = methodName.replace("add", "");
-                    consoleWriter.printErrorln(String.format("Type: %s is", methodName));
+                    consoleHandler.printErrorln(String.format("Type: %s is", methodName));
                 }
-                consoleWriter.printErrorln(e.getMessage());
-                consoleWriter.printInfoln(writer.getUsage());
-                //TODO remove or better output
-                consoleWriter.println(ConsoleWriter.LinePrefix.ERROR, Arrays.toString(e.getStackTrace()));
+                consoleHandler.printErrorln(e.getMessage());
+                consoleHandler.printInfoln(writer.getUsage());
+                //TODO generate better output
+                consoleHandler.println(ConsoleHandler.LinePrefix.ERROR, Arrays.toString(e.getStackTrace()));
                 throw new RuntimeException();
             }
+        }
+    }
+
+    private void tagOutput(Object structure) {
+        String comment = String.format("Converted by MDConverter at %s", DateTime.now().toString(DateTimeFormat.forPattern("MM/dd/yyyy")));
+        if (structure instanceof TopologyStructure) {
+            ((TopologyStructure) structure).getHeaderComments().add(0, comment);
+        } else {
+            ((Structure) structure).getPDBHeader().setDescription(comment);
         }
     }
 
@@ -120,12 +133,12 @@ public class MDConverterMain {
             ModelVersion modelVersionW = pluginLoader.getWriter().getPluginManifest().getModelVersion();
             if (!modelVersionR.equals(modelVersionW)) {
                 if (ModelVersion.getVersionNumber(modelVersionR) > ModelVersion.getVersionNumber(modelVersionW)) {
-                    consoleWriter.printInfoln("The ModelVersion of Reader is higher than the writer's one");
-                    consoleWriter.printInfoln("DATA COULD BE LOST!");
+                    consoleHandler.printInfoln("The ModelVersion of Reader is higher than the writer's one");
+                    consoleHandler.printInfoln("DATA COULD BE LOST!");
                 } else {
-                    consoleWriter.printErrorln("ModelVersions of selected Plugins are incompatible!");
-                    consoleWriter.printErrorln(String.format("Reader model version: %s", modelVersionR));
-                    consoleWriter.printErrorln(String.format("Writer model version: %s", modelVersionW));
+                    consoleHandler.printErrorln("ModelVersions of selected Plugins are incompatible!");
+                    consoleHandler.printErrorln(String.format("Reader model version: %s", modelVersionR));
+                    consoleHandler.printErrorln(String.format("Writer model version: %s", modelVersionW));
                     throw new RuntimeException();
                 }
             }

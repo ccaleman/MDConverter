@@ -138,7 +138,7 @@
     },
     "dihedral/dihedralTypes": {
       "1": {
-        "c1": "kcal/mol",
+        "c1": "rad",
         "c2": "kcal/mol"
       },
       "2": {
@@ -149,7 +149,7 @@
         "c1": "kcal/mol",
         "c2": "kcal/mol",
         "c3": "kcal/mol",
-        "c4": "rad",
+        "c4": "kcal/mol",
         "c5": "kcal/mol",
         "c6": "kcal/mol"
       },

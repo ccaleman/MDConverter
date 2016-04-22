@@ -57,14 +57,14 @@ public class GromacsReader extends AbstractReader {
             structure.setPDBHeader(pdbHeader);
             return structure;
         } catch (IOException e) {
-            getConsoleWriter().printErrorln(e.getMessage());
+            getConsoleHandler().printErrorln(e.getMessage());
             throw new InvalidInputException(getName() + " wasn't able to parse input file!");
         }
     }
 
     @Override
     public String getUsage() {
-        return "GromacsSR do not need any special options differing from normal usage.";
+        return "GromacsSR do not need any special options differing from standard usage.";
     }
 
 }

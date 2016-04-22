@@ -1,4 +1,4 @@
-package org.mdconverter.classloader;
+package org.mdconverter.pluginloader;
 
 import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
@@ -6,7 +6,7 @@ import com.google.common.io.CharStreams;
 import com.google.gson.Gson;
 import com.google.inject.Injector;
 import org.mdconverter.Application;
-import org.mdconverter.api.consolewriter.ConsoleWriter;
+import org.mdconverter.api.consolehandler.ConsoleHandler;
 import org.mdconverter.api.plugin.AbstractPlugin;
 import org.mdconverter.api.plugin.PluginManifest;
 import org.mdconverter.api.plugin.reader.AbstractReader;
@@ -54,7 +54,7 @@ public class PluginLoader {
      * Impl because of method {@link JythonObjectFactoryImpl#addPluginToInterpreter(String)} which only should be accessed internal and not by plugins
      */
     private final JythonObjectFactoryImpl jof;
-    private final ConsoleWriter consoleWriter;
+    private final ConsoleHandler consoleHandler;
 
     //Fields
     private final Path structureReaderPath;
@@ -74,12 +74,12 @@ public class PluginLoader {
     /**
      * ensure the right paths are set for the plugin folders
      */
-    public PluginLoader(ConsoleWriter consoleWriter, JythonObjectFactoryImpl jof,
+    public PluginLoader(ConsoleHandler consoleHandler, JythonObjectFactoryImpl jof,
                         @Named("location.reader.structure") String structureReaderPath,
                         @Named("location.writer.structure") String structureWriterPath,
                         @Named("location.reader.topology") String topReaderPath,
                         @Named("location.writer.topology") String topWriterPath) {
-        this.consoleWriter = consoleWriter;
+        this.consoleHandler = consoleHandler;
         this.jof = jof;
         URL url = Application.class.getProtectionDomain().getCodeSource().getLocation();
         String s = "";
@@ -96,10 +96,10 @@ public class PluginLoader {
         if (ensureDirectories()) {
             throw new RuntimeException("Could not create plugin folders.");
         }
-        consoleWriter.printInfoln(this.structureReaderPath.toAbsolutePath().toString());
-        consoleWriter.printInfoln(this.structureWriterPath.toAbsolutePath().toString());
-        consoleWriter.printInfoln(this.topReaderPath.toAbsolutePath().toString());
-        consoleWriter.printInfoln(this.topWriterPath.toAbsolutePath().toString());
+        consoleHandler.printInfoln(this.structureReaderPath.toAbsolutePath().toString());
+        consoleHandler.printInfoln(this.structureWriterPath.toAbsolutePath().toString());
+        consoleHandler.printInfoln(this.topReaderPath.toAbsolutePath().toString());
+        consoleHandler.printInfoln(this.topWriterPath.toAbsolutePath().toString());
     }
 
     /**
@@ -125,30 +125,34 @@ public class PluginLoader {
      */
     public void loadPlugin(LoaderInput loaderInput) throws IOException, PluginMisconfigurationException, URISyntaxException {
         List<URI> jarFiles = getJarFilePaths(loaderInput);
-        if (actual.equals(PluginType.READER)) {
+        if (actual.equals(PluginType.READER) && reader == null) {
             AbstractReader abstractReader = searchForPlugin(loaderInput, jarFiles, AbstractReader.class);
             if (abstractReader != null) {
                 abstractReader.setPluginManifest(readerPluginManifest);
                 reader = abstractReader;
-                consoleWriter.printInfoln("Found reader plugin");
+                consoleHandler.printInfoln("Found reader plugin");
             } else {
-                consoleWriter.printErrorln("Didn't found reader plugin");
+                consoleHandler.printErrorln("Didn't found reader plugin");
                 inputErrors.add(InputError.NO_READER);
             }
-        } else if (actual.equals(PluginType.WRITER)) {
+        } else if (actual.equals(PluginType.WRITER) && writer == null) {
             AbstractWriter abstractWriter = searchForPlugin(loaderInput, jarFiles, AbstractWriter.class);
             if (abstractWriter != null) {
                 abstractWriter.setPluginManifest(writerPluginManifest);
                 writer = abstractWriter;
-                consoleWriter.printInfoln("Found writer plugin");
+                consoleHandler.printInfoln("Found writer plugin");
             } else {
-                consoleWriter.printErrorln("Didn't found writer plugin");
+                consoleHandler.printErrorln("Didn't found writer plugin");
                 inputErrors.add(InputError.NO_WRITER);
             }
+        } else if (writer != null && reader != null && !writer.getPluginManifest().getFileType().equals(reader.getPluginManifest().getFileType())) {
+            throw new PluginMisconfigurationException(reader.getPluginManifest(), "Defined plugins are implemented for different meta models.");
+        } else {
+            throw new PluginMisconfigurationException(actual.equals(PluginType.READER) ? readerPluginManifest : writerPluginManifest, String.format("It is not possible to load two %s at once!", actual));
         }
         /*else if (script) {
-            consoleWriter.printErrorln("Script aren't supported yet!");
-            //TODO: implement script loader (differ between script languages?)
+            consoleHandler.printErrorln("Script aren't supported yet!");
+            //TODO: implement script loader (differ between script languages)
         }*/
     }
 
@@ -279,8 +283,11 @@ public class PluginLoader {
      */
     private PluginManifest scanJarFile(URI uriToJarFile) throws IOException {
         JarFile jarFile = new JarFile(new File(uriToJarFile));
-        loadClassLoader(uriToJarFile.toURL());
-        return scanContent(jarFile);
+        PluginManifest manifest = scanContent(jarFile);
+        if (manifest != null) {
+            loadClassLoader(uriToJarFile.toURL());
+        }
+        return manifest;
     }
 
     /**

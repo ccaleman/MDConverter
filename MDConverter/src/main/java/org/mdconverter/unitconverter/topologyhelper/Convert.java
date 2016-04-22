@@ -31,7 +31,7 @@ public abstract class Convert<T extends ValueHolder> {
 
     //Fields
     private final Pattern REFL = Pattern.compile("'([\\d\\w]+?)'");
-    private final double cal = 4.1868;
+    private final double cal = 4.184;
     private Map<String, Map<String, Map<String, String>>> readerUnits;
     private Map<String, Map<String, Map<String, String>>> writerUnits;
     private Default def;
@@ -366,7 +366,7 @@ public abstract class Convert<T extends ValueHolder> {
     /**
      * checks if the given String matches a Regex and defines a Reflection method call
      *
-     * @param unit for example kJ·nm^-2/mol or U·nm^'getAlpha' if a method call is included
+     * @param unit for example U·nm^'getAlpha' if a method call is included
      * @return either the already transformed unit or the String if method call is included
      */
     private Object checkSpecialUnits(String unit) {

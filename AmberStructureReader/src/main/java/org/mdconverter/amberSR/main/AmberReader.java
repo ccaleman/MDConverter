@@ -39,7 +39,7 @@ public class AmberReader extends AbstractReader {
         //get the Structure from the Java implementation
         Structure structure = readFile.readFileToStructure(getInputFile().toString(), (Structure) getStructure());
         //inform the user about progress
-        getConsoleWriter().printInfoln(structure.getName() + " successfully read in");
+        getConsoleHandler().printInfoln(structure.getName() + " successfully read in");
         return structure;
     }
 }

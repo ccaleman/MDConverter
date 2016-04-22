@@ -1,13 +1,13 @@
 package org.mdconverter.argumentparser;
 
 import com.beust.jcommander.internal.Lists;
-import org.mdconverter.api.consolewriter.ConsoleWriter;
+import org.mdconverter.api.consolehandler.ConsoleHandler;
 import org.mdconverter.api.plugin.PluginManifest;
 import org.mdconverter.api.plugin.type.FileType;
 import org.mdconverter.api.plugin.type.PluginType;
-import org.mdconverter.classloader.LoaderInput;
-import org.mdconverter.classloader.PluginLoader;
-import org.mdconverter.classloader.PluginMisconfigurationException;
+import org.mdconverter.pluginloader.LoaderInput;
+import org.mdconverter.pluginloader.PluginLoader;
+import org.mdconverter.pluginloader.PluginMisconfigurationException;
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -20,12 +20,12 @@ import java.util.List;
 public class InputErrorHandler {
 
     //Injects
-    private final ConsoleWriter cw;
+    private final ConsoleHandler ch;
     private final PluginLoader pl;
 
     @Inject
-    public InputErrorHandler(ConsoleWriter cw, PluginLoader pl) {
-        this.cw = cw;
+    public InputErrorHandler(ConsoleHandler ch, PluginLoader pl) {
+        this.ch = ch;
         this.pl = pl;
     }
 
@@ -48,11 +48,11 @@ public class InputErrorHandler {
                     setPluginForLoaderInput(writer, PluginType.WRITER);
                     break;
                 case NO_FILETYPE:
-                    cw.println("Following file types can be choosen:");
-                    cw.println("(0) exit");
-                    cw.println("(1) structure");
-                    cw.println("(2) topology");
-                    Integer intInput = cw.getIntInput();
+                    ch.println("Following file types can be choosen:");
+                    ch.println("(0) exit");
+                    ch.println("(1) structure");
+                    ch.println("(2) topology");
+                    Integer intInput = ch.getIntInput();
                     if (intInput.equals(1)) {
                         reader.setFileType(FileType.STRUCTURE);
                         writer.setFileType(FileType.STRUCTURE);
@@ -66,7 +66,7 @@ public class InputErrorHandler {
                 case NO_INPUT:
                     throw new RuntimeException("No input file defined!");
                 default:
-                    cw.printErrorln("Such an error is not defined in InputErrorHandler!");
+                    ch.printErrorln("Such an error is not defined in InputErrorHandler!");
             }
         }
         if (checkLoaderInput(reader) && checkLoaderInput(writer)) {
@@ -84,15 +84,15 @@ public class InputErrorHandler {
      */
     private void setPluginForLoaderInput(LoaderInput input, PluginType pluginType) throws IOException, PluginMisconfigurationException, URISyntaxException {
         input.setPluginType(pluginType);
-        cw.println(String.format("Following %s can be choosen:",input.getPluginType().getValue()));
+        ch.println(String.format("Following %s can be choosen:", input.getPluginType().getValue()));
         List<PluginManifest> pluginManifests = pl.getPluginManifestsByLoaderInput(input);
         int i=0;
-        cw.println(String.format("(%s) exit", i));
+        ch.println(String.format("(%s) exit", i));
         for (i = 0; i < pluginManifests.size(); i++) {
             PluginManifest pluginManifest = pluginManifests.get(i);
-            cw.println(String.format("(%s) " + pluginManifest.getPluginName(), i+1));
+            ch.println(String.format("(%s) " + pluginManifest.getPluginName(), i + 1));
         }
-        Integer intInput = cw.getIntInput();
+        Integer intInput = ch.getIntInput();
         if (intInput > 0 && intInput < pluginManifests.size()+1) {
             input.setPluginName(pluginManifests.get(intInput-1).getPluginName());
         } else {

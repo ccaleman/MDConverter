@@ -54,7 +54,7 @@ public class GromacsTReader extends AbstractReader {
                 "\t\tposreswat:true\n" +
                 "\t\tdefault = false\n" +
                 "\tFor use of heavy water definition:\n" +
-                "\t\theavyW:\n" +
+                "\t\theavyW:true\n" +
                 "\t\tdefault = false\n" +
                 "\tFor use flexible definition:\n" +
                 "\t\tflex:true\n" +

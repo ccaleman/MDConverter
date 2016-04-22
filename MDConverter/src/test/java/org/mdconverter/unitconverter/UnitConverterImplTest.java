@@ -5,9 +5,9 @@ import com.google.common.collect.Lists;
 import org.biojava.nbio.structure.*;
 import org.junit.Before;
 import org.junit.Test;
-import org.mdconverter.api.consolewriter.ConsoleWriter;
+import org.mdconverter.api.consolehandler.ConsoleHandler;
 import org.mdconverter.api.plugin.type.FileType;
-import org.mdconverter.consolewriter.ConsoleWriterImpl;
+import org.mdconverter.consolehandler.ConsoleHandlerImpl;
 
 import javax.measure.converter.ConversionException;
 
@@ -21,7 +21,7 @@ public class UnitConverterImplTest {
 
     private UnitConverterImpl unitConverter;
     private Structure struct;
-    private ConsoleWriter mockedCW;
+    private ConsoleHandler mockedCH;
 
     @Before
     public void setUp() throws Exception {
@@ -29,14 +29,14 @@ public class UnitConverterImplTest {
         Chain chain = new ChainImpl();
         Group group = new AminoAcidImpl();
         Atom atom = new AtomImpl();
-        mockedCW = mock(ConsoleWriterImpl.class);
+        mockedCH = mock(ConsoleHandlerImpl.class);
         atom.setX(1);
         atom.setY(12);
         atom.setZ(123);
         group.setAtoms(Lists.newArrayList(atom));
         chain.setAtomGroups(Lists.newArrayList(group));
         struct.addChain(chain);
-        unitConverter = new UnitConverterImpl(mockedCW);
+        unitConverter = new UnitConverterImpl(mockedCH);
     }
 
     @Test

@@ -5,7 +5,7 @@ import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import org.biojava.nbio.structure.*;
 import org.biojava.nbio.structure.xtal.CrystalCell;
-import org.mdconverter.api.consolewriter.ConsoleWriter;
+import org.mdconverter.api.consolehandler.ConsoleHandler;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -35,11 +35,11 @@ public class ParseInputFile {
     private double lowestZ;
 
     //Injects
-    private ConsoleWriter cw;
+    private ConsoleHandler ch;
 
     @Inject
-    public ParseInputFile(ConsoleWriter cw) {
-        this.cw = cw;
+    public ParseInputFile(ConsoleHandler ch) {
+        this.ch = ch;
         highestX = 0;
         highestY = 0;
         highestZ = 0;

@@ -20,7 +20,7 @@
     </modules>
 
     <properties>
-        <project.version>0.1</project.version>
+        <project.version>1.0</project.version>
         <guava.version>19.0</guava.version>
         <guice.version>4.0</guice.version>
         <jscience.version>4.3.1</jscience.version>
@@ -34,6 +34,7 @@
         <jansi.version>1.11</jansi.version>
         <commonslang.version>3.4</commonslang.version>
         <commonsio.version>2.4</commonsio.version>
+        <jodaDtime.version>2.9.3</jodaDtime.version>
         <!-- DIRECTORY DEFINITIONS-->
         <build.dir>${project.basedir}/../build</build.dir>
         <plugin.output.reader.structure>${build.dir}/StructureReader</plugin.output.reader.structure>
@@ -100,6 +101,11 @@
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${commonsio.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>${jodaDtime.version}</version>
             </dependency>
             <dependency>
                 <groupId>junit</groupId>

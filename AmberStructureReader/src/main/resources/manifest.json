@@ -14,7 +14,7 @@
         "length": "Å",
         "mass": "amu",
         "time": "s",
-        "charge": "C*18.222615",
+        "charge": "efact",
         "energy": "kcal/mol"
       }
     }

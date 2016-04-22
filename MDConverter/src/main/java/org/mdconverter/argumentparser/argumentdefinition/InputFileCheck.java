@@ -18,7 +18,7 @@ public class InputFileCheck implements IValueValidator<Path> {
      */
     public void validate(String s, Path path) throws ParameterException {
         if (Files.notExists(path)) {
-            throw new ParameterException("Given path for parameter " + s + " is not valid. (found " + path +")");
+            throw new ParameterException(String.format("Given path \"%s\" for parameter " + s + " is not valid.", path));
         }
     }
 }

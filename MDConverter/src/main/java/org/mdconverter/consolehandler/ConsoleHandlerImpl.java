@@ -1,7 +1,7 @@
 
-package org.mdconverter.consolewriter;
+package org.mdconverter.consolehandler;
 
-import org.mdconverter.api.consolewriter.ConsoleWriter;
+import org.mdconverter.api.consolehandler.ConsoleHandler;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -17,7 +17,7 @@ import java.util.Scanner;
  *     is used by the Framework and all plugins
  */
 @Singleton
-public class ConsoleWriterImpl extends PrintStream implements ConsoleWriter {
+public class ConsoleHandlerImpl extends PrintStream implements ConsoleHandler {
 
     //Fields
     private final OutputStream errorStream;
@@ -25,7 +25,7 @@ public class ConsoleWriterImpl extends PrintStream implements ConsoleWriter {
     private Scanner sc = new Scanner(System.in);
 
     @Inject
-    public ConsoleWriterImpl(@Named("INFO") OutputStream out, @Named("ERROR") OutputStream err) {
+    public ConsoleHandlerImpl(@Named("INFO") OutputStream out, @Named("ERROR") OutputStream err) {
         super(out, true);
         this.errorStream = err;
         this.infoStream = out;
@@ -117,6 +117,9 @@ public class ConsoleWriterImpl extends PrintStream implements ConsoleWriter {
         do {
             try {
                 stringInput = sc.nextLine();
+                if (stringInput == null || stringInput.isEmpty()) {
+                    throw new InputMismatchException("Defined value is not valid");
+                }
                 inputOk = true;
             } catch (InputMismatchException e) {
                 this.printErrorln("Please define a string.");
@@ -130,7 +133,7 @@ public class ConsoleWriterImpl extends PrintStream implements ConsoleWriter {
     /**
      * only accessible in the MDConverter framework
      * @param type the OutputStream type
-     * @return the OutputStream according to the given {@link ConsoleWriter.LinePrefix}
+     * @return the OutputStream according to the given {@link ConsoleHandler.LinePrefix}
      */
     public OutputStream getStream(LinePrefix type) {
         switch (type) {

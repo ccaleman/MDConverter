@@ -4,13 +4,15 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.internal.Lists;
 import com.google.common.io.Files;
-import org.mdconverter.api.consolewriter.ConsoleWriter;
+import org.mdconverter.api.consolehandler.ConsoleHandler;
+import org.mdconverter.api.plugin.reader.AbstractReader;
 import org.mdconverter.api.plugin.type.FileType;
 import org.mdconverter.api.plugin.type.PluginType;
+import org.mdconverter.api.plugin.writer.AbstractWriter;
 import org.mdconverter.argumentparser.argumentdefinition.MainArguments;
-import org.mdconverter.classloader.LoaderInput;
-import org.mdconverter.classloader.PluginLoader;
-import org.mdconverter.classloader.PluginMisconfigurationException;
+import org.mdconverter.pluginloader.LoaderInput;
+import org.mdconverter.pluginloader.PluginLoader;
+import org.mdconverter.pluginloader.PluginMisconfigurationException;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -26,7 +28,7 @@ import java.util.List;
 public class ArgumentParser {
 
     //Injects
-    private final ConsoleWriter consoleWriter;
+    private final ConsoleHandler consoleHandler;
     private final InputErrorHandler errorHandler;
     private final PluginLoader pluginLoader;
 
@@ -34,16 +36,18 @@ public class ArgumentParser {
     private JCommander jc;
     private MainArguments mainArguments;
     private List<InputError> argumentsErrors = Lists.newArrayList();
+    private String programName;
 
     @Inject
-    public ArgumentParser(@Named("project.version") String version, ConsoleWriter consoleWriter,
+    public ArgumentParser(@Named("project.version") String version, ConsoleHandler consoleHandler,
                           InputErrorHandler errorHandler, PluginLoader pluginLoader) {
         mainArguments = new MainArguments();
-        this.consoleWriter = consoleWriter;
+        this.consoleHandler = consoleHandler;
         this.errorHandler = errorHandler;
         this.pluginLoader = pluginLoader;
         jc = new JCommander(mainArguments);
-        jc.setProgramName("MDConverter-" + version + ".jar");
+        programName = "MDConverter-" + version + ".jar";
+        jc.setProgramName(programName);
     }
 
     /**
@@ -69,33 +73,36 @@ public class ArgumentParser {
                 writer = loaderInputs.get(1);
 
             }
+            AbstractReader readerPlugin;
+            AbstractWriter writerPlugin;
             do {
                 pluginLoader.loadPlugin(reader);
                 pluginLoader.loadPlugin(writer);
+                readerPlugin = pluginLoader.getReader();
+                writerPlugin = pluginLoader.getWriter();
                 if (!pluginLoader.getInputErrors().isEmpty()) {
                     errorHandler.handleErrors(pluginLoader.getInputErrors(), reader, writer);
                 }
                 pluginLoader.getInputErrors().clear();
-            } while ((pluginLoader.getReader() == null && pluginLoader.getWriter() == null));
-
-            consoleWriter.println(ConsoleWriter.LinePrefix.INFO,
+            } while ((readerPlugin == null && writerPlugin == null));
+            consoleHandler.println(ConsoleHandler.LinePrefix.INFO,
                     String.format("Defined reader: %s", reader.getPluginName()),
-                    pluginLoader.getReader().getDescription(), mainArguments.isHelp() ? pluginLoader.getReader().getUsage() : "",
+                    readerPlugin.getDescription(), mainArguments.isHelp() ? readerPlugin.getUsage() : "",
                     String.format("Defined writer: %s", writer.getPluginName()),
-                    pluginLoader.getWriter().getDescription(), mainArguments.isHelp() ? pluginLoader.getWriter().getUsage() : "");
+                    writerPlugin.getDescription(), mainArguments.isHelp() ? writerPlugin.getUsage() : "");
             checkFileExtensions();
             errorHandler.handleErrors(argumentsErrors, reader, writer);
         } catch (ParameterException e) {
             if (!mainArguments.isHelp()) {
                 printUsage();
             }
-            consoleWriter.printErrorln(e.getMessage() + "\n");
+            consoleHandler.printErrorln(e.getMessage() + "\n");
             throw new IllegalArgumentException("Given options are wrong!");
         } catch (IOException | RuntimeException e) {
-            consoleWriter.printErrorln(e.getMessage() != null ? e.getMessage() : "Error not defined.");
+            consoleHandler.printErrorln(e.getMessage() != null ? e.getMessage() : "Error in ArgumentParser not defined.");
             throw new RuntimeException();
         } catch (PluginMisconfigurationException e) {
-            consoleWriter.printErrorln(e.getMessage() + "\n");
+            consoleHandler.printErrorln(e.getMessage() != null ? e.getMessage() : String.format("Error not defined for %s", e.getPluginManifest().getPluginName()));
             throw new RuntimeException();
         } catch (URISyntaxException e) {
             e.printStackTrace();
@@ -141,6 +148,10 @@ public class ArgumentParser {
         return mainArguments;
     }
 
+
+    public String getProgramName() {
+        return programName;
+    }
     /**
      * checks the given {@link LoaderInput} for the {@link FileType} if not defined adds an {@link InputError} to the argumentsErrors
      * !!!!!!!!!!!!!!always on index 0 of the list because of the double checked LoaderInput for Reader & Writer!!!!!!!!!!!!
@@ -155,11 +166,11 @@ public class ArgumentParser {
         } else {
             if (!argumentsErrors.contains(InputError.NO_FILETYPE)) {
                 argumentsErrors.add(0, InputError.NO_FILETYPE);
-                consoleWriter.printErrorln("No file type defined!");
+                consoleHandler.printErrorln("No file type defined!");
             } else if (!argumentsErrors.get(0).equals(InputError.NO_FILETYPE)) {
                 argumentsErrors.remove(InputError.NO_FILETYPE);
                 argumentsErrors.add(0, InputError.NO_FILETYPE);
-                consoleWriter.printErrorln("No file type defined!");
+                consoleHandler.printErrorln("No file type defined!");
             }
         }
         return loaderInput;
@@ -176,7 +187,7 @@ public class ArgumentParser {
             loaderInput.setPluginName(fileReader);
             loaderInput.setPluginType(PluginType.READER);
         } else {
-            consoleWriter.printErrorln("No Reader defined!");
+            consoleHandler.printErrorln("No Reader defined!");
             argumentsErrors.add(InputError.NO_READER);
         }
         loaderInput = checkForFileType(loaderInput);
@@ -195,7 +206,7 @@ public class ArgumentParser {
             loaderInput.setPluginName(fileWriter);
             loaderInput.setPluginType(PluginType.WRITER);
         } else {
-            consoleWriter.printErrorln("No Writer defined!");
+            consoleHandler.printErrorln("No Writer defined!");
             argumentsErrors.add(InputError.NO_WRITER);
         }
         loaderInput = checkForFileType(loaderInput);
@@ -208,6 +219,6 @@ public class ArgumentParser {
     private void printUsage() {
         StringBuilder stringBuilder = new StringBuilder();
         getJc().usage(stringBuilder);
-        consoleWriter.println(stringBuilder.toString());
+        consoleHandler.println(stringBuilder.toString());
     }
 }

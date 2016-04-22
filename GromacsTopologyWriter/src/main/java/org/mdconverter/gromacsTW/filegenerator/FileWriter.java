@@ -2,7 +2,7 @@ package org.mdconverter.gromacstw.filegenerator;
 
 
 import org.apache.commons.lang3.StringUtils;
-import org.mdconverter.api.consolewriter.ConsoleWriter;
+import org.mdconverter.api.consolehandler.ConsoleHandler;
 import org.mdconverter.api.topologystructure.SectionType;
 import org.mdconverter.api.topologystructure.model.Section;
 import org.mdconverter.api.topologystructure.model.TopologyStructure;
@@ -27,11 +27,11 @@ public class FileWriter {
     private String output = "";
 
     //Injects
-    private ConsoleWriter cw;
+    private ConsoleHandler ch;
 
     @Inject
-    public FileWriter(ConsoleWriter cw) {
-        this.cw = cw;
+    public FileWriter(ConsoleHandler ch) {
+        this.ch = ch;
     }
 
     /**
@@ -43,13 +43,13 @@ public class FileWriter {
         Integer oldFuncType;
 
         generateHeaderLines(structure.getHeaderComments());
+        DefaultImpl def = structure.getDef();
+        if (def != null) {
+            addLine("[ defaults ]");
+            addLine("; nbfunc        comb-rule       gen-pairs       fudgeLJ fudgeQQ");
+            addDefaultEntry(def);
+        }
         if (ff) {
-            DefaultImpl def = structure.getDef();
-            if (def != null) {
-                addLine("[ defaults ]");
-                addLine("; nbfunc        comb-rule       gen-pairs       fudgeLJ fudgeQQ");
-                addDefaultEntry(def);
-            }
             List<AtomType> atomTypes = structure.getAtomTypes();
             if (!atomTypes.isEmpty()) {
                 addLine("[ atomtypes ]");
