@@ -1,8 +1,4 @@
 org.mdconverter
-org.mdconverter.ambersr.api
-org.mdconverter.ambersr.main
-org.mdconverter.ambertr.fileparser
-org.mdconverter.ambertr.main
 org.mdconverter.api.consolehandler
 org.mdconverter.api.jython
 org.mdconverter.api.plugin
@@ -17,13 +13,6 @@ org.mdconverter.api.topologystructure.model.impl
 org.mdconverter.argumentparser
 org.mdconverter.argumentparser.argumentdefinition
 org.mdconverter.consolehandler
-org.mdconverter.gromacssr.fileparser
-org.mdconverter.gromacssr.main
-org.mdconverter.gromacstr.fileparser
-org.mdconverter.gromacstr.main
-org.mdconverter.gromacstr.utils
-org.mdconverter.gromacstw.filegenerator
-org.mdconverter.gromacstw.main
 org.mdconverter.inject
 org.mdconverter.jythonsupport
 org.mdconverter.pluginloader
