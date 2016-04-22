@@ -4,7 +4,7 @@ package org.mdconverter.gromacstr.fileparser;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import org.mdconverter.api.consolewriter.ConsoleWriter;
+import org.mdconverter.api.consolehandler.ConsoleHandler;
 import org.mdconverter.api.topologystructure.SectionType;
 import org.mdconverter.api.topologystructure.model.Section;
 import org.mdconverter.api.topologystructure.model.TopologyStructure;
@@ -116,11 +116,11 @@ public class InputParser {
     private Map<String, String> defines = Maps.newHashMap();
 
     //Injects
-    private ConsoleWriter cw;
+    private ConsoleHandler ch;
 
     @Inject
-    protected InputParser(ConsoleWriter cw) {
-        this.cw = cw;
+    protected InputParser(ConsoleHandler ch) {
+        this.ch = ch;
     }
 
     //Recursive function able to run posres and ff files too
@@ -204,7 +204,7 @@ public class InputParser {
                             skipElsePath = false;
                         }
                     }
-                } else if (line.contains("define")) {
+                } else if (line.contains(define)) {
                     //List<String> strings = reworkLineRemovePrefix(line, define);
                     //defines.put(strings.get(0), Joiner.on(" ").join(strings.subList(1, strings.size())));
                 } else if (line.contains(elsse)) {
@@ -657,7 +657,7 @@ public class InputParser {
                 p.setC5(new BigDecimal(split.get(7)));
             }
             if (length < 3 || length > 8) {
-                cw.printErrorln(String.format("some PAIRS values are lost! --> %s", line));
+                ch.printErrorln(String.format("some PAIRS values are lost! --> %s", line));
             } else {
                 pairs.add(p);
             }
@@ -679,7 +679,7 @@ public class InputParser {
                 p.setC4(new BigDecimal(split.get(6)));
                 pairsNB.add(p);
             } else {
-                cw.printErrorln(String.format("some PAIRS values are lost! --> %s", line));
+                ch.printErrorln(String.format("some PAIRS values are lost! --> %s", line));
             }
         }
     }
@@ -706,7 +706,7 @@ public class InputParser {
             pt.setC5(new BigDecimal(split.get(7)));
         }
         if (length < 3 || length > 8) {
-            cw.printErrorln(String.format("some PAIRTYPES values are lost! --> %s", line));
+            ch.printErrorln(String.format("some PAIRTYPES values are lost! --> %s", line));
         } else {
             pairTypes.add(pt);
         }
@@ -723,7 +723,7 @@ public class InputParser {
             def.setC2(new BigDecimal(split.get(4)));
             structure.setDef(def);
         } else {
-            cw.printErrorln(String.format("some DEFAULTS values are lost! --> %s", line));
+            ch.printErrorln(String.format("some DEFAULTS values are lost! --> %s", line));
         }
     }
 
@@ -732,7 +732,7 @@ public class InputParser {
             List<String> headers = structure.getHeaderComments();
             headers.add(line.substring(2, line.length()));
         } else {
-            cw.printErrorln(String.format("some HEADERS values are lost! --> %s", line));
+            ch.printErrorln(String.format("some HEADERS values are lost! --> %s", line));
         }
     }
 
@@ -760,7 +760,7 @@ public class InputParser {
                 a.setC4(new BigDecimal(split.get(10)));
             }
             if (length < 7 || length > 11) {
-                cw.printErrorln(String.format("some ATOMS values are lost! --> %s", line));
+                ch.printErrorln(String.format("some ATOMS values are lost! --> %s", line));
             } else {
                 atoms.add(a);
             }
@@ -769,6 +769,8 @@ public class InputParser {
 
     private void addAtomType(String line) {
         List<String> split = reworkLine(line);
+        //TODO replace when atom atom translation dictionary exists --> special handling of oplsaa FF
+        // produces errors if oplsaa is used
         if (split.size() == 8) {
             String s = split.get(0);
             String s1 = split.get(1);
@@ -788,7 +790,7 @@ public class InputParser {
             at.setC4(new BigDecimal(split.get(6)));
             atomTypes.add(at);
         } else {
-            cw.printErrorln(String.format("some ATOMTYPES values are lost! --> %s", line));
+            ch.printErrorln(String.format("some ATOMTYPES values are lost! --> %s", line));
         }
     }
 
@@ -814,7 +816,7 @@ public class InputParser {
                 b.setC4(new BigDecimal(split.get(6)));
             }
             if (length < 3 || length > 7) {
-                cw.printErrorln(String.format("some BONDS values are lost! --> %s", line));
+                ch.printErrorln(String.format("some BONDS values are lost! --> %s", line));
             } else {
                 bonds.add(b);
             }
@@ -842,7 +844,7 @@ public class InputParser {
             bt.setC4(new BigDecimal(split.get(6)));
         }
         if (length < 3 || length > 7) {
-            cw.printErrorln(String.format("some BONDTYPES values are lost! --> %s", line));
+            ch.printErrorln(String.format("some BONDTYPES values are lost! --> %s", line));
         } else {
             bondTypes.add(bt);
         }
@@ -864,7 +866,7 @@ public class InputParser {
                 c.setC2(new BigDecimal(split.get(4)));
             }
             if (length < 4 || length > 5) {
-                cw.printErrorln(String.format("some CONSTRAINTS values are lost! --> %s", line));
+                ch.printErrorln(String.format("some CONSTRAINTS values are lost! --> %s", line));
             } else {
                 constraints.add(c);
             }
@@ -886,7 +888,7 @@ public class InputParser {
             ct.setC2(new BigDecimal(split.get(4)));
         }
         if (length < 4 || length > 5) {
-            cw.printErrorln(String.format("some CONSTRAINTTYPES values are lost! --> %s", line));
+            ch.printErrorln(String.format("some CONSTRAINTTYPES values are lost! --> %s", line));
         } else {
             constraintTypes.add(ct);
         }
@@ -919,7 +921,7 @@ public class InputParser {
                 a.setC6(new BigDecimal(split.get(9)));
             }
             if (length < 4 || length > 10) {
-                cw.printErrorln(String.format("some ANGLES values are lost! --> %s", line));
+                ch.printErrorln(String.format("some ANGLES values are lost! --> %s", line));
             } else {
                 angles.add(a);
             }
@@ -950,7 +952,7 @@ public class InputParser {
             a.setC6(new BigDecimal(split.get(9)));
         }
         if (length < 6 || length > 10) {
-            cw.printErrorln(String.format("some ANGLETYPES values are lost! --> %s", line));
+            ch.printErrorln(String.format("some ANGLETYPES values are lost! --> %s", line));
         } else {
             angleTypes.add(a);
         }
@@ -986,7 +988,7 @@ public class InputParser {
                 dh.setC6(new BigDecimal(split.get(10)));
             }
             if (length < 5 || length > 11) {
-                cw.printErrorln(String.format("some DIHEDRALS values are lost! --> %s", line));
+                ch.printErrorln(String.format("some DIHEDRALS values are lost! --> %s", line));
             } else {
                 dihedrals.add(dh);
             }
@@ -1027,7 +1029,7 @@ public class InputParser {
             dt.setC6(new BigDecimal(split.get(10)));
         }
         if (length < 6 || length > 11) {
-            cw.printErrorln(String.format("some DIHEDRALTYPES values are lost! --> %s", line));
+            ch.printErrorln(String.format("some DIHEDRALTYPES values are lost! --> %s", line));
         } else {
             dihedralTypes.add(dt);
         }
@@ -1046,7 +1048,7 @@ public class InputParser {
             gp.setC5(new BigDecimal(split.get(5)));
             genbornParams.add(gp);
         } else {
-            cw.printErrorln(String.format("some GENBORN values are lost! --> %s", line));
+            ch.printErrorln(String.format("some GENBORN values are lost! --> %s", line));
         }
     }
 
@@ -1062,7 +1064,7 @@ public class InputParser {
                 s.setC2(new BigDecimal(split.get(3)));
                 settles.add(s);
             } else {
-                cw.printErrorln(String.format("some SETTLES values are lost! --> %s", line));
+                ch.printErrorln(String.format("some SETTLES values are lost! --> %s", line));
             }
         }
     }
@@ -1080,7 +1082,7 @@ public class InputParser {
                 }
                 exclusions.add(e);
             } else {
-                cw.printErrorln(String.format("some EXCLUSIONS values are lost! --> %s", line));
+                ch.printErrorln(String.format("some EXCLUSIONS values are lost! --> %s", line));
             }
         }
     }
@@ -1098,7 +1100,7 @@ public class InputParser {
                 pr.setC3(new BigDecimal(split.get(4)));
                 posres.add(pr);
             } else {
-                cw.printErrorln(String.format("some POSRES values are lost! --> %s", line));
+                ch.printErrorln(String.format("some POSRES values are lost! --> %s", line));
             }
         }
     }
@@ -1120,7 +1122,7 @@ public class InputParser {
                 res.setC4(new BigDecimal(split.get(8)));
                 distRes.add(res);
             } else {
-                cw.printErrorln(String.format("some DISTANCERES values are lost! --> %s", line));
+                ch.printErrorln(String.format("some DISTANCERES values are lost! --> %s", line));
             }
         }
     }
@@ -1141,7 +1143,7 @@ public class InputParser {
             param.setC3(new BigDecimal(split.get(5)));
         }
         if (length < 5 || length > 6) {
-            cw.printErrorln(String.format("some nonbond params values are lost! --> %s", line));
+            ch.printErrorln(String.format("some nonbond params values are lost! --> %s", line));
         } else {
             nonbondRes.add(param);
         }
@@ -1174,7 +1176,7 @@ public class InputParser {
                 res.setC4(new BigDecimal(split.get(9)));
                 diheRes.add(res);
             } else {
-                cw.printErrorln(String.format("some dihedral restraints values are lost! --> %s", line));
+                ch.printErrorln(String.format("some dihedral restraints values are lost! --> %s", line));
             }
         }
     }
@@ -1196,7 +1198,7 @@ public class InputParser {
                 res.setC3(new BigDecimal(split.get(3)));
                 oriRes.add(res);
             } else {
-                cw.printErrorln(String.format("some orientation restraints values are lost! --> %s", line));
+                ch.printErrorln(String.format("some orientation restraints values are lost! --> %s", line));
             }
         }
     }
@@ -1226,7 +1228,7 @@ public class InputParser {
                 res.setC3(new BigDecimal(split.get(7)));
                 angleRes.add(res);
             } else {
-                cw.printErrorln(String.format("some angles restraints(z) values are lost! --> %s", line));
+                ch.printErrorln(String.format("some angles restraints(z) values are lost! --> %s", line));
             }
         }
     }
@@ -1242,7 +1244,7 @@ public class InputParser {
 
     private boolean isDataRow(String line) {
         if (LOGICAL_PATTERN.matcher(line).matches()) {
-            cw.printInfoln(String.format("LOGICAL: %s", line));
+            ch.printInfoln(String.format("LOGICAL: %s", line));
         }
         return !COMMENT_PATTERN.matcher(line).matches() && !LOGICAL_PATTERN.matcher(line).matches() && !line.trim().isEmpty();
     }
