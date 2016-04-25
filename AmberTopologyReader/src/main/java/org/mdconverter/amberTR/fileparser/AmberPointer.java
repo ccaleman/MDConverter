@@ -6,8 +6,8 @@ import java.util.Map;
 
 /**
  * Created by miso on 11.02.2016.  <br>
- *     Amber specific definitions
- *     available pointers for amber input format and their position in an array
+ * Amber specific definitions
+ * available pointers for amber input format and their position in an array
  */
 public enum AmberPointer {
     NATOM(0),
