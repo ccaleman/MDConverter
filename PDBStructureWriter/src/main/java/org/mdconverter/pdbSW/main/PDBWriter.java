@@ -102,9 +102,10 @@ public class PDBWriter extends AbstractWriter {
 
     /**
      * Adds a String to another String to reach a defined length for the appended String
+     *
      * @param entry existing String
      * @param value String to add
-     * @param len minimum length of value (filled up spaces leftside)
+     * @param len   minimum length of value (filled up spaces leftside)
      * @return entry + value
      */
     private String appendLengthDependant(String entry, String value, int len) {
