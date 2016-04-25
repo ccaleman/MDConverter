@@ -21,6 +21,7 @@
           </execution>
         </executions>
         <configuration>
+          <finalName>MDConverter-${project.version}</finalName>
           <transformers>
             <transformer>
               <mainClass>org.mdconverter.Application</mainClass>

@@ -20,7 +20,7 @@
     </modules>
 
     <properties>
-        <project.version>1.0</project.version>
+        <converter.version>1.0</converter.version>
         <guava.version>19.0</guava.version>
         <guice.version>4.0</guice.version>
         <jscience.version>4.3.1</jscience.version>
